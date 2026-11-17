@@ -515,7 +515,7 @@ mod tests {
     fn asset_rules() {
         assert!(is_asset_related("ATTRIBUTION.md"));
         assert!(is_asset_related("crates/engine/scripts/Rename Layers.jsx.attribution"));
-        assert!(is_asset_related("docs/brand/artcraft-mark.png"));
+        assert!(is_asset_related("docs/brand/visualab-mark.png"));
         assert!(!is_asset_related("docs/testing.md"));
         assert!(!is_asset_related("crates/time/src/lib.rs"));
     }

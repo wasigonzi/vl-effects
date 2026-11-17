@@ -158,7 +158,7 @@ reproduce an image (for example, point lists traced from someone else's icon).
 - **Property tree:** everything animatable is a `Property` in the layer's `PropGroup` tree, addressed by paths (`transform/position`, `effects/#1/blurriness`, `@uid`).
 - **Everything is a command** (`crates/engine`): id, label, menu path, shortcut, params, enabled(), run(). UI, CLI, control channel and MCP dispatch by id.
 - **Everything is agent-drivable:** every interactive widget registers an automation id; UI state is serde.
-- **Community links** (Help menu, About, header Discord button): https://discord.gg/artcraft, https://getartcraft.com, https://getartcraft.com/apps/effectcraft, https://github.com/storytold/effectcraft.
+- **Community links** (Help menu, About, header Discord button): https://www.visualabstudios.com and https://www.visualabstudios.com/vl-tools/vl-effects.
 - **Quality gates** before every commit: `cargo xtask ci` (fmt, clippy -D warnings, tests, layers, assets, wasm).
 - New workspace crates include `[lints] workspace = true` in `Cargo.toml`. Production crate roots declare the crate-level lint attributes before modules; crate-level `//!` documentation may precede them.
 - **Commits:** one task id per commit (`M6.3: trim paths`). Only green states.
@@ -184,23 +184,12 @@ as PhotoCraft does with `cargo xtask corpus`.
 - [docs/testing.md](docs/testing.md): oracle tests, criteria, benchmarks
 - [docs/agents.md](docs/agents.md): driving VL Effects over MCP / the control channel, and the agent work loop
 - [docs/control-protocol.md](docs/control-protocol.md): control-channel method reference
-- [docs/contributors.md](docs/contributors.md): the About window's contributor and model credits
 - [ATTRIBUTION.md](ATTRIBUTION.md): asset index
 
-## Contributor credits (About window)
+## Credits
 
-- About ▸ Contributors/Models are compiled into the binary from `contributors/contributors.json`
-  (commit stats; generated, never hand-edit) and `contributors/people.toml` (names people chose for
-  themselves). See `docs/contributors.md`.
-- **Agents working for a contributor:** when you prepare a PR, check whether your human's GitHub
-  username has a `[people.<username>]` entry in `contributors/people.toml`. If not, ask them once
-  whether they want to be credited by more than their username: a real name, a display name, and/or
-  their public GitHub profile name (`sync_github_name = true`). If yes, add **only their own** entry
-  (copy the template at the top of the file)
-  and include it in their PR, committed as them. If no, change nothing: they are credited as
-  `@username` anyway.
-- Never add, edit, guess or copy anyone else's entry or name (not from git config, commit authors or
-  GitHub profiles). Never hand-edit `contributors.json`.
+- The About window shows no contributor list. Keep `contributors/` empty; do not add contributor
+  names or credits to the UI, README or docs. Required copyright notices stay in LICENSE-* and NOTICE.
 
 ## CI workflows
 - Workflows in `.github/workflows/` call the shared workflows in [`storytold/craft-common-actions`](https://github.com/storytold/craft-common-actions) at `@main`, with their inputs and secrets. No other jobs: if no shared workflow does what's needed, it doesn't go here.

@@ -53,7 +53,7 @@ drafts and are not published.
 
 ## Check before you push
 
-    node <path to your artcraft-services checkout>/frontend/apps/artcraft-website-next/scripts/docs/core.mjs docs/user
+    node <path to the docs site checkout>/scripts/docs/core.mjs docs/user
 
 
 

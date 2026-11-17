@@ -105,5 +105,4 @@ rustflags = ["-C", "link-self-contained=yes", "-L", "native=C:/gnu-import-libs"]
 
 ## Talk to us
 
-Questions, ideas and bug reports are welcome on [Discord](https://discord.gg/artcraft) and in
-GitHub issues.
+Questions, ideas and bug reports are welcome at [Visualab Studios](https://www.visualabstudios.com).

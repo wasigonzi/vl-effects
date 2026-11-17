@@ -15,7 +15,7 @@ fn main() {
     res.set_icon("../../assets/app-icon/effectcraft.ico")
         .set("ProductName", "VL Effects")
         .set("FileDescription", "VL Effects motion graphics and visual effects")
-        .set("LegalCopyright", "Copyright (c) 2026 The VL Effects contributors. MIT OR Apache-2.0.")
+        .set("LegalCopyright", "VL Effects by Visualab Studios. MIT OR Apache-2.0.")
         .set("OriginalFilename", "effectcraft.exe")
         .set("InternalName", "effectcraft");
     if let Err(e) = res.compile() {
