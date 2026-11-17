@@ -1,6 +1,6 @@
 [package]
 name = "effectcraft-project"
-description = "The Visualab Effects document: project items, compositions, layers and the After-Effects-style property tree"
+description = "The VL Effects document: project items, compositions, layers and the After-Effects-style property tree"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -14,6 +14,7 @@ effectcraft-time = { workspace = true }
 effectcraft-geom = { workspace = true }
 effectcraft-color = { workspace = true }
 effectcraft-keyframe = { workspace = true }
+craft-ecproj-format = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

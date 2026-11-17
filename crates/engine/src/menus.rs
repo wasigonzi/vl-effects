@@ -14,7 +14,7 @@
 //!   @effects                                  the effect categories (Effect menu)
 //!   @dynamic:history                          entries computed from the session when the menu
 //!                                             opens ([`dynamic`]: recent files, undo history…)
-//! [mac] Quit Visualab Effects | app.quit           only on macOS ([!mac] = everywhere else)
+//! [mac] Quit VL Effects | app.quit           only on macOS ([!mac] = everywhere else)
 //! ```
 //!
 //! An entry's shortcut is the command's default shortcut unless the line gives one (needed for
@@ -22,7 +22,13 @@
 //! (`| F3, Cmd+Shift+T`); the menus show the first. Adobe-service entries (Team Projects,
 //! Libraries, Bridge, Media Encoder, Behance, Creative Cloud…) are intentionally absent; the
 //! Essential Graphics workspace uses the Properties panel and the Essential Graphics panel, whose
-//! templates use Visualab Effects's own open `.ectemplate` format.
+//! templates use VL Effects' own open `.ectemplate` format.
+//!
+//! Where VL Effects has entries After Effects lacks, After Effects' entries keep their order and
+//! the others get a fixed place. File ▸ Import: the project imports sit together where After
+//! Effects has Adobe Premiere Pro Project…, in alphabetical order and named in full (Adobe After
+//! Effects Project…, Adobe Premiere Pro Project…, VL Effects Project…); the formats only
+//! VL Effects imports follow a separator at the end, in alphabetical order (#3103).
 
 use std::sync::OnceLock;
 
@@ -314,6 +320,7 @@ pub fn checked(s: &Session, command: &str, params: &Value) -> Option<bool> {
     let layer = s.state.selected_layers.first().and_then(|l| comp.layer(*l));
     let pstr = |k: &str| params.get(k).and_then(Value::as_str);
     match command {
+        "path.toggleClosed" => crate::cmd::paths::selected_paths_closed(s),
         "layer.setBlendMode" => {
             let want = effectcraft_color::BlendMode::from_name(pstr("mode")?)?;
             Some(layer?.blend_mode == want)
@@ -525,8 +532,8 @@ fn effect_categories() -> Vec<MenuNode> {
 
 /// The After Effects menu layout. Labels use "..." like AE's macOS menus.
 pub const TREE: &str = r#"
-[mac] Visualab Effects
-  About Visualab Effects... | app.about
+[mac] VL Effects
+  About VL Effects... | app.about
   ---
   Settings...
     General... | app.settings {"page":"general"} | Cmd+Alt+;
@@ -547,11 +554,11 @@ pub const TREE: &str = r#"
     3D... | app.settings {"page":"3d"}
     Scripting & Expressions... | app.settings {"page":"scripting"}
   ---
-  Hide Visualab Effects | app.hide
+  Hide VL Effects | app.hide
   Hide Others | app.hideOthers
   Show All | app.showAll
   ---
-  Quit Visualab Effects | app.quit
+  Quit VL Effects | app.quit
 File
   New
     New Project | file.newProject
@@ -577,13 +584,15 @@ File
   Import
     File... | file.import
     Multiple Files... | file.importMultiple
+    Adobe After Effects Project... | file.importAep
     Adobe Premiere Pro Project... | file.importTimeline
-    Visualab Effects Project... | file.importProject
+    VL Effects Project... | file.importProject
+    Vanishing Point (.vpe)... | file.importVanishingPoint
     Placeholder... | file.importPlaceholder
     Solid... | file.importSolid
-    Lottie... | file.importLottie
-    Vanishing Point (.vpe)... | file.importVanishingPoint
+    ---
     Essential Graphics Template... | essential.importTemplate
+    Lottie... | file.importLottie
   Import Recent Footage
     @dynamic:recentFootage
     ---
@@ -591,6 +600,7 @@ File
   Export
     Add to Render Queue | renderQueue.add
     Adobe Premiere Pro Project... | file.exportTimeline
+    Adobe After Effects Project... | file.exportAep
     Lottie JSON... | file.exportLottie
     Essential Graphics Template... | essential.exportTemplate
   ---
@@ -820,7 +830,7 @@ Layer
     Hide Locked Masks | layer.mask.hideLocked
   Mask and Shape Path
     RotoBezier | path.rotoBezier
-    Closed | mask.setClosed
+    Closed | path.toggleClosed
     Convert To Bezier Path | path.convertToBezier
     Set First Vertex | path.setFirstVertex
     Free Transform Points | path.freeTransform
@@ -860,6 +870,16 @@ Layer
     Flip Vertical | layer.transform {"op":"flipV"}
     Center In View | layer.transform {"op":"center"} | Cmd+Home
     Center Anchor Point in Layer Content | layer.centerAnchor
+    Quick Set Anchor
+      Top Left | layer.quickSetAnchor {"point":"topLeft"}
+      Top | layer.quickSetAnchor {"point":"top"}
+      Top Right | layer.quickSetAnchor {"point":"topRight"}
+      Left | layer.quickSetAnchor {"point":"left"}
+      Center | layer.quickSetAnchor {"point":"center"}
+      Right | layer.quickSetAnchor {"point":"right"}
+      Bottom Left | layer.quickSetAnchor {"point":"bottomLeft"}
+      Bottom | layer.quickSetAnchor {"point":"bottom"}
+      Bottom Right | layer.quickSetAnchor {"point":"bottomRight"}
     Fit to Comp | layer.transform {"op":"fit"} | Cmd+Alt+F
     Fit to Comp Width | layer.transform {"op":"fitWidth"} | Cmd+Alt+Shift+H
     Fit to Comp Height | layer.transform {"op":"fitHeight"} | Cmd+Alt+Shift+G
@@ -1006,6 +1026,7 @@ Layer
     Duplicate and Assign Material | material.duplicateAssign
   Auto-trace... | layer.autoTrace
   Pre-compose... | layer.precompose
+  Un-precompose | layer.unprecompose
   Scene Edit Detection... | layer.sceneEditDetection
 Effect
   Effect Controls | window.panel {"panel":"effectControls"} | F3, Cmd+Shift+T
@@ -1014,6 +1035,11 @@ Effect
   ---
   Manage Effects... | effect.manage
   Load Effect Plug-in... | effect.plugins.load
+  Install Effect Plug-in... | effect.plugins.install
+  Install Effect Plug-in Bundle (Folder)... | effect.plugins.install {"bundle": true}
+  Load Plug-ins Through Helper... | effect.helpers.load
+  Scan for Effect Helpers | effect.helpers.scan
+  Plug-in Library... | prefs.open {"page":"library"}
   ---
   @effects
 Animation
@@ -1036,6 +1062,8 @@ Animation
   ---
   Add Keyframe | anim.addKeyframe
   Toggle Hold Keyframe | keys.toggleHold
+  Mute Keyframes | keys.setMuted
+  Unmute Keyframes | keys.setMuted {"muted":false}
   Keyframe Interpolation... | keys.interpolation
   Keyframe Velocity... | keys.velocity
   Keyframe Assistant
@@ -1243,7 +1271,7 @@ Window
   Essential Graphics | window.panel {"panel":"essentialGraphics"}
   Info | window.panel {"panel":"info"} | Cmd+2
   Learn | help.inAppTutorials
-  Lumetri Scopes | window.panel {"panel":"lumetriScopes"}
+  Video Scopes | window.panel {"panel":"lumetriScopes"}
   Mask Interpolation | window.panel {"panel":"maskInterpolation"}
   Media Browser | window.panel {"panel":"mediaBrowser"}
   Metadata | window.panel {"panel":"metadata"}
@@ -1273,7 +1301,7 @@ Window
   VR Comp Editor | window.panel {"panel":"vrCompEditor"}
   @dynamic:scriptPanels
 Help
-  Visualab Effects Help... | help.docs {"page":"help"} | F1
+  VL Effects Help... | help.docs {"page":"help"} | F1
   Scripting Help... | help.docs {"page":"scripting"}
   Expression Reference... | help.docs {"page":"expressions"}
   Effect Reference... | help.docs {"page":"effects"}
@@ -1287,15 +1315,14 @@ Help
   Enable Logging | help.enableLogging
   Reveal Logging File | help.revealLogFile
   ---
-  Join the Visualab Discord... | help.discord
+  Visit Visualab Studios... | help.discord
   Provide Feedback... | help.reportIssue
   ---
-  Visualab Website | help.website
-  Visualab Effects Home Page | help.appPage
-  Visualab Effects on GitHub | help.github
+  Visualab Studios Website | help.website
+  VL Effects Home Page | help.appPage
   Open Demo Project | file.openDemoProject
   [!mac] ---
-  [!mac] About Visualab Effects... | app.about
+  [!mac] About VL Effects... | app.about
 "#;
 
 #[cfg(test)]

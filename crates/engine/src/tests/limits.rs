@@ -53,7 +53,7 @@ fn a_hostile_project_opens_within_the_limits_and_says_what_changed() {
         let r = s.execute("file.open", json!({"path": path})).unwrap();
         let repaired = r["repaired"].as_array().unwrap();
         assert!(repaired.iter().any(|n| n.as_str().unwrap().contains("4000000000 × 0 px → 30000 × 1 px")), "{path}: {repaired:?}");
-        let toast = s.drain_events().into_iter().any(|e| matches!(e, Event::Toast { message, .. } if message.contains("outside Visualab Effects's limits")));
+        let toast = s.drain_events().into_iter().any(|e| matches!(e, Event::Toast { message, .. } if message.contains("outside VL Effects' limits")));
         assert!(toast, "{path}");
         let (cid, c) = s.project.comps().next().map(|(id, c)| (*id, c.clone())).unwrap();
         assert_eq!((c.width, c.height), (limits::MAX_SIZE, 1));
@@ -101,6 +101,24 @@ fn commands_cap_sizes_at_30000_px() {
     s.execute("file.importPlaceholder", json!({"width": 4_000_000_000u64, "height": 8, "frameRate": 0})).unwrap();
     let f = s.project.items.values().find_map(|i| if let ItemKind::Footage(f) = &i.kind { Some(f.clone()) } else { None }).unwrap();
     assert_eq!((f.width, f.height, f.frame_rate), (limits::MAX_SIZE, 8, FrameRate::FPS_29_97));
+}
+
+/// Time Stretch takes After Effects' range, ±1 % to ±9900 %: before, 1e300 % was set, and a
+/// project file holding it opened at 9900 % (#3247).
+#[test]
+fn time_stretch_refuses_more_than_9900_percent() {
+    let mut s = Session::default();
+    s.execute("comp.new", json!({"name": "Main", "width": 64, "height": 32, "frameRate": 30, "duration": 2})).unwrap();
+    let layer = s.execute("layer.newSolid", json!({"color": "#ff0000"})).unwrap()["layer"].as_u64().unwrap();
+    let stretch = |s: &Session| s.active_comp().unwrap().layers.iter().find(|l| l.id.0 == layer).unwrap().stretch;
+    for pct in [1e300, -1e300, 9900.5] {
+        assert!(s.execute("layer.timeStretch", json!({"layers": [layer], "percent": pct})).is_err(), "{pct}");
+        assert_eq!(stretch(&s), 100.0, "{pct}");
+    }
+    for pct in [limits::MAX_STRETCH, -limits::MAX_STRETCH] {
+        s.execute("layer.timeStretch", json!({"layers": [layer], "percent": pct})).unwrap();
+        assert_eq!(stretch(&s), pct);
+    }
 }
 
 #[test]

@@ -1,6 +1,6 @@
 {
   "id": "effectcraft",
-  "name": "Visualab Effects",
+  "name": "VL Effects",
   "upgradeCode": "AACA8593-C6ED-40A8-BA6C-CB325D8529F9",
   "sources": [
     "effectcraft.wxs",
@@ -29,13 +29,13 @@
     ],
     [
       "-1",
-      "Software\\Visualab Effects",
+      "Software\\VL Effects",
       "DesktopShortcut",
       "[DESKTOPSHORTCUT]"
     ],
     [
       "-1",
-      "Software\\Visualab Effects",
+      "Software\\VL Effects",
       "DesktopShortcut",
       "1"
     ]

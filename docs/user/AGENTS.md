@@ -1,13 +1,13 @@
 # User docs: rules for agents and contributors
 
 Everything in this folder (except this file, CLAUDE.md and README.md) is published at
-https://www.visualabstudios.com/docs/effectcraft. The file path is the URL:
+https://www.visualabstudios.com/vl-tools/vl-effects. The file path is the URL:
 `troubleshooting/gpu-not-used.md` → `/docs/effectcraft/troubleshooting/gpu-not-used`.
 Renaming a file breaks links, so add the old path to `redirect_from` when you rename.
 
 ## Who reads this
 
-Artists using Visualab Effects, Discord mods answering them, and AI assistants looking things up for
+Artists using VL Effects, support staff answering them, and AI assistants looking things up for
 either. Write for an artist, not a developer.
 
 ## Page rules
@@ -16,20 +16,20 @@ either. Write for an artist, not a developer.
 - Plain words, short sentences, numbered steps for anything the reader does.
 - Start the body at `##`. The page title comes from frontmatter.
 - Link to other pages instead of repeating them. Use relative links to the `.md` file:
-  `[Install Visualab Effects](../getting-started/install.md)`.
+  `[Install VL Effects](../getting-started/install.md)`.
 - No marketing copy, no "simply", no claims you have not checked in the code, a release or an issue.
-- Call the product "Visualab Effects", as the app, its downloads and www.visualabstudios.com do.
+- Call the product "VL Effects", as the app, its downloads and visualabstudios.com do.
 - Name UI labels exactly as the app shows them, in **bold**. Menu paths use the menu text from
   `crates/engine/src/menus.rs`.
 - Shortcuts: the code writes `Cmd`, which is Ctrl on Windows and Linux. Write Ctrl for Windows.
 - Windows 11 is the only Windows version to name.
 - Troubleshooting pages: `## Symptoms`, `## Fix`, `## Why this happens` (optional),
-  `## Still stuck?` (link the issue tracker or Discord).
+  `## Still stuck?` (link the contact page, https://www.visualabstudios.com/contacto).
 
 ## Frontmatter
 
     ---
-    title: Visualab Effects does not use my graphics card
+    title: VL Effects does not use my graphics card
     description: One sentence for search results, link previews and AI summaries.
     order: 10                 # optional, sorts within the folder (lower first)
     verified: 0.8.0           # optional, app version you last checked this page against
@@ -55,10 +55,10 @@ drafts and are not published.
 
     node <path to your artcraft-services checkout>/frontend/apps/artcraft-website-next/scripts/docs/core.mjs docs/user
 
-The checker lives in storytold/artcraft-services. A CI check will be added once it is on that repo's main branch.
+
 
 ## Support PRs
 
 Pages written to answer a user question come in as PRs titled `docs(support): <page title>`.
 Review them like code: check every claim against the source. Problems and bug reports go in the
-[issue tracker](https://github.com/wasigonzi/visualab-effects/issues).
+[contact page](https://www.visualabstudios.com/contacto).

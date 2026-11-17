@@ -17,7 +17,7 @@ macro_rules! fe {
 pub fn specs() -> Vec<CommandSpec> {
     vec![
         // Application.
-        fe!("app.about", "About Visualab Effects...", [], None, "{}", always),
+        fe!("app.about", "About VL Effects...", [], None, "{}", always),
         fe!("layer.style.options", "Layer Style Options...", ["Layer", "Layer Styles"], None, "{layer?, style?: blendingOptions|dropShadow|…}", has_layers),
         fe!(
             "app.settings",
@@ -28,15 +28,15 @@ pub fn specs() -> Vec<CommandSpec> {
             always
         ),
         fe!("app.gpuInfo", "GPU Information...", [], None, "{}", always),
-        fe!("app.hide", "Hide Visualab Effects", [], None, "{}", always),
+        fe!("app.hide", "Hide VL Effects", [], None, "{}", always),
         // macOS: the native menu's Hide Others / Show All (the desktop app hides the other apps).
         fe!("app.hideOthers", "Hide Others", [], None, "{}", always),
         fe!("app.showAll", "Show All", [], None, "{}", always),
-        fe!("app.quit", "Quit Visualab Effects", [], Some("Cmd+Q"), "{}", always),
+        fe!("app.quit", "Quit VL Effects", [], Some("Cmd+Q"), "{}", always),
         fe!("app.commandPalette", "Quick Apply...", ["Edit"], Some("Cmd+Shift+Space"), "{query?}", always),
         fe!("app.keyboardShortcuts", "Keyboard Shortcuts", ["Edit"], Some("Cmd+Alt+'"), "{}", always),
         fe!("app.templates", "Templates", [], None, "{kind: renderSettings|outputModule}", always),
-        fe!("app.find", "Find", ["File"], Some("Cmd+F"), "{query?}", always),
+        fe!("app.find", "Find", ["File"], Some("Cmd+F"), "{query?: string, status?: all|available|missing}", always),
         fe!("effects.copyPresetsFolderPath", "Copy Presets Folder Path", [], None, "{}", always),
         // Preview.
         fe!(
@@ -106,6 +106,7 @@ pub fn specs() -> Vec<CommandSpec> {
         fe!("layer.openLayer", "Open Layer", ["Layer"], None, "{layer?}", has_layers),
         fe!("effect.manage", "Manage Effects...", ["Effect"], None, "{}", always),
         fe!("anim.browsePresets", "Browse Presets...", ["Animation"], None, "{}", always),
+        fe!("timeline.revealMask", "Reveal Created Mask", [], None, "{comp, layer, mask, projectEpoch} — engine-supplied creation identity", has_comp),
         // Project panel: delete the selected items without the prompt that Delete shows when
         // compositions use them. The UI runs `project.delete` (agents can run it directly).
         fe!(

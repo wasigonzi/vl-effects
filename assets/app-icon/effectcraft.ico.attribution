@@ -1,8 +1,8 @@
 asset:        effectcraft.ico
-title:        EffectCraft Windows app icon
-author:       EffectCraft contributors (drawing by the project owner in ArtCraft)
-source:       original work
+title:        VL Effects app icon (Visualab Studios brand mark), Windows .ico (16-256 px)
+author:       Visualab Studios
+source:       original work (Visualab Studios brand mark)
 license:      MIT OR Apache-2.0
 license-file: assets/app-icon/LICENSE.txt
-added:        2026-10-02 by EffectCraft contributors (Claude agent, app icon)
-notes:        Rendered from effectcraft.svg (16-256 px) with resvg and packed by cargo xtask ico (packaging/icons.sh).
+added:        2026-11-16 by Visualab Studios
+notes:        Visualab Studios brand mark, same artwork as VL Studios and VL Vector.

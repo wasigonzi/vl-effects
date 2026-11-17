@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build and package Visualab Effects for Linux (<arch> is x86_64 or aarch64, or riscv64 when cross-compiling):
+# Build and package VL Effects for Linux (<arch> is x86_64 or aarch64, or riscv64 when cross-compiling):
 #
 #   $DIST/effectcraft-<version>-linux-<arch>.AppImage  any distro with glibc >= the build host's
 #   $DIST/effectcraft-<version>-linux-<arch>.AppImage.zsync  delta updates (needs zsyncmake)
@@ -41,10 +41,10 @@ case "$ARCH" in
   aarch64 | arm64) ARCH=aarch64; DEB_ARCH=arm64 ;;
   *) echo "unsupported architecture $ARCH" >&2; exit 2 ;;
 esac
-export EFFECTCRAFT_MAINTAINER="${EFFECTCRAFT_MAINTAINER:-Visualab Studios <hola@visualabstudios.com>}"
+export EFFECTCRAFT_MAINTAINER="${EFFECTCRAFT_MAINTAINER:-VL Effects maintainers <effectcraft@storyteller.ai>}"
 BASENAME="effectcraft-$VERSION-linux-$ARCH"
 
-echo "==> Visualab Effects $VERSION for Linux $ARCH ($FORMATS)"
+echo "==> VL Effects $VERSION for Linux $ARCH ($FORMATS)"
 
 if [[ "$SKIP_BUILD" = 0 ]]; then
   if [[ -n "${CROSS_TARGET:-}" ]]; then
@@ -128,8 +128,10 @@ if has appimage; then
     echo "no pinned AppImage runtime for $ARCH; build the AppImage on x86_64 or aarch64" >&2
     exit 2
   fi
-  APPDIR="$WORK/Visualab Effects.AppDir"
+  APPDIR="$WORK/VL Effects.AppDir"
   cp -R "$STAGE" "$APPDIR"
+  # Keep sctk-adwaita's MIT notice in the AppImage.
+  install -Dm644 "$ROOT/NOTICE" "$APPDIR/usr/share/doc/effectcraft/NOTICE"
   ln -s usr/bin/effectcraft "$APPDIR/AppRun"
   cp "$HERE/$APP_ID.desktop" "$APPDIR/$APP_ID.desktop"
   cp "$ROOT/assets/app-icon/hicolor/256x256/apps/$APP_ID.png" "$APPDIR/$APP_ID.png"
@@ -173,7 +175,7 @@ if has appimage; then
   # fetch only the blocks that changed in a newer release, through the .zsync published next to
   # each AppImage on GitHub Releases. `latest` is the newest published release that is not a
   # pre-release. A fork's builds point at its own releases through GITHUB_REPOSITORY.
-  REPO="${GITHUB_REPOSITORY:-wasigonzi/visualab-effects}"
+  REPO="${GITHUB_REPOSITORY:-wasigonzi/vl-effects}"
   UPDATE_INFO="gh-releases-zsync|${REPO%%/*}|${REPO#*/}|latest|effectcraft-*-linux-$ARCH.AppImage.zsync"
   # Extract-and-run: works without FUSE (containers, CI). The output embeds the static runtime,
   # so users don't need libfuse2 either. With zsyncmake on the host (CI installs the zsync

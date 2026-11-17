@@ -1,6 +1,6 @@
 ---
 title: Guides
-description: Step-by-step guides for the main tasks in Visualab Effects.
+description: Step-by-step guides for the main tasks in VL Effects.
 order: 20
 ---
 

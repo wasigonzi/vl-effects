@@ -29,7 +29,13 @@ ffmpeg elsewhere) to check the code tables against an independent implementation
   the app's existing object model. References retain object and generation numbers. A bounded
   compatibility repair recovers referenced objects from object streams when damaged xrefs omit
   them; every recovery or unresolved reference is reported in `Doc::skipped` (up to 64 messages).
-  The existing page tree preserves inherited resources, MediaBox / CropBox and `/Rotate`.
+  The existing page tree preserves inherited resources, MediaBox / CropBox and `/Rotate`. A page
+  is its CropBox (else MediaBox), turned by `/Rotate` (`Framing::Viewer`, the default). Footage
+  from an After Effects project is framed as After Effects places a PDF or `.ai`
+  (`Framing::Placed`, `parse_page_framed`): the page's own ArtBox clipped to the CropBox (else
+  MediaBox) when it has one, else the CropBox, else the MediaBox, with `/Rotate` ignored
+  (measured in After Effects 2026 with own files, #3099). Not measured: a CropBox without an
+  ArtBox, files saved by Illustrator itself, `.pdf` names.
   Content/image filters remain app-owned: Flate (with PNG predictors), LZW, ASCIIHex, ASCII85,
   RunLength and CCITTFax. Encrypted files remain refused; `page_count` returns zero when the
   reader refuses a document.
@@ -108,6 +114,10 @@ ffmpeg elsewhere) to check the code tables against an independent implementation
   stitching and PostScript calculator (type 4) functions.
 - **Pages:** any page ([`parse_page`], [`page_count`]); File ▸ Import takes `page` (from 1) and
   the Import dialog asks for it; footage remembers its page (`Footage::page`).
+- **VectorCraft documents** (`.vectorcraft`, plain or compressed): the PDF the document carries
+  when VectorCraft saved it with Create PDF-Compatible File, one page per artboard, read through
+  `craft-doc` from craft-libs. The footage codec is `VectorCraft`. A document saved without that
+  option has no PDF, and importing it reports an error that names the option.
 
 ## Limitations
 
@@ -138,8 +148,8 @@ ffmpeg elsewhere) to check the code tables against an independent implementation
 ## Shared parser setup and bounds
 
 The workspace pins `craft-pdf` to `craft-libs` Git revision
-`92d392cff132eaf53e13afff77f38b5c11b73aa0`, with `default-features = false` and only the explicit `read`
-feature. This excludes the backend's bundled fonts and Adobe CMaps and preserves Visualab Effects's
+`091863e4a615f38743bfd5d6dc62a2e8f37cd5d5`, with `default-features = false` and only the explicit `read`
+feature. This excludes the backend's bundled fonts and Adobe CMaps and preserves VL Effects'
 font and asset policies. The shared parser does not change the supported drawing operators,
 image codecs, continuously rasterized SVG tree, editable shapes, or EPS interpreter.
 This revision removes an unchecked lazy-array read and preserves later values and pages after
@@ -160,9 +170,9 @@ partial state. These limits are not an overall process-memory or execution-time 
 WASM aborts and process-wide allocation failures cannot be caught. Missing or repaired objects
 are reported rather than silently presented as a complete import.
 
-The shared parser receives Visualab Effects's existing ordinary object/xref stream limit at open:
+The shared parser receives VL Effects' existing ordinary object/xref stream limit at open:
 256 MiB on 64-bit targets and 64 MiB on 32-bit targets, including WASM. Immutable document
 limits apply during normal parsing, initial xrefs, fallback and repair. Malformed object-stream
 compatibility recovery also obeys that limit and the adapter's remaining retained-data budget.
-Content/image filter decoding still uses Visualab Effects's existing bounded filter chain; the
+Content/image filter decoding still uses VL Effects' existing bounded filter chain; the
 retained-data cap is not a bound on every parser cache or temporary allocation.

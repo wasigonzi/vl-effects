@@ -1,11 +1,11 @@
 ---
-title: Is Visualab Effects free, and where does it run?
-description: Visualab Effects is free and open source under MIT or Apache-2.0, and runs on Windows, macOS, Linux and in the browser.
+title: Is VL Effects free, and where does it run?
+description: VL Effects is free and open source under MIT or Apache-2.0, and runs on Windows, macOS, Linux and in the browser.
 order: 20
 verified: 0.9.2
 ---
 
-Yes, Visualab Effects is free. It is open source, dual-licensed under MIT or Apache-2.0, at your option. It has no telemetry, and it uses no network access unless you ask for it.
+Yes, VL Effects is free. It is open source, dual-licensed under MIT or Apache-2.0, at your option. It has no telemetry, and it uses no network access unless you ask for it.
 
 ## Where it runs
 
@@ -17,8 +17,8 @@ Yes, Visualab Effects is free. It is open source, dual-licensed under MIT or Apa
 | FreeBSD  | x86_64 tar.gz                                                                          |
 | Browser  | A web build that runs the full app                                                     |
 
-See [Install Visualab Effects](../getting-started/install.md) for the files.
+See [Install VL Effects](../getting-started/install.md) for the files.
 
 ## How mature is it?
 
-Visualab Effects is in alpha. The README calls macOS the most tested platform, and says Linux and Windows users have hit basic interaction bugs that are being fixed first. Bug reports in the [issue tracker](https://github.com/wasigonzi/visualab-effects/issues) are the most useful thing you can send.
+VL Effects is in alpha. The README calls macOS the most tested platform, and says Linux and Windows users have hit basic interaction bugs that are being fixed first. Bug reports in the [contact page](https://www.visualabstudios.com/contacto) are the most useful thing you can send.

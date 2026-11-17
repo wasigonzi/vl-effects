@@ -1,6 +1,6 @@
 # Attribution
 
-Every non-code asset in EffectCraft, with its author, source and licence. Each repository file listed here also has
+Every non-code asset in VL Effects, with its author, source and licence. Each repository file listed here also has
 a `<file>.attribution` sidecar with full details. The rules are in [AGENTS.md](AGENTS.md) §1: no Adobe
 iconography, images or other Adobe assets; open licences only; every asset attributed.
 `cargo xtask assets` checks that this index and the sidecars cover every asset in the repository.
@@ -36,49 +36,51 @@ and licence texts are in [`NOTICE`](NOTICE).
 | `assets/fonts/NotoSerif-Regular.ttf` | The Noto Project Authors | https://github.com/notofonts/latin-greek-cyrillic | OFL-1.1 (`assets/fonts/OFL-NotoSerif.txt`) |
 | `assets/fonts/NotoSansSymbols2-Regular.ttf` | The Noto Project Authors | https://github.com/notofonts/symbols | OFL-1.1 (`assets/fonts/OFL-NotoSansSymbols2.txt`) |
 | `assets/fonts/JetBrainsMono-Regular.ttf` | The JetBrains Mono Project Authors | https://github.com/JetBrains/JetBrainsMono | OFL-1.1 (`assets/fonts/OFL-JetBrainsMono.txt`) |
-| `apps/effectcraft-web/web/favicon.svg` | EffectCraft contributors | Original work: web app icon, a copy of `assets/app-icon/effectcraft-small.svg` (the unicorn app icon) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `packaging/macos/dmg/background.svg` | @XusBadia | Original work: macOS DMG Finder window background, derived from the EffectCraft app icon (`assets/app-icon/effectcraft.svg`); rendered to a TIFF by `packaging/macos/package.sh` at package time | MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`) |
-| `assets/app-icon/effectcraft-1024.png` | EffectCraft contributors | Original work: effectCraft app icon, 1024 px (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/effectcraft-macos-512.png` | EffectCraft contributors | Original work: effectCraft runtime Dock icon (macOS) (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/effectcraft-small.svg` | EffectCraft contributors | Original work: effectCraft app icon, light vector (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/effectcraft.icns` | EffectCraft contributors | Original work: effectCraft macOS app icon (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/effectcraft.ico` | EffectCraft contributors | Original work: effectCraft Windows app icon (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/effectcraft.svg` | EffectCraft contributors | Original work: effectCraft app icon, master vector (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/128x128/apps/ai.storyteller.effectcraft.png` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor 128x128 (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/16x16/apps/ai.storyteller.effectcraft.png` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor 16x16 (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/24x24/apps/ai.storyteller.effectcraft.png` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor 24x24 (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/256x256/apps/ai.storyteller.effectcraft.png` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor 256x256 (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/32x32/apps/ai.storyteller.effectcraft.png` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor 32x32 (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/48x48/apps/ai.storyteller.effectcraft.png` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor 48x48 (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/512x512/apps/ai.storyteller.effectcraft.png` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor 512x512 (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/64x64/apps/ai.storyteller.effectcraft.png` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor 64x64 (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `assets/app-icon/hicolor/scalable/apps/ai.storyteller.effectcraft.svg` | EffectCraft contributors | Original work: effectCraft app icon, Linux hicolor scalable (owner's ArtCraft unicorn drawing, vectorised) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
-| `crates/lottie/tests/fixtures/bouncing-ball.json` | EffectCraft contributors | Original work: hand-written Lottie test fixture (bouncing ball, eased position keys) | MIT OR Apache-2.0 |
-| `crates/lottie/tests/fixtures/shapes-gradient.json` | EffectCraft contributors | Original work: hand-written Lottie test fixture (star, rectangle, gradient fill, dashed stroke, trim paths) | MIT OR Apache-2.0 |
-| `crates/lottie/tests/fixtures/precomp-matte-text.json` | EffectCraft contributors | Original work: hand-written Lottie test fixture (precomp, track matte, parented text) | MIT OR Apache-2.0 |
-| `crates/lottie/tests/fixtures/legacy-masks.json` | EffectCraft contributors | Original work: hand-written Lottie test fixture (legacy keyframes, masks) | MIT OR Apache-2.0 |
-| `crates/svg/tests/fixtures/basic-shapes.svg` | EffectCraft contributors | Original work: hand-written SVG test fixture (basic shapes, groups, transforms) | MIT OR Apache-2.0 |
-| `crates/svg/tests/fixtures/paths-gradients.svg` | EffectCraft contributors | Original work: hand-written SVG test fixture (path data, gradients, CSS, use) | MIT OR Apache-2.0 |
-| `crates/model/tests/fixtures/quad.gltf` | EffectCraft contributors | Original work: glTF 2.0 test fixture (textured quad, node hierarchy, translation animation; data URIs) | MIT OR Apache-2.0 |
-| `crates/model/tests/fixtures/quad.glb` | EffectCraft contributors | Original work: binary glTF test fixture (the same quad with its texture in the BIN chunk) | MIT OR Apache-2.0 |
-| `crates/model/tests/fixtures/cube.obj` | EffectCraft contributors | Original work: Wavefront OBJ test fixture (unit cube, two materials) | MIT OR Apache-2.0 |
-| `crates/model/tests/fixtures/cube.mtl` | EffectCraft contributors | Original work: MTL test fixture (materials of cube.obj) | MIT OR Apache-2.0 |
+| `apps/effectcraft-web/web/favicon.svg` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `packaging/macos/dmg/background.svg` | @XusBadia | Original work: macOS DMG Finder window background, derived from the VL Effects app icon (`assets/app-icon/effectcraft.svg`); rendered to a TIFF by `packaging/macos/package.sh` at package time | MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`) |
+| `assets/app-icon/effectcraft-1024.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/effectcraft-macos-512.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/effectcraft-small.svg` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/effectcraft.icns` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/effectcraft.ico` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/effectcraft.svg` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/128x128/apps/ai.storyteller.effectcraft.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/16x16/apps/ai.storyteller.effectcraft.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/24x24/apps/ai.storyteller.effectcraft.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/256x256/apps/ai.storyteller.effectcraft.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/32x32/apps/ai.storyteller.effectcraft.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/48x48/apps/ai.storyteller.effectcraft.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/512x512/apps/ai.storyteller.effectcraft.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/64x64/apps/ai.storyteller.effectcraft.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/app-icon/hicolor/scalable/apps/ai.storyteller.effectcraft.svg` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `crates/lottie/tests/fixtures/bouncing-ball.json` | VL Effects contributors | Original work: hand-written Lottie test fixture (bouncing ball, eased position keys) | MIT OR Apache-2.0 |
+| `crates/lottie/tests/fixtures/shapes-gradient.json` | VL Effects contributors | Original work: hand-written Lottie test fixture (star, rectangle, gradient fill, dashed stroke, trim paths) | MIT OR Apache-2.0 |
+| `crates/lottie/tests/fixtures/precomp-matte-text.json` | VL Effects contributors | Original work: hand-written Lottie test fixture (precomp, track matte, parented text) | MIT OR Apache-2.0 |
+| `crates/lottie/tests/fixtures/legacy-masks.json` | VL Effects contributors | Original work: hand-written Lottie test fixture (legacy keyframes, masks) | MIT OR Apache-2.0 |
+| `crates/svg/tests/fixtures/basic-shapes.svg` | VL Effects contributors | Original work: hand-written SVG test fixture (basic shapes, groups, transforms) | MIT OR Apache-2.0 |
+| `crates/svg/tests/fixtures/paths-gradients.svg` | VL Effects contributors | Original work: hand-written SVG test fixture (path data, gradients, CSS, use) | MIT OR Apache-2.0 |
+| `crates/model/tests/fixtures/quad.gltf` | VL Effects contributors | Original work: glTF 2.0 test fixture (textured quad, node hierarchy, translation animation; data URIs) | MIT OR Apache-2.0 |
+| `crates/model/tests/fixtures/quad.glb` | VL Effects contributors | Original work: binary glTF test fixture (the same quad with its texture in the BIN chunk) | MIT OR Apache-2.0 |
+| `crates/model/tests/fixtures/cube.obj` | VL Effects contributors | Original work: Wavefront OBJ test fixture (unit cube, two materials) | MIT OR Apache-2.0 |
+| `crates/model/tests/fixtures/cube.mtl` | VL Effects contributors | Original work: MTL test fixture (materials of cube.obj) | MIT OR Apache-2.0 |
+
+Three small After Effects test projects of `crates/aep` are in this repository: `crates/aep/tests/fixtures/synthetic.aep` (original work, made with After Effects 2026 from own data, working space None, the embedded colour profile removed; MIT OR Apache-2.0, with its `.attribution` sidecar), `crates/aep/tests/fixtures/ai-mask-3099.aep` (original work, made with After Effects 2026 from four hand-written one-page PDFs named `.ai`, footage paths and host name neutralised, the embedded colour profiles replaced by stubs made with `crates/aep/examples/stubicc.rs`; MIT OR Apache-2.0, with its `.attribution` sidecar) and `crates/aep/tests/fixtures/text-synthetic.aep` (original work, made with After Effects 2026 by script from own data, working space None, no colour profile embedded, nothing changed after the save; MIT OR Apache-2.0, with its `.attribution` sidecar). The other After Effects test projects of `crates/aep` are not in this repository. They are original work of an VL Effects contributor, generated with After Effects 2026 as own test data (MIT OR Apache-2.0, each file with its `.attribution` sidecar); they are in [storytold/effectcraft-corpus](https://github.com/storytold/effectcraft-corpus) with their sidecars, fetched by `cargo xtask aep-corpus` (commit-pinned, SHA-256-verified), and the tests read them only from the folder named by `EFFECTCRAFT_AEP_FIXTURES` (opt-in). Their embedded colour profiles are replaced by stubs made with `crates/aep/examples/stubicc.rs` (a header and a description, no colour data), so no vendor profile data is in them.
 
 ## Screenshots
 
-Screenshots of EffectCraft itself, rendered headlessly, showing only procedurally generated demo content.
+Screenshots of VL Effects itself, rendered headlessly, showing only procedurally generated demo content.
 
 | Asset | Author | Source | Licence |
 |---|---|---|---|
-| `docs/images/effectcraft-hero.png` | EffectCraft contributors | Original work: screenshot of EffectCraft (EffectCraft main window) | MIT OR Apache-2.0 |
-| `docs/images/effectcraft-3d.png` | EffectCraft contributors | Original work: screenshot of EffectCraft (EffectCraft Classic 3D) | MIT OR Apache-2.0 |
-| `docs/images/effectcraft-graph-editor.png` | EffectCraft contributors | Original work: screenshot of EffectCraft (EffectCraft Graph Editor) | MIT OR Apache-2.0 |
-| `docs/images/effectcraft-effects.png` | EffectCraft contributors | Original work: screenshot of EffectCraft (EffectCraft effects) | MIT OR Apache-2.0 |
-| `docs/images/effectcraft-render-queue.png` | EffectCraft contributors | Original work: screenshot of EffectCraft (EffectCraft Render Queue panel with the demo compositions queued for H.264 and ProRes export) | MIT OR Apache-2.0 |
+| `docs/images/effectcraft-hero.png` | VL Effects contributors | Original work: screenshot of VL Effects (VL Effects main window) | MIT OR Apache-2.0 |
+| `docs/images/effectcraft-3d.png` | VL Effects contributors | Original work: screenshot of VL Effects (VL Effects Classic 3D) | MIT OR Apache-2.0 |
+| `docs/images/effectcraft-graph-editor.png` | VL Effects contributors | Original work: screenshot of VL Effects (VL Effects Graph Editor) | MIT OR Apache-2.0 |
+| `docs/images/effectcraft-effects.png` | VL Effects contributors | Original work: screenshot of VL Effects (VL Effects effects) | MIT OR Apache-2.0 |
+| `docs/images/effectcraft-render-queue.png` | VL Effects contributors | Original work: screenshot of VL Effects (VL Effects Render Queue panel with the demo compositions queued for H.264 and ProRes export) | MIT OR Apache-2.0 |
 
 ## Code-drawn assets (original work, MIT OR Apache-2.0)
 
-- UI icons drawn in code: `crates/ui-egui/src/icons.rs`, including the original filled favorite star (2026-10-11, EffectCraft contributors).
+- UI icons drawn in code: `crates/ui-egui/src/icons.rs`, including the original filled favorite star (2026-10-11, VL Effects contributors).
 - Procedural demo content (solids, shapes, gradients, text animations): `crates/engine/src/demo.rs`.
 - Built-in project templates (Lower Third, Title Card, Logo Reveal, Kinetic Type, Social Square, Vertical Story,
   Slideshow, 3D Text Orbit) built from engine commands, and their thumbnails rendered by our own renderer:
@@ -97,7 +99,7 @@ Screenshots of EffectCraft itself, rendered headlessly, showing only procedurall
   (sidecars `.attribution`).
 - Bundled extension (ScriptUI panel) with its twelve built-in ease presets:
   `extensions/scriptui-panels/Ease Presets.jsx` (sidecar `.attribution`).
-- Example effect plug-in: `examples/plugins/posterize-bands` (plug-in API v1, WebAssembly).
+- Example effect plug-in: `examples/plugins/posterize-bands` (WebAssembly ABI 1).
 
 ## Trained models (optional downloads, not bundled)
 
@@ -105,7 +107,7 @@ The repository and the installers contain no model weights. These models are dow
 a user asks (Settings ▸ Roto Brush, Settings ▸ Face Tracking, or the `roto.model.*` /
 `face.model.*` commands), unmodified from their authors' official location, checked against a
 pinned SHA-256 and stored in the user's `models` folder with a `<file>.NOTICE.txt` naming their
-authors, licence and source. EffectCraft runs them with its own Rust implementation and is not
+authors, licence and source. VL Effects runs them with its own Rust implementation and is not
 affiliated with or endorsed by their authors.
 
 | Model | Authors | Source | Licence |
@@ -115,7 +117,7 @@ affiliated with or endorsed by their authors.
 
 ## Formats and parameters from other open-source projects
 
-Written in Rust for EffectCraft; no code is copied. They follow published specifications and
+Written in Rust for VL Effects; no code is copied. They follow published specifications and
 configuration from these Apache-2.0 projects:
 
 - `crates/segment/src/tflite.rs` reads TensorFlow Lite files using the field layout of TensorFlow
@@ -127,22 +129,33 @@ configuration from these Apache-2.0 projects:
 - `crates/segment/src/mobilesam.rs` follows the MobileSAM, TinyViT and Segment Anything
   architectures and their Apache-2.0 reference code.
 
-## First-party brand marks
+## Frozen matte regression fixture
 
-The ArtCraft name, wordmark and logos are trademarks of the ArtCraft Team. They are not open source and are not
-covered by the project licence; they may be used only unmodified and only as part of this repository and EffectCraft,
-under [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt). Forks and modified versions must remove them
-(AGENTS.md §1.8).
+| Asset | Author | Source | Licence |
+|---|---|---|---|
+| `crates/engine/src/tests/fixtures/analysed-0.24.ecproj` | arnav-hiwarkar | Original work, synthetic project keyed by VL Effects 0.24.1 | MIT OR Apache-2.0 |
+| `crates/engine/src/tests/fixtures/object-matte-0.22.ecproj` | lisn0 | Original work, synthetic project saved by VL Effects 0.22.0 | MIT OR Apache-2.0 |
+| `crates/engine/src/tests/fixtures/tracked-0.22.ecproj` | arnav-hiwarkar | Original work, synthetic project saved by VL Effects 0.22.0 | MIT OR Apache-2.0 |
+
+## Visualab Studios brand
+
+The Visualab Studios name and logos are trademarks of Visualab Studios. The artwork below is
+original work by Visualab Studios.
 
 | File | Author | Source | Licence |
 |---|---|---|---|
-| `docs/brand/artcraft-logo-white.png` | ArtCraft Team | Original work: first-party ArtCraft brand mark (ArtCraft wordmark, light ink for dark backgrounds) | ArtCraft brand terms, not open source (`docs/brand/LICENSE-brand.txt`) |
-| `docs/brand/artcraft-logo-white.svg` | ArtCraft Team | Original work: first-party ArtCraft brand mark (ArtCraft wordmark, light ink for dark backgrounds) | ArtCraft brand terms, not open source (`docs/brand/LICENSE-brand.txt`) |
-| `docs/brand/artcraft-logo.png` | ArtCraft Team | Original work: first-party ArtCraft brand mark (ArtCraft wordmark (symbol + "ARTCRAFT"), dark ink for light backgrounds) | ArtCraft brand terms, not open source (`docs/brand/LICENSE-brand.txt`) |
-| `docs/brand/artcraft-logo.svg` | ArtCraft Team | Original work: first-party ArtCraft brand mark (ArtCraft wordmark (symbol + "ARTCRAFT"), dark ink for light backgrounds) | ArtCraft brand terms, not open source (`docs/brand/LICENSE-brand.txt`) |
-| `docs/brand/artcraft-mark-black.png` | ArtCraft Team | Original work: first-party ArtCraft brand mark (ArtCraft symbol ("A" mark), black) | ArtCraft brand terms, not open source (`docs/brand/LICENSE-brand.txt`) |
-| `docs/brand/artcraft-mark-black.svg` | ArtCraft Team | Original work: first-party ArtCraft brand mark (ArtCraft symbol ("A" mark), black) | ArtCraft brand terms, not open source (`docs/brand/LICENSE-brand.txt`) |
-| `docs/brand/artcraft-mark.png` | ArtCraft Team | Original work: first-party ArtCraft brand mark (ArtCraft symbol ("A" mark), blue) | ArtCraft brand terms, not open source (`docs/brand/LICENSE-brand.txt`) |
-| `docs/brand/artcraft-mark.svg` | ArtCraft Team | Original work: first-party ArtCraft brand mark (ArtCraft symbol ("A" mark), blue) | ArtCraft brand terms, not open source (`docs/brand/LICENSE-brand.txt`) |
+| `assets/app-icon/visualab-mark.png` | Visualab Studios | Original work: VL Effects app icon (Visualab Studios brand mark) | MIT OR Apache-2.0 (`assets/app-icon/LICENSE.txt`) |
+| `assets/brand/visualab-splash-bg.png` | Visualab Studios | Original work: Visualab Studios loading-screen background | MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`) |
+| `assets/brand/visualab-splash-logo.png` | Visualab Studios | Original work: Visualab Studios loading-screen artwork | MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`) |
+| `apps/effectcraft-web/web/vl-logo.png` | Visualab Studios | Original work: Visualab Studios brand mark (web loading screen) | MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`) |
+| `apps/effectcraft-web/web/favicon.png` | Visualab Studios | Original work: Visualab Studios brand mark; 128 px | MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`) |
+| `apps/effectcraft-web/web/icon-180.png` | Visualab Studios | Original work: Visualab Studios brand mark; 180 px home-screen icon | MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`) |
+| `apps/effectcraft-web/web/icon-192.png` | Visualab Studios | Original work: Visualab Studios brand mark; 192 px home-screen icon | MIT OR Apache-2.0 (`LICENSE-MIT`, `LICENSE-APACHE`) |
 
 - Appearance theme previews, drawn procedurally from original shapes: `crates/ui-egui/src/panels/settings.rs` (original work, MIT OR Apache-2.0).
+
+## Synthetic test audio
+
+| Asset | Author | Source | Licence |
+|---|---|---|---|
+| `crates/media/tests/fixtures/pce61-ffmpeg.aac-fixture` | Dylan M. Taylor | Original sine waves; reproducible recipe in `crates/media/tests/fixtures/README.md` | MIT OR Apache-2.0 |

@@ -2,7 +2,7 @@
 
 ## Settings (Preferences)
 
-Visualab Effects ▸ Settings (macOS) or Edit ▸ Preferences (Windows/Linux), `Cmd+Alt+;`. The dialog has
+VL Effects ▸ Settings (macOS) or Edit ▸ Preferences (Windows/Linux), `Cmd+Alt+;`. The dialog has
 After Effects 2026's pages (General, Startup & Repair, Project, Composition, Previews, Appearance,
 Grids & Guides, Labels, Type, Import, Export, Audio, Disk, Memory & CPU, Video, 3D, Scripting &
 Expressions) with OK, Cancel, Previous and Next. Older page names still open the right page
@@ -12,8 +12,8 @@ Performance` opens Memory & CPU).
 The model is `effectcraft_engine::prefs::Prefs`: serde, versioned (`version`), addressed by dotted
 keys (`general.undoLevels`, `autoSave.intervalMinutes`, `labels.3.name`). It is stored as
 `prefs.json` through the session's `ConfigStore` (the desktop app uses the platform config
-directory: `~/Library/Application Support/Visualab Effects` on macOS, `%APPDATA%\Visualab Effects` on
-Windows, `$XDG_CONFIG_HOME/effectcraft` on Linux, or `Visualab EffectsData` beside the executable when a
+directory: `~/Library/Application Support/VL Effects` on macOS, `%APPDATA%\VL Effects` on
+Windows, `$XDG_CONFIG_HOME/effectcraft` on Linux, or `EffectCraftData` beside the executable when a
 `portable.txt` sits there, as in the Windows portable zip; the web app keeps it in browser storage: the
 Origin Private File System, or IndexedDB where OPFS can't write, see [web.md](web.md)). Loading migrates older layouts, keeps unknown keys (from newer versions) and
 falls back to defaults for values that don't parse.
@@ -30,18 +30,21 @@ Commands (CLI, MCP, control channel):
 
 ### Settings that change behaviour
 
-- `general.language`: interface language (`system` / `en` / `ja` / `zh-hans` / `zh-hant` / `uk` / `es` / `pt-br` / `ka`), Settings ▸ General ▸ Language; menu labels change immediately. `system` (Match System, the default) follows the operating system's interface language where Visualab Effects has a translation and is English otherwise: a Simplified Chinese locale (`zh`, `zh-CN`, `zh_CN.UTF-8`, `zh-Hans-CN`, `zh-SG`) selects `zh-hans`, a Traditional one (`zh-TW`, `zh-HK`, `zh-Hant`, `zh_MO`) selects `zh-hant`, a Ukrainian one (`uk`, `uk-UA`, `uk_UA.UTF-8`) selects `uk`, a Spanish one (`es`, `es-ES`, `es_MX.UTF-8`) selects `es`, a Portuguese one (`pt`, `pt-BR`, `pt_PT.UTF-8`) selects `pt-br`, a Georgian one (`ka`, `ka-GE`, `ka_GE.UTF-8`) selects `ka`; the browser build follows `?lang=` in the address, then the browser's languages (`navigator.languages`). Choose **Español** or **Português (Brasil)** for Spanish or Brazilian Portuguese menus (panels stay in English for now); choose **Українська** for Ukrainian menus and cataloged panel, dialog, button and tooltip text; Ukrainian uses the bundled UI fonts. Native Japanese, Simplified and Traditional Chinese UI uses installed system fonts; the web host must supply a Japanese font. The same setting picks the CJK fallback for the interface *and* the Han preference of the text engine, so the composition's own text is drawn with the same language's glyph forms (the text engine's preference is process-global); swapping the language reinstalls the fonts, so it applies without a restart. Two catalogs back the text: the menus are keyed by `(command, English label)` (`crates/ui-egui/src/i18n.rs`), and the rest of the interface - panels, dialogs, buttons, tooltips - is keyed by its English source string (`crates/ui-egui/src/i18n/ui.rs`, with rows for Japanese, Simplified and Traditional Chinese and Ukrainian), where a panel writes `tr("Rename")`, or `tr_args("Proxy Use: {}", &[&quality])` when the row carries a value. A row that is missing falls back to English, so a new string shows up untranslated rather than empty; the `missing_translations_report` test lists what each language lacks, and the tests in `ui.rs` fail on an unused row.
+- `general.language`: interface language (`system` / `en` / `ja` / `zh-hans` / `zh-hant` / `uk` / `es` / `pt-br` / `ka` / `sv`), Settings ▸ General ▸ Language; menu labels change immediately. `system` (Match System, the default) follows the operating system's interface language where VL Effects has a translation and is English otherwise: a Simplified Chinese locale (`zh`, `zh-CN`, `zh_CN.UTF-8`, `zh-Hans-CN`, `zh-SG`) selects `zh-hans`, a Traditional one (`zh-TW`, `zh-HK`, `zh-Hant`, `zh_MO`) selects `zh-hant`, a Ukrainian one (`uk`, `uk-UA`, `uk_UA.UTF-8`) selects `uk`, a Spanish one (`es`, `es-ES`, `es_MX.UTF-8`) selects `es`, a Portuguese one (`pt`, `pt-BR`, `pt_PT.UTF-8`) selects `pt-br`, a Georgian one (`ka`, `ka-GE`, `ka_GE.UTF-8`) selects `ka`, a Swedish one (`sv`, `sv-SE`, `sv_SE.UTF-8`) selects `sv`; the browser build follows `?lang=` in the address, then the browser's languages (`navigator.languages`). Choose **Español** or **Português (Brasil)** for Spanish or Brazilian Portuguese menus (panels stay in English for now); choose **Українська** for Ukrainian menus and cataloged panel, dialog, button and tooltip text; Ukrainian uses the bundled UI fonts. Choose **Svenska** for Swedish menus, panels and effect names. Native Japanese, Simplified and Traditional Chinese UI uses installed system fonts; the web host must supply a Japanese font. The same setting picks the CJK fallback for the interface *and* the Han preference of the text engine, so the composition's own text is drawn with the same language's glyph forms (the text engine's preference is process-global); swapping the language reinstalls the fonts, so it applies without a restart. Two catalogs back the text: the menus are keyed by `(command, English label)` (`crates/ui-egui/src/i18n.rs`), and the rest of the interface - panels, dialogs, buttons, tooltips - is keyed by its English source string (`crates/ui-egui/src/i18n/ui.rs`, with rows for Japanese, Simplified and Traditional Chinese and Ukrainian), where a panel writes `tr("Rename")`, or `tr_args("Proxy Use: {}", &[&quality])` when the row carries a value. A row that is missing falls back to English, so a new string shows up untranslated rather than empty; the `missing_translations_report` test lists what each language lacks, and the tests in `ui.rs` fail on an unused row.
 - `general.undoLevels`: Levels of Undo
 - `general.pathPointSize`: Path Point and Handle Size
 - `general.recentItems`: Recent Projects Shown
 - `general.showToolTips`: Show Tool Tips
+- `general.viewerWheelScrubbing`: Scrub Composition Frames with Mouse Wheel (off by default). On: an unmodified mouse wheel over the Composition viewer steps frames, and the smoothed tail of that notch does not zoom or pan. Ctrl/Cmd+wheel and a trackpad still zoom and pan.
 - `general.createLayersAtCompStart`: Create Layers at Composition Start Time
+- `general.fitNewLayersToWorkArea`: Fit New Layers to Work Area (off by default). On: new text, solid, shape, null and adjustment layers start at the work area start and end at its end, ahead of Create Layers at Composition Start Time. Footage and compositions keep their own length.
 - `general.defaultSpatialLinear`: Default Spatial Interpolation to Linear
 - `startup.showHomeOnLaunch`: Show Home Screen When Launching
 - `startup.offerCrashRecovery`: Offer to Open the Latest Auto-Save After a Crash
 - `startup.windowGraphics`: Window Graphics (`auto` / `gl`), what the desktop window draws with from the next launch. `auto` lets the platform pick (DirectX 12, Vulkan or Metal); `gl` uses OpenGL, with CPU compositing, for graphics drivers that crash with the others. A launch leaves a `launch-pending` marker in the settings folder until its window has been drawing for a few seconds (or the app quits normally before that); a launch that stops earlier (a graphics driver crashing as the window opens or as its surface is re-created) leaves the marker behind, and the next launch switches to `gl` and says so (not on macOS, which has no OpenGL backend). `WGPU_BACKEND` overrides both.
 - `project.useTemplate`: New Project Loads Template
 - `project.templatePath`: Template Project
+- `project.compactProjectFiles`: Save Compact Project Files (default off). Off: File ▸ Save writes `.ecproj` files as indented JSON, one value per line, easy to read and diff in version control. On: compact JSON on one line, smaller and faster to save and open. Either opens the same; auto-saves, XML copies and template packages are not affected.
 - `autoSave.enabled`: Automatically Save Projects
 - `autoSave.intervalMinutes`: Save Every
 - `autoSave.maxVersions`: Maximum Project Versions
@@ -50,14 +53,24 @@ Commands (CLI, MCP, control channel):
 - `autoSave.saveOnRenderStart`: Save When Starting Render Queue
 - `composition.showRenderingProgress`: Show Rendering Progress in Info Panel and Flowchart
 - `previews.adaptiveResolutionLimit`: Adaptive Resolution Limit (the lowest resolution Fast Previews ▸
-  Adaptive Resolution drops to while you drag; a playing preview keeps the viewer's resolution)
+  Adaptive Resolution drops to while you drag, and the lowest a playing preview steps down to)
+- `previews.adaptivePlayback`: Lower Resolution When Playback Can't Keep Up. Off by default (without it a first play renders
+  at the viewer's resolution at the rate frames arrive, and a looping preview plays its later loops
+  from the cache in real time, as in After Effects; with it the play stays lowered). A
+  preview at Resolution Auto that plays under 80 % of its frame rate (frames render slower than
+  that, so it plays them at the rate they arrive rather than freezing between them) steps
+  down a resolution (half the scale after two seconds, a quarter two seconds later if still slow,
+  no lower than the Adaptive Resolution Limit) for the rest of that play; stopping goes back to the viewer's resolution, and Cache
+  Frames When Idle fills it in. An explicit Resolution (the comp's or the Preview panel's) is
+  kept as set
 - `previews.cacheFramesWhenIdle`: Cache Frames When Idle (Composition ▸ Preview): after a second
   without input or edits, the viewer renders the work area into the RAM preview in the
-  background, from the current time on, until it is cached or the budget is full
+  background, from the current time on, until it is cached or the budget is full. On by default,
+  as in After Effects, so the first playback of a comp left alone for a second is already cached
 - `previews.fastPreviews`: Fast Previews (Draft 3D, Faster Effects)
 - `appearance.appearanceMode`: Appearance Mode (`auto` / `dark` / `light`). `auto` (Sync with System) follows the operating system's light or dark appearance while the app runs: on Linux the desktop app reads the XDG desktop portal (`org.freedesktop.appearance` `color-scheme`) once and then listens for its `SettingChanged` signal on a worker thread, repainting only when the value changes (nothing polls); `gsettings` runs at most once at start-up, by absolute path, when the portal gives no answer. Elsewhere it uses what the window system reports. With no answer it shows the dark theme. New installs stay `dark`; Sync with System is opt-in. The Tools bar's appearance button (a monitor, sun or moon) cycles Sync with System, Light and Dark (`view.theme.toggle`, Next Appearance Mode).
 - `appearance.darkTheme`: Dark Theme (`dark` / `darker`), shown in dark appearance
-- `appearance.lightTheme`: Light Theme (`light`), shown in light appearance. Settings ▸ Appearance shows the mode above a light and a dark theme card, each with a preview of the Visualab Effects window in that theme.
+- `appearance.lightTheme`: Light Theme (`light`), shown in light appearance. Settings ▸ Appearance shows the mode above a light and a dark theme card, each with a preview of the VL Effects window in that theme.
 - `appearance.favoriteThemes`: a list of unique theme ids (`dark`, `darker`, `light`), empty by default. Hover a theme row to star it; saved favorites keep an accent-colored star. Right-click the appearance button for Appearance Settings and favorites grouped light first, then dark. Selecting a favorite fixes its appearance family and preserves the opposite family choice; left-click still cycles modes. Settings OK saves favorites and Cancel restores them. Unknown or duplicate ids are rejected by `prefs.set` and removed when loading old settings.
 - `appearance.theme`: the single theme from before appearance modes, kept for older settings files and automation. A saved file with only `theme` loads as a fixed Dark or Light mode showing it; setting it (`prefs.set`, `ui.set {"theme": …}`, `view.theme.dark|darker|light`) selects that theme and fixes the mode to its family. While the mode is Dark or Light it mirrors the theme in use.
 - `appearance.brightness`: Brightness
@@ -80,6 +93,27 @@ Commands (CLI, MCP, control channel):
 - `memory.layerCacheMb`: Layer Cache (in the browser at most 512 MB, see [web.md](web.md))
 - `memory.mediaCacheMb`: Footage Frame Cache (in the browser at most 256 MB)
 - `memory.previewCacheMb`: Preview (RAM) Cache
+- `memory.gpuFramesInFlight`: GPU Frames Rendered at Once (`auto`, `1`, `2`, `3`): how many
+  frames the Render Queue renders on the GPU at once. Auto measures the GPU memory after the
+  job's first GPU frame and fits up to 3 frames into the GPU memory cap (by default a
+  conservative 3 GiB on a discrete card, less when its memory is known, 2 GiB on an integrated
+  one; `EFFECTCRAFT_GPU_MEMCAP_MB` sets it), keeping room for the upload cache to fill. It
+  renders one frame at a time where the memory can't be measured (Metal, WebGPU, GL, or the
+  cap turned off) and once frames have had to wait for memory. The render log names the count.
+  `EFFECTCRAFT_GPU_INFLIGHT` overrides it. CPU renders have no such setting. A job on GPU
+  Acceleration that renders on the CPU (it measured the CPU faster, or the GPU stopped) fits
+  its CPU frames in flight into half the memory the system has free, at the size a GPU frame
+  measured, from 1 to one per thread; the app log names the count. Other CPU renders (Software
+  Rendering projects) keep one frame per thread in flight, so their memory grows with the core
+  count. Set `EFFECTCRAFT_CPU_INFLIGHT` to a whole number of frames (at least 1) to cap the
+  frames in flight of every Render Queue render and export, `effectcraft-cli render` included
+  ([#1615](https://github.com/storytold/effectcraft/issues/1615)); previews don't read it. One
+  exception: while a job on GPU Acceleration times both compositors on its first frames, it
+  renders them under the cap but keeps them all (up to 12) until it has chosen. That timing
+  picks the compositor that a job of 12 frames or more renders every frame on (the render log
+  names it and why). `EFFECTCRAFT_RQ_RENDERER` set to `gpu` or `cpu` skips it and renders on
+  that compositor; `auto` (the default) measures. A queue item's later output modules reuse its
+  first one's choice, and Software Rendering projects always render on the CPU.
 - `threeD.defaultRenderer`: Default 3D Renderer
 - `labels.N.name` / `labels.N.color`: the 16 label names and colours, used by the Label menu,
   the timeline, project panel, render queue and viewer handles
@@ -119,9 +153,11 @@ Commands (CLI, MCP, control channel):
 - `import.reportMissingFrames`: gaps in an image sequence's numbering are reported on import
   (they show as colour-bar placeholders, as in After Effects; see [footage.md](footage.md))
 - `import.autoReloadFootage`: Automatically Reload Footage, `off`, `nonSequence` (the default, as
-  in After Effects) or `all` (image sequences too). Every two seconds,
-  and as soon as the window comes back to the front, the desktop app compares each footage file's
-  size and modification time with what they were, and reloads what another app saved: a
+  in After Effects) or `all` (image sequences too). Every two seconds while its window is in
+  front (every ten seconds while another app has the front), and as soon as the window comes back
+  to the front, the desktop app compares each footage file's size and modification time with what
+  they were, on a worker thread that only wakes the interface when something changed, and reloads
+  what another app saved: a
   Photoshop file edited in PhotoCraft or Photoshop shows its new pixels without File ▸ Reload
   Footage. It is not an undo step and doesn't modify the project; a layer item stays on its layer
   (found again by name), and a file that can't be read yet (still being written) is tried again once it changes again.
@@ -138,7 +174,12 @@ Commands (CLI, MCP, control channel):
   it supports it)
 - `disk.diskCacheEnabled`, `disk.diskCacheMaxGb`, `disk.diskCacheFolder`: the persistent disk
   cache of processed layers and frames (in the browser: frames in the Origin Private File System,
-  at most half the origin's quota; the folder setting does not apply there). The Disk page also
+  at most half the origin's quota; the folder setting does not apply there). On the desktop the
+  cache never fills its disk: it leaves 5% of the disk free, at least 2 GB and at most 10 GB, and
+  is smaller than `disk.diskCacheMaxGb` when free space requires it. The Disk page shows the limit
+  in effect in MB under Maximum Disk Cache Size, with a note naming the space kept free when free
+  disk space lowers it (with less than 64 MB of room nothing is written, and frames and layers
+  are not compressed for it). The Disk page also
   shows **Browser Storage** in the web app: usage and quota, persistent storage, Clear buttons
   (`storage.info` / `storage.persist` / `storage.clear`, see [web.md](web.md))
 - `disk.mediaCacheFolder`: audio waveform summaries kept between sessions (`Peaks/`)
@@ -171,11 +212,11 @@ Commands (CLI, MCP, control channel):
 
 ### Display-only settings
 
-These rows are in the dialog for After Effects parity and are stored, but have no Visualab Effects
+These rows are in the dialog for After Effects parity and are stored, but have no VL Effects
 behaviour to change. `prefs.pages` reports them with `"live": false`; a test keeps this list in
 step with the schema.
 
-- `general.useSystemColorPicker`: Visualab Effects has one colour picker on every platform and the
+- `general.useSystemColorPicker`: VL Effects has one colour picker on every platform and the
   web; there is no pure-Rust way to open the system colour panels.
 - `composition.hardwareAcceleratePanels`: the Composition, Layer and Footage panels are always
   drawn by the GPU (egui on wgpu).
@@ -189,17 +230,25 @@ Effect Controls uses compact, fixed 20 pt parameter rows, as After Effects does:
 Edit ▸ Keyboard Shortcuts (`Cmd+Alt+'`) opens the shortcut editor: an on-screen keyboard showing
 which keys are assigned for the held modifiers (purple: application-wide, green: panel-specific,
 both: split), modifier toggles, a searchable list of every command (all engine commands, menu
-entries with bound parameters and the frontend's tool / panel commands), and a preset menu.
+entries with bound parameters, the scripts File ▸ Scripts lists and the frontend's tool / panel
+commands), and a preset menu.
 
-- **Presets.** "Visualab Effects Default" is After Effects' default layout and is read-only; editing
+- **Presets.** "VL Effects Default" is After Effects' default layout and is read-only; editing
   it creates a "Custom" copy. Custom presets store only their differences from the default and
   can be duplicated, renamed, deleted, exported and imported (JSON). The active preset is what
   the menus show and what the shortcut dispatcher runs.
 - **Assigning.** Select a command, then press keys in the shortcut field (or type them), or
   click a key on the keyboard with the modifiers toggled. Conflicts with other commands in an
   overlapping scope are listed before you assign.
-- **Scope.** Menu and engine commands are application-wide; timeline commands work in the
-  Timeline and viewer commands in the Composition panel.
+- **Scope.** A shortcut belongs to the application, to a panel (Project, Timeline, Composition,
+  Render Queue…) or to a context (editing text, a paint tool or a camera tool active, a mask
+  selected). One chord can be bound once per scope, and the narrowest active scope runs it: an
+  active context, then the panel with the keyboard, then the application. The Timeline and the
+  Composition panel share their shortcuts. A context's shortcuts work only while it is active;
+  a panel's shortcut that nothing nearer claims still works from the other panels.
+- **Conflicts.** Two commands of one scope on one chord are a conflict (`shortcuts.conflicts`
+  lists them; the default preset has none). The same chord in two scopes is an override: both
+  keep working, and `shortcuts.set` reports it with `overrides: true`.
 
 Commands: `shortcuts.list {query?, keys?, assigned?}`, `shortcuts.set {command, params?, keys}`,
 `shortcuts.reset {command?}`, `shortcuts.preset {op: select|new|duplicate|delete|rename, name?,
@@ -209,9 +258,9 @@ from?, newName?}`, `shortcuts.export {preset?, path?}`, `shortcuts.import {path?
 ## Auto-save and crash recovery
 
 - Every *n* minutes (Settings ▸ Project ▸ Auto-Save) a project with unsaved changes is written
-  to an `Visualab Effects Auto-Save` folder next to it (or the custom folder) as
+  to an `VL Effects Auto-Save` folder next to it (or the custom folder) as
   `<name> auto-save N.ecproj`. Slots rotate through 1…maximum versions, overwriting the oldest.
-  Untitled projects go to the custom folder, or to `Visualab Effects Auto-Save` in the config directory.
+  Untitled projects go to the custom folder, or to `VL Effects Auto-Save` in the config directory.
 - Every project and auto-save write is atomic: a temporary file is written and flushed, then
   renamed over the target, so a crash mid-write leaves the previous file intact.
 - While the app runs, `session.lock` in the config directory records the open project and its
@@ -222,7 +271,7 @@ from?, newName?}`, `shortcuts.export {preset?, path?}`, `shortcuts.import {path?
 
 Headless MCP clients can opt in with `effectcraft-cli mcp --autosave`. Unlike the desktop's
 interval, this writes changed dirty projects before sending each tool reply, with separate
-version slots per server under `Visualab Effects Auto-Save/MCP/` (or the custom folder's `MCP/`).
+version slots per server under `VL Effects Auto-Save/MCP/` (or the custom folder's `MCP/`).
 It reads settings without sharing the desktop's writable settings store or `session.lock`.
 See [headless recovery](agents.md#keeping-headless-work-across-restarts) for how to reopen a
 checkpoint after a client restart.
@@ -237,9 +286,9 @@ config directory. Each launch moves the previous log to `effectcraft.1.log` (and
 `effectcraft.2.log`), so the log of a run that crashed survives the next start; a log stops
 growing at 16 MiB. A launch from the Dock, the Start menu or a launcher has no terminal, so
 attach these files to a bug report. Help ▸ Reveal Logging File shows this run's log (or Help ▸
-Enable Logging's `Visualab Effects Log.txt` while that is on, which keeps every Visualab Effects record
+Enable Logging's `VL Effects Log.txt` while that is on, which keeps every VL Effects record
 across launches).
 
-By default the log has `info` records from Visualab Effects and warnings and errors from everything
+By default the log has `info` records from VL Effects and warnings and errors from everything
 else. `RUST_LOG` replaces that with env_logger-style directives: `debug`,
 `warn,effectcraft_render=trace`, `wgpu_core=info`. The control-channel token is never logged.

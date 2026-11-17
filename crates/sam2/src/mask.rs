@@ -1,4 +1,4 @@
-// Modified work: wraps the ported SAM 2 image path behind EffectCraft's `MaskModel` interface
+// Modified work: wraps the ported SAM 2 image path behind VL Effects' `MaskModel` interface
 // (Apache-2.0, see NOTICE).
 //! SAM 2 as a drop-in [`MaskModel`]: a frame and a prompt in, a foreground probability per pixel
 //! out. The frame's encoding is cached, so further strokes on the same frame cost one decode.

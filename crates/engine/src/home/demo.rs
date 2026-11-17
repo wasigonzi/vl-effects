@@ -11,7 +11,7 @@ use effectcraft_project::build::{self, Ids};
 use effectcraft_project::{Comp, ItemId, ItemKind, Layer, LayerSource, Project, PropGroup, Solid};
 use effectcraft_time::{FrameRate, Tick};
 
-pub const MAIN_COMP: &str = "Visualab Effects Intro";
+pub const MAIN_COMP: &str = "VL Effects Intro";
 pub const SHOWCASE_3D: &str = "3D Showcase";
 
 /// Seconds → the nearest frame of the demo's 29.97 fps comps (AE keeps times frame-aligned).
@@ -116,12 +116,12 @@ fn lower_third(p: &mut Project) -> Comp {
     let mut title = text_layer(
         p,
         &c,
-        "Built with Visualab Effects",
-        TextDoc { text: "Built with Visualab Effects".into(), size: 40.0, style: "SemiBold".into(), justify: Justify::Center, ..Default::default() },
+        "Built with VL Effects",
+        TextDoc { text: "Built with VL Effects".into(), size: 40.0, style: "SemiBold".into(), justify: Justify::Center, ..Default::default() },
         [440.0, 914.0],
     );
     anim(&mut title, "transform/opacity", keys(&[(0.4, Value::Scalar(0.0)), (0.9, Value::Scalar(100.0))]));
-    c.layers = vec![title, bar];
+    c.layers = vec![title, bar].into();
     c
 }
 
@@ -238,7 +238,7 @@ fn showcase_3d(p: &mut Project, solids: ItemId) -> Comp {
     anim(&mut cam, "cameraOptions/focusDistance", keys(&[(0.0, Value::Scalar(1700.0)), (5.0, Value::Scalar(1900.0)), (10.0, Value::Scalar(1650.0))]));
 
     // Key light: warm spot casting soft shadows. Fill: cool ambient.
-    let mut key = build::layer(p, &c, "Key Light", LayerSource::Light { kind: effectcraft_project::LightKind::Spot }, (1920, 1080), None);
+    let mut key = build::layer(p, &c, "Screen Color Key", LayerSource::Light { kind: effectcraft_project::LightKind::Spot }, (1920, 1080), None);
     set(&mut key, "transform/position", Value::Vec3([500.0, -500.0, -700.0]));
     set(&mut key, "transform/poi", Value::Vec3([960.0, 600.0, 300.0]));
     set(&mut key, "lightOptions/intensity", Value::Scalar(150.0));
@@ -270,7 +270,7 @@ fn showcase_3d(p: &mut Project, solids: ItemId) -> Comp {
     );
     anim(&mut caption, "transform/opacity", keys(&[(0.3, Value::Scalar(0.0)), (1.2, Value::Scalar(100.0))]));
 
-    c.layers = vec![caption, cam, key, fill, title, left, right, x1, x2, floor];
+    c.layers = vec![caption, cam, key, fill, title, left, right, x1, x2, floor].into();
     c
 }
 
@@ -396,8 +396,8 @@ pub fn demo_project() -> Project {
     let mut title = text_layer(
         &mut p,
         &comp,
-        "EFFECTCRAFT",
-        TextDoc { text: "EFFECTCRAFT".into(), size: 148.0, style: "Bold".into(), tracking: 120.0, justify: Justify::Center, ..Default::default() },
+        "VL EFFECTS",
+        TextDoc { text: "VL EFFECTS".into(), size: 148.0, style: "Bold".into(), tracking: 120.0, justify: Justify::Center, ..Default::default() },
         [960.0, 560.0],
     );
     let mut next = p.next_id;
@@ -442,7 +442,7 @@ pub fn demo_project() -> Project {
         &comp,
         "Tagline",
         TextDoc {
-            text: "MOTION GRAPHICS  ·  VISUAL EFFECTS  ·  PURE RUST".into(),
+            text: "MOTION GRAPHICS  ·  VISUAL EFFECTS  ·  VISUALAB STUDIOS".into(),
             size: 30.0,
             style: "Medium".into(),
             tracking: 260.0,
@@ -463,7 +463,7 @@ pub fn demo_project() -> Project {
     lower.out_point = t(9.5);
 
     // Stack: top first.
-    comp.layers = vec![lower, title, sub, line, burst, rings, null, bg];
+    comp.layers = vec![lower, title, sub, line, burst, rings, null, bg].into();
     for l in &mut comp.layers {
         if l.name == "Controller" {
             l.switches.video = false;

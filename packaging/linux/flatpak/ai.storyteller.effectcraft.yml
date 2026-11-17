@@ -1,4 +1,4 @@
-# Flatpak manifest for Visualab Effects, ready for a Flathub submission.
+# Flatpak manifest for VL Effects, ready for a Flathub submission.
 #
 # Flatpak builds run offline, so the crate sources must be vendored first. From the repo root:
 #
@@ -20,6 +20,9 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
 command: effectcraft
 finish-args:
+  # The shared updater inspects and updates this installation via flatpak-spawn --host.
+  - --talk-name=org.freedesktop.Flatpak
+  - --filesystem=xdg-data/Visualab Studios/versions:ro
   # Display: Wayland first; X11 only when no Wayland compositor is running.
   - --socket=wayland
   - --socket=fallback-x11

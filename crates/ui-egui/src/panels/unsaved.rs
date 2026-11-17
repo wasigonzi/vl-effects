@@ -16,7 +16,16 @@ use crate::theme::Tokens;
 use crate::{Dialog, EffectcraftApp};
 
 /// Commands that replace or close the open project (Quit is asked when the window closes).
-const CLOSING: &[&str] = &["file.newProject", "file.open", "file.openRecent", "file.closeProject", "file.revert", "file.openDemoProject", "templates.create"];
+const CLOSING: &[&str] = &[
+    "file.newProject",
+    "file.open",
+    "file.openRecent",
+    "file.closeProject",
+    "file.revert",
+    "file.openDemoProject",
+    "templates.create",
+    "file.runShutdownScripts",
+];
 
 /// The command waiting on the prompt, and whether the user already answered it.
 #[derive(Clone, Debug, Default)]
@@ -80,7 +89,7 @@ pub fn project_name(app: &EffectcraftApp) -> String {
 /// The window title: the project's path (or name) and `*` while it has unsaved changes.
 pub fn window_title(app: &EffectcraftApp) -> String {
     let doc = app.session.path.clone().unwrap_or_else(|| project_name(app));
-    format!("Visualab Effects - {doc}{}", if app.session.is_dirty() { " *" } else { "" })
+    format!("VL Effects - {doc}{}", if app.session.is_dirty() { " *" } else { "" })
 }
 
 /// Whether the prompt is Revert Project (Revert / Cancel) instead of Unsaved Changes.
@@ -237,6 +246,23 @@ mod tests {
     fn modified(app: &mut EffectcraftApp) {
         app.session.execute("comp.new", json!({"name": "Main", "width": 64, "height": 64})).unwrap();
         assert!(app.session.is_dirty());
+    }
+
+    #[test]
+    fn shutdown_scripts_prompt_before_discarding_unsaved_work() {
+        let (mut app, ctx) = app();
+        modified(&mut app);
+        let result = crate::menus::invoke(&mut app, &ctx, "file.runShutdownScripts", json!({})).unwrap();
+        assert_eq!(result, json!({"dialog": "unsavedChanges"}));
+        assert_eq!(app.session.project.comps().count(), 1);
+        assert!(app.session.is_dirty());
+        answer_with(&mut app, &ctx, Answer::Cancel);
+        assert_eq!(app.session.project.comps().count(), 1);
+        assert!(app.session.is_dirty());
+        crate::menus::invoke(&mut app, &ctx, "file.runShutdownScripts", json!({})).unwrap();
+        answer_with(&mut app, &ctx, Answer::Discard);
+        assert_eq!(app.session.project.comps().count(), 0);
+        assert!(!app.session.is_dirty() && app.dialog.is_none());
     }
 
     #[test]
@@ -414,7 +440,8 @@ mod tests {
     fn a_dialog_answer_runs_before_the_close_decision() {
         let (mut app, ctx) = app();
         assert!(!app.session.is_dirty());
-        let answer = crate::DialogAnswer { command: "comp.new".into(), key: "name", params: json!({"width": 64, "height": 64}), paths: vec!["Main".into()] };
+        let answer =
+            crate::DialogAnswer { command: "comp.new".into(), key: "name", params: json!({"width": 64, "height": 64}), paths: Ok(vec!["Main".into()]) };
         app.dialog_answers.0.send(answer).unwrap();
         let mut raw = egui::RawInput::default();
         raw.viewports.entry(egui::ViewportId::ROOT).or_default().events.push(egui::ViewportEvent::Close);

@@ -1,7 +1,7 @@
 //! Lottie JSON import and export.
 //!
-//! Implemented from the public Lottie format description (the lottie-spec 1.0 schema and the
-//! LottieFiles format documentation); no player or exporter source was used.
+//! The format itself (the document model, property and keyframe encoding, paths, gradients,
+//! embedded images) is `craft-lottie`; this crate maps it onto VL Effects' project.
 //!
 //! **Export** ([`export_comp`]) turns a composition into a Lottie document: nested compositions
 //! become precomp assets, still footage becomes embedded base64 image assets, and shape, solid,
@@ -15,13 +15,12 @@
 //!
 //! **Import** ([`import`]) is the inverse mapping into a new composition.
 //!
-//! Keyframe times in Lottie are frames of the layer's local time, which is Visualab Effects's layer
+//! Keyframe times in Lottie are frames of the layer's local time, which is VL Effects' layer
 //! time; layer `ip`/`op`/`st` are composition frames and `sr` is the stretch factor.
 
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 
 mod anim;
-mod base64;
 mod export;
 mod import;
 mod shapes;
@@ -31,7 +30,7 @@ pub mod zip;
 use effectcraft_color::BlendMode;
 use effectcraft_time::{FrameRate, TICKS_PER_SECOND, Tick};
 
-pub use export::{ExportOptions, ExportResult, export_comp, to_dotlottie};
+pub use export::{ExportOptions, ExportResult, export_comp, to_dotlottie, try_to_dotlottie};
 pub use import::{ImportResult, ImportedImage, import};
 
 #[derive(Debug, thiserror::Error)]

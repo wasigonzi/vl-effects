@@ -1,4 +1,4 @@
-//! File ▸ Watch Folder…: render farm without a farm. Visualab Effects watches a folder for project
+//! File ▸ Watch Folder…: render farm without a farm. VL Effects watches a folder for project
 //! files (`.ecproj`, at the top level or one folder down, e.g. the folders File ▸ Dependencies ▸
 //! Collect Files writes) whose Render Queue has queued items, renders them, and writes a status
 //! file next to each project (`<project>.status.json`: `rendering`, then `done` or `failed`, with
@@ -88,6 +88,9 @@ fn render_project(host: &Session, path: &Path) -> Value {
         let failed = s.project.render_queue.iter().any(|i| matches!(i.status, RenderStatus::Failed(_)));
         Ok(json!({"state": if failed { "failed" } else { "done" }, "items": items}))
     })();
+    // The project shared `host`'s footage source and gave it its own set of footage effects read
+    // the channels of (#474): give back the host's.
+    host.footage.set_aux_footage(host.aux_footage.as_deref().unwrap_or(&[]));
     let mut v = match result {
         Ok(v) => v,
         Err(e) => json!({"state": "failed", "error": e, "items": []}),

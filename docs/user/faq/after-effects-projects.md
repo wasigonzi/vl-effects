@@ -1,11 +1,11 @@
 ---
-title: Can Visualab Effects open After Effects projects?
-description: Visualab Effects cannot open .aep or .aepx files, and After Effects plug-ins do not run. It saves .ecproj files and imports Lottie.
+title: Can VL Effects open After Effects projects?
+description: VL Effects cannot open .aep or .aepx files, and After Effects plug-ins do not run. It saves .ecproj files and imports Lottie.
 order: 10
 verified: 0.9.2
 ---
 
-No. Visualab Effects cannot open After Effects projects (`.aep` or `.aepx`), and After Effects plug-ins do not run in it.
+No. VL Effects cannot open After Effects projects (`.aep` or `.aepx`), and After Effects plug-ins do not run in it.
 
 ## What it opens instead
 
@@ -19,4 +19,4 @@ Expressions are JavaScript with the After Effects object model, such as `wiggle`
 
 ## Status
 
-Reading `.aep` files is the largest known gap between Visualab Effects and After Effects. It is listed in the project's [gap list](https://github.com/wasigonzi/visualab-effects/blob/main/docs/gaps.md), and the maintainers have not yet decided how to approach it.
+Reading `.aep` files is the largest known gap between VL Effects and After Effects. It is listed in the project's gap list, and the maintainers have not yet decided how to approach it.

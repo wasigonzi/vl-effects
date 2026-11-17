@@ -1,8 +1,8 @@
 ---
 title: FAQ
-description: Short answers about Visualab Effects.
+description: Short answers about VL Effects.
 order: 40
 ---
 
-- [Can Visualab Effects open After Effects projects?](after-effects-projects.md)
-- [Is Visualab Effects free, and where does it run?](price-and-platforms.md)
+- [Can VL Effects open After Effects projects?](after-effects-projects.md)
+- [Is VL Effects free, and where does it run?](price-and-platforms.md)
