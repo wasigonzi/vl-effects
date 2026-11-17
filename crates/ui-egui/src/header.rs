@@ -312,12 +312,13 @@ fn community_buttons(app: &mut EffectcraftApp, ui: &mut egui::Ui, p: &egui::Pain
         let _ = app.session.execute("help.discord", json!({}));
     }
     rx = discord.min.x - 6.0;
-    for (id, icon, tip, cmd) in [("hdr-web", Icon::Sparkle, "VL Effects on visualabstudios.com", "help.appPage")] {
+    {
+        let tip = "VL Effects on visualabstudios.com";
         let r = Rect::from_min_max(pos2(rx - 26.0, cy - 13.0), pos2(rx, cy + 13.0));
-        if widgets::icon_button(ui, r, icon, false, &t, egui::Id::unique(id)).on_hover_text(tip).clicked() {
-            let _ = app.session.execute(cmd, json!({}));
+        if widgets::icon_button(ui, r, Icon::Sparkle, false, &t, egui::Id::unique("hdr-web")).on_hover_text(tip).clicked() {
+            let _ = app.session.execute("help.appPage", json!({}));
         }
-        app.auto.add(&format!("header.{}", &id[4..]), r, tip);
+        app.auto.add("header.web", r, tip);
         rx = r.min.x - 4.0;
     }
     rx
