@@ -2,7 +2,7 @@
 
 **VL Effects** es la herramienta de motion graphics y efectos visuales de **Visualab Studios**:
 composiciones, capas, fotogramas clave, expresiones, máscaras, rotoscopia, texto animado y
-exportación, en el escritorio (Windows, macOS, Linux) y en el navegador.
+exportación, con 308 efectos integrados, en el escritorio (Windows, macOS, Linux) y en el navegador.
 
 - Web: https://www.visualabstudios.com/vl-tools/vl-effects
 - Visualab Studios: https://www.visualabstudios.com

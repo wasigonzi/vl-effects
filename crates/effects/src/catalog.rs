@@ -192,7 +192,10 @@ mod tests {
         let words: Vec<&str> = readme.split_whitespace().collect();
         let counts: Vec<&str> = words
             .windows(3)
-            .filter(|w| w[0].parse::<u32>().is_ok() && (w[1].starts_with("effects") || (w[1] == "built-in" && w[2].starts_with("effects"))))
+            .filter(|w| {
+                w[0].parse::<u32>().is_ok()
+                    && (w[1].starts_with("effects") || w[1].starts_with("efectos") || (w[1] == "built-in" && w[2].starts_with("effects")))
+            })
             .map(|w| w[0])
             .collect();
         let n = super::registry().len().to_string();
