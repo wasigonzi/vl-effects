@@ -346,7 +346,7 @@ pub(crate) fn export_items(ex: &mut Ex, contents: &PropGroup, label: &str) -> Ve
             }),
             "repeater" => {
                 let (copies, offset) = (o.put("copies", &anim::num), o.put("offset", &anim::num));
-                // Lottie: 1 = Above, 2 = Below; EffectCraft: 0 = Below, 1 = Above.
+                // Lottie: 1 = Above, 2 = Below; VL Effects: 0 = Below, 1 = Above.
                 let composite = Some(if o.e("composite") == 1 { 1 } else { 2 });
                 let transform = g.sub("transform").map(|t| repeater_transform(shape_transform(o.ex, t, &lbl)));
                 ShapeKind::Repeater(Repeater { copies, offset, composite, transform })

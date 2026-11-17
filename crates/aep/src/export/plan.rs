@@ -1,4 +1,4 @@
-//! The plan: the EffectCraft project reduced to exactly the values the `.aep` can hold, in the
+//! The plan: the VL Effects project reduced to exactly the values the `.aep` can hold, in the
 //! file's units, with everything that cannot be written already reported. Pure data; the chunks
 //! are built from it in `emit`.
 
@@ -705,7 +705,7 @@ fn resolve_parents(cp: &mut CompPlan, exported: &HashSet<LayerId>, comp_name: &s
 ///
 /// Each parent chain used to be walked from every layer (a chain of N layers took N² steps).
 /// With unique layer ids each layer has one link, the links form chains and disjoint loops, and
-/// the layers on a loop are found once ([`loop_of`]). Repeated ids (not made by EffectCraft)
+/// the layers on a loop are found once ([`loop_of`]). Repeated ids (not made by VL Effects)
 /// keep the walk ([`parents_to_cut_by_walk`]).
 fn parents_to_cut(links: &[(LayerId, Option<LayerId>)], exported: &HashSet<LayerId>) -> Vec<bool> {
     if exported.len() != links.len() {
@@ -927,7 +927,7 @@ fn plan_transform(layer: &Layer, src: &LayerSrc, comp: &Comp, source_size: (u32,
             }
         }
         // A camera's or light's block holds After Effects' own Position and point of interest:
-        // a value at EffectCraft's default is written too.
+        // a value at VL Effects' default is written too.
         if cam_light {
             for (kind, id) in [(PropKind::Position, "position"), (PropKind::Anchor, "poi")] {
                 if props.iter().any(|p: &PropPlan| p.kind == kind) {
@@ -996,7 +996,7 @@ pub(crate) fn report_beyond(beyond: bool, what: &str, col: &mut Collector) {
 }
 
 /// Reports keys whose evaluation the format does not keep: muted keys (written as active keys) and
-/// auto-Bezier keys (written with their stored ease, not the slope EffectCraft computes).
+/// auto-Bezier keys (written with their stored ease, not the slope VL Effects computes).
 fn report_key_flags(layer: &Layer, what: &str, col: &mut Collector) {
     layer.props.walk("", &mut |_, p| {
         if p.keys.iter().any(|k| k.muted) {
@@ -1045,7 +1045,7 @@ fn plan_layer(cx: &PlanCx<'_>, at: CompAt<'_>, cp: &CompPlan, layer: &Layer, col
     // stretch for a stretch of 100 % or more, in the composition's below (018, 317: 51 200 and
     // 38 400; 316: 25 600). Keys count source time in that time scale (641: 200 %, a key at comp
     // 1 s = source 0.5 s stored as 25 600 / 51 200; 642: 50 %, comp 1 s = source 2 s stored as
-    // 51 200 / 25 600; 643: the same with the layer starting at 1 s), which is EffectCraft's layer
+    // 51 200 / 25 600; 643: the same with the layer starting at 1 s), which is VL Effects' layer
     // time in the layer's time scale.
     let (stretch, time_scale) = plan_stretch(layer, cp.tb.timescale, comp_name, col);
     // In and out points relative to the start, in source time (reversed, 981: After Effects' in
@@ -1238,7 +1238,7 @@ fn precomp_loop(component: &HashMap<ItemId, usize>, from: ItemId, to: ItemId) ->
 }
 
 /// The names of a layer's Material Options that differ from a new layer's (value, keys or an
-/// expression); a property EffectCraft's defaults do not list counts as changed.
+/// expression); a property VL Effects' defaults do not list counts as changed.
 fn changed_material_options(layer: &Layer) -> Vec<String> {
     let Some(g) = layer.props.sub("materialOptions") else { return Vec::new() };
     let mut next = 0;

@@ -1,4 +1,4 @@
-//! After Effects' Puppet effect (`ADBE FreePin3`) arrives as EffectCraft's Puppet
+//! After Effects' Puppet effect (`ADBE FreePin3`) arrives as VL Effects' Puppet
 //! (`ec.distort.puppet`) in its place in the stack, with its name and fx switch, but **without
 //! its meshes and pins**: how After Effects stores a pin's rest place (a vertex index and offset
 //! into the hidden mesh data) and its Position (pixels or a fraction of the layer) is not decoded
@@ -73,7 +73,7 @@ pub(crate) fn import_puppet<'f, 'a>(
         }
     }
     report_meshes(fx, &params.iter().map(|p| p.match_name.as_str()).collect::<Vec<_>>(), &here, col);
-    // The effect itself arrives (an EffectCraft Puppet the user can pin again), so it counts as
+    // The effect itself arrives (an VL Effects Puppet the user can pin again), so it counts as
     // imported; what it held is in the losses above.
     col.imported.effects = col.imported.effects.saturating_add(1);
     target.children.push(Node::Group(group));
@@ -119,7 +119,7 @@ fn report_meshes(fx: &AepEffect<'_, '_>, param_names: &[&str], here: &str, col: 
                         }
                     }
                 }
-                // Auto-traced Shapes are made from the layer again (EffectCraft traces the alpha).
+                // Auto-traced Shapes are made from the layer again (VL Effects traces the alpha).
                 (OUTLINES, _) => {}
                 _ => push_unique(&mut unknown, e.match_name.clone()),
             }
@@ -157,7 +157,7 @@ fn mesh_summary(mesh: &AepGroup<'_, '_>, n: usize, unknown: &mut Vec<String>) ->
         };
         match (label, e.node) {
             (Some(label), PropNode::Property(p)) => settings.push(format!("{label} {}", describe(&p))),
-            // The triangulation After Effects keeps; EffectCraft builds its own.
+            // The triangulation After Effects keeps; VL Effects builds its own.
             _ if e.match_name == MESH_DATA => {}
             _ => match (PIN_GROUPS.iter().find(|(m, _)| *m == e.match_name), e.node) {
                 (Some((_, shown)), PropNode::Group(g)) => containers.push(format!("{shown} {}", pins_summary(&g, unknown))),

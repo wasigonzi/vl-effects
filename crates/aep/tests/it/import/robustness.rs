@@ -710,7 +710,7 @@ fn bogus_effect_structure_is_reported_not_imported_blindly() {
 
 #[test]
 fn exposure_values_beyond_effectcrafts_slider_range_are_kept() {
-    // After Effects accepts Exposure -100..100 stops (389); EffectCraft's own range is narrower.
+    // After Effects accepts Exposure -100..100 stops (389); VL Effects' own range is narrower.
     // A stored 50 is imported as stored (the effect renders it), not clamped and not reported.
     let bytes = skip!(mutate("391-fx-exposure-master-1.5.aep", &mut |c| {
         if c.is(b"cdat") && c.bytes().is_some_and(|b| b.get(0..8) == Some(&1.5f64.to_be_bytes()[..])) {

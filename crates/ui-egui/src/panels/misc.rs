@@ -390,7 +390,7 @@ pub fn audio(app: &mut EffectcraftApp, ui: &mut egui::Ui, rect: Rect) {
 /// state runs `edit.history.goto`, reporting a failure in `app.ui.status`.
 pub fn history(app: &mut EffectcraftApp, ui: &mut egui::Ui, rect: Rect) {
     let t = app.tokens;
-    // The branching history (EffectCraft's History panel): every state, branches indented under
+    // The branching history (VL Effects' History panel): every state, branches indented under
     // the state they grew from; click any state to go there (`edit.history.goto`).
     let nodes = app.session.history_tree();
     let row_h = 22.0;

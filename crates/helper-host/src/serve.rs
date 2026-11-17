@@ -1,9 +1,9 @@
-//! The helper side of the protocol: [`serve`] answers EffectCraft's requests with any set of
+//! The helper side of the protocol: [`serve`] answers VL Effects' requests with any set of
 //! [`EffectPlugin`]s, so a helper program only has to provide its effects ([`Provider`]).
 //! The fake helper in the tests and the OpenFX helper both use it.
 //!
-//! During a render the plug-in's [`PluginHost`] calls become requests to EffectCraft
-//! ([`Reply::InputAt`], ...). While a helper waits for the answer, EffectCraft may send a nested
+//! During a render the plug-in's [`PluginHost`] calls become requests to VL Effects
+//! ([`Reply::InputAt`], ...). While a helper waits for the answer, VL Effects may send a nested
 //! [`Request::Render`] (an effect of this helper further up the same layer's stack); it is
 //! served right away, on the same stack, before the wait goes on.
 
@@ -39,7 +39,7 @@ pub trait Provider {
     fn load(&mut self, _path: &str) -> Result<(Vec<Arc<dyn EffectPlugin>>, Vec<String>), String> {
         Err("this helper does not load files".into())
     }
-    /// Whether EffectCraft should ask for padding before each render of `effect`.
+    /// Whether VL Effects should ask for padding before each render of `effect`.
     fn wants_padding(&self, _effect: &dyn EffectPlugin) -> bool {
         true
     }
@@ -47,7 +47,7 @@ pub trait Provider {
     fn destroy(&mut self, _instance: u64) {}
 }
 
-/// Serve requests on stdin / stdout until EffectCraft says `shutdown` or closes the pipe.
+/// Serve requests on stdin / stdout until VL Effects says `shutdown` or closes the pipe.
 pub fn serve(provider: &mut dyn Provider) -> Result<(), String> {
     let stdin = std::io::stdin();
     let stdout = std::io::stdout();
@@ -181,15 +181,15 @@ impl Server<'_> {
         exchange.write(&r.frame, &pixels)
     }
 
-    /// Ask EffectCraft something during a render and wait for the answer, serving nested
+    /// Ask VL Effects something during a render and wait for the answer, serving nested
     /// requests meanwhile.
     fn ask(&mut self, q: &Reply) -> Result<Request, String> {
         self.send(q)?;
         loop {
-            let req = self.next_request()?.ok_or("EffectCraft closed the pipe")?;
+            let req = self.next_request()?.ok_or("VL Effects closed the pipe")?;
             match req {
                 Request::Image { .. } | Request::Params { .. } => return Ok(req),
-                Request::Shutdown => return Err("EffectCraft asked the helper to shut down".into()),
+                Request::Shutdown => return Err("VL Effects asked the helper to shut down".into()),
                 other => self.handle(other)?,
             }
         }
@@ -206,7 +206,7 @@ impl Server<'_> {
     }
 }
 
-/// The [`PluginHost`] a helper's plug-in renders with: questions go back to EffectCraft.
+/// The [`PluginHost`] a helper's plug-in renders with: questions go back to VL Effects.
 struct Callbacks<'a, 'p> {
     server: RefCell<&'a mut Server<'p>>,
     req: &'a RenderRequest,

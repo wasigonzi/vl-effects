@@ -57,7 +57,7 @@ pub struct NativeItem {
     pub command: String,
     #[serde(skip_serializing_if = "Value::is_null")]
     pub params: Value,
-    /// The shortcut in EffectCraft notation (`Cmd+Shift+S`).
+    /// The shortcut in VL Effects notation (`Cmd+Shift+S`).
     pub shortcut: Option<String>,
     /// The menu key equivalent in `muda` accelerator notation, when the shortcut can be one (see
     /// [`accelerator`]).
@@ -282,7 +282,7 @@ pub fn build(app: &EffectcraftApp) -> NativeMenu {
     NativeMenu { menus }
 }
 
-/// The `muda` accelerator for an EffectCraft shortcut, or `None` when it must stay a plain
+/// The `muda` accelerator for an VL Effects shortcut, or `None` when it must stay a plain
 /// keyboard shortcut. Only shortcuts with Cmd or Ctrl (and function keys) become menu key
 /// equivalents: a single-key shortcut (`V`, `Space`, `U`) or an Alt/Shift-only one would be
 /// swallowed by the menu while typing into a text field. Those still work through the
@@ -564,7 +564,7 @@ mod tests {
         }
         let mut translated = vec![];
         labels(&build(&app).menus, &mut translated);
-        assert_eq!(translated, ["Служби", "Приховати EffectCraft", "Приховати решту", "Показати все"]);
+        assert_eq!(translated, ["Служби", "Приховати VL Effects", "Приховати решту", "Показати все"]);
     }
 
     #[test]
@@ -585,7 +585,7 @@ mod tests {
         }
         let mut translated = vec![];
         labels(&build(&app).menus, &mut translated);
-        assert_eq!(translated, ["Tjänster", "Dölj EffectCraft", "Göm övriga", "Visa alla"]);
+        assert_eq!(translated, ["Tjänster", "Dölj VL Effects", "Göm övriga", "Visa alla"]);
     }
 
     #[test]
@@ -606,7 +606,7 @@ mod tests {
         }
         let mut translated = vec![];
         labels(&build(&app).menus, &mut translated);
-        assert_eq!(translated, ["Služby", "Skrýt EffectCraft", "Skrýt ostatní", "Zobrazit vše"]);
+        assert_eq!(translated, ["Služby", "Skrýt VL Effects", "Skrýt ostatní", "Zobrazit vše"]);
     }
 
     #[test]
@@ -627,7 +627,7 @@ mod tests {
         }
         let mut translated = vec![];
         labels(&build(&app).menus, &mut translated);
-        assert_eq!(translated, ["Usługi", "Ukryj EffectCraft", "Ukryj pozostałe", "Pokaż wszystko"]);
+        assert_eq!(translated, ["Usługi", "Ukryj VL Effects", "Ukryj pozostałe", "Pokaż wszystko"]);
     }
 
     #[test]
@@ -648,7 +648,7 @@ mod tests {
         }
         let mut translated = vec![];
         labels(&build(&app).menus, &mut translated);
-        assert_eq!(translated, ["სერვისები", "EffectCraft-ის დამალვა", "სხვების დამალვა", "ყველას ჩვენება"]);
+        assert_eq!(translated, ["სერვისები", "VL Effects-ის დამალვა", "სხვების დამალვა", "ყველას ჩვენება"]);
     }
 
     #[test]

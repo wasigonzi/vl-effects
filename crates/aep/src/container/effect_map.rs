@@ -1,13 +1,13 @@
 //! The effect table shared by the importer (`crate::import`) and the exporter
 //! (`crate::export`): an After Effects effect (its match name) and its parameters (by
-//! their index in `parT`) map to an EffectCraft effect, a parameter id and a unit conversion.
+//! their index in `parT`) map to an VL Effects effect, a parameter id and a unit conversion.
 //! Plain data; the evidence for each row is in `docs/aep-format.md` 3.7 and the case numbers in
 //! the comments. The importer reads a file through it, the exporter writes the inverse.
 
 use ParamKind as K;
 use craft_aep::ParamKind;
 
-/// How a stored parameter value becomes an EffectCraft value.
+/// How a stored parameter value becomes an VL Effects value.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Conv {
     /// A colour (ARGB 0..255 or the reader's ARGB fractions) to opaque RGBA 0..1.
@@ -32,7 +32,7 @@ pub enum Conv {
     Checkbox,
     /// A layer (the `tdpi` id of a layer of the same composition, 0 = None; 904 E22-E24, 220,
     /// 320, 321). `own` says what the owning layer itself becomes: itself (Layer Control) or
-    /// EffectCraft's unset layer (effects whose unset layer means "this layer").
+    /// VL Effects' unset layer (effects whose unset layer means "this layer").
     LayerRef { own: bool },
     /// A parameter that holds no value to import (Levels (Individual Controls)' histogram).
     Skip,
@@ -133,10 +133,10 @@ pub struct ParamMap {
     pub index: usize,
     /// The parameter type the file must declare.
     pub kind: ParamKind,
-    /// The EffectCraft parameter id.
+    /// The VL Effects parameter id.
     pub target: &'static str,
     pub conv: Conv,
-    /// The range EffectCraft's effect works in when it is narrower than the range After Effects
+    /// The range VL Effects' effect works in when it is narrower than the range After Effects
     /// accepts (the effect limits the value there): a stored value or key outside it is imported
     /// as it is and reported. `None`: no narrower range.
     pub limit: Option<(f64, f64)>,
@@ -162,7 +162,7 @@ pub enum Extra {
     /// IDentifier's Channel Info (`identifier_channel_type`): the chosen channel by name.
     Identifier,
     /// The Cryptomatte plug-in: the layer and selection in its Settings data
-    /// (`CryptomatteData`), Output split over EffectCraft's Display and Matte Only; every
+    /// (`CryptomatteData`), Output split over VL Effects' Display and Matte Only; every
     /// parameter is handled by the importer's Cryptomatte step, none by the table.
     Cryptomatte,
 }
@@ -171,7 +171,7 @@ pub enum Extra {
 #[derive(Clone, Copy, Debug)]
 pub struct EffectMap {
     pub match_name: &'static str,
-    /// The EffectCraft effect id.
+    /// The VL Effects effect id.
     pub effect: &'static str,
     pub params: &'static [ParamMap],
     pub extra: Extra,
@@ -181,7 +181,7 @@ const fn pm(index: usize, kind: ParamKind, target: &'static str, conv: Conv) -> 
     ParamMap { index, kind, target, conv, limit: None }
 }
 
-/// [`pm`] for a parameter EffectCraft's effect limits to `lo..=hi` (see [`ParamMap::limit`]).
+/// [`pm`] for a parameter VL Effects' effect limits to `lo..=hi` (see [`ParamMap::limit`]).
 const fn pm_limited(index: usize, kind: ParamKind, target: &'static str, conv: Conv, lo: f64, hi: f64) -> ParamMap {
     ParamMap { index, kind, target, conv, limit: Some((lo, hi)) }
 }
@@ -567,7 +567,7 @@ pub const EFFECTS: &[EffectMap] = &[
         "ec.blur.directional",
         &[pm(1, K::Angle, "direction", Conv::Angle), pm(2, K::FixedSlider, "length", Conv::Plain { valid_max: 1000.0 })],
     ),
-    // Radial Blur (712, 713): 1 is a hidden entry without data; 6 Random Seed has no EffectCraft
+    // Radial Blur (712, 713): 1 is a hidden entry without data; 6 Random Seed has no VL Effects
     // parameter (reported when stored).
     fx(
         "ADBE Radial Blur",
@@ -1062,7 +1062,7 @@ pub const EFFECTS: &[EffectMap] = &[
     fx("ADBE HDR ToneMap", "ec.utility.hdrcompression", &[pm(1, K::FloatSlider, "amount", Conv::Plain { valid_max: 100.0 })]),
     // Echo (`echo-*`): Echo Time in seconds (valid -30 000..30 000), Number Of Echoes an integer
     // (valid 0..30 000), Starting Intensity 0..1, Decay (valid 0..100, slider 0..1), Echo
-    // Operator. EffectCraft's Echo uses at most 255 echoes and a Decay up to 1.
+    // Operator. VL Effects' Echo uses at most 255 echoes and a Decay up to 1.
     fx(
         "ADBE Echo",
         "ec.time.echo",
@@ -1105,7 +1105,7 @@ pub const EFFECTS: &[EffectMap] = &[
     // Original are float sliders in percent (valid 0..100). After Effects' correction is the Red /
     // Green / Blue slider of each range (3-5, 9-11, 15-17; the Unbalance colours are pickers that
     // set them and keep no record), then View (22) and Black / White Point (23, 24):
-    // EffectCraft's CC Color Neutralizer has none of them, so they are reported when stored.
+    // VL Effects' CC Color Neutralizer has none of them, so they are reported when stored.
     fx(
         "CS Color Neutralizer",
         "ec.color.cccolorneutralizer",
@@ -1113,7 +1113,7 @@ pub const EFFECTS: &[EffectMap] = &[
     ),
     // EXtractoR (`extractor-*`): 1 Channel Info (arbitrary data, `Extra::Extractor`), 2 / 6 the
     // Process group, Black and White Point float sliders (valid ±3.4e38, the float32 range),
-    // UnMult. EffectCraft's Clip has no counterpart and stays off.
+    // UnMult. VL Effects' Clip has no counterpart and stays off.
     EffectMap {
         match_name: "EXtractoR",
         effect: "ec.3d.extractor",
@@ -1154,7 +1154,7 @@ pub const F32_MAX: f64 = f32::MAX as f64;
 pub const GLOW_MIDPOINT_MAX: f64 = 0.990_005_493_164_062_5;
 
 /// The key a popup item is matched by between the two programs: trimmed, lower case, and
-/// Set Matte's "Red Channel" ... "Alpha Channel" are EffectCraft's "Red" ... "Alpha" (904 E24).
+/// Set Matte's "Red Channel" ... "Alpha Channel" are VL Effects' "Red" ... "Alpha" (904 E24).
 ///
 /// Lower case is Unicode's, not only ASCII's: After Effects stores popup items in its UI
 /// language, so an item can start with a capital outside ASCII (French "Écran"), and its key must
@@ -1186,7 +1186,7 @@ pub(crate) fn popup_keys_match(a: &str, b: &str) -> bool {
 }
 
 /// The English [`popup_key`] a non-English After Effects popup item name stands for, when this
-/// table knows it; `None` otherwise. EffectCraft's own popup options are English only, so a
+/// table knows it; `None` otherwise. VL Effects' own popup options are English only, so a
 /// project saved by an After Effects set to another UI language never matches them by name and
 /// the parameter falls back to its default (observed on a real "Niveaux" project, French After
 /// Effects 2026 26.0.0x67: Levels' Channel and Clip to Output Black / White). Add an entry only
@@ -1212,16 +1212,16 @@ pub fn by_match_name(match_name: &str) -> Option<&'static EffectMap> {
     EFFECTS.iter().find(|m| m.match_name == match_name)
 }
 
-/// The table row of an EffectCraft effect id.
+/// The table row of an VL Effects effect id.
 pub fn by_effect(effect: &str) -> Option<&'static EffectMap> {
     EFFECTS.iter().find(|m| m.effect == effect)
 }
 
-/// The EffectCraft parameters Hue/Saturation's master values (`Extra::HueSaturation`) go to,
+/// The VL Effects parameters Hue/Saturation's master values (`Extra::HueSaturation`) go to,
 /// in the order of the data (hue, saturation, lightness: 444-446).
 pub const HUE_SATURATION_MASTER: [&str; 3] = ["hue", "saturation", "lightness"];
 
-/// The EffectCraft parameters Levels' RGB channel values (`Extra::Levels`) go to, in the order of
+/// The VL Effects parameters Levels' RGB channel values (`Extra::Levels`) go to, in the order of
 /// the data (input black, input white, gamma, output black, output white: 512-516).
 pub const LEVELS_RGB: [&str; 5] = ["inBlack", "inWhite", "gamma", "outBlack", "outWhite"];
 

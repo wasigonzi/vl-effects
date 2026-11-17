@@ -1,5 +1,5 @@
 //! Layer styles: fixture -> import -> export -> import keeps every style value, the written
-//! `ADBE Layer Styles` group is After Effects' own (951-979), and styles made in EffectCraft are
+//! `ADBE Layer Styles` group is After Effects' own (951-979), and styles made in VL Effects are
 //! written with After Effects' defaults in mind.
 
 use crate::export::helpers::{add_comp, add_layer, add_solid, export_all, key, with_comp, with_layer};
@@ -124,7 +124,7 @@ fn a_style_made_here_is_written_with_after_effects_defaults_in_mind() {
     assert!(losses.is_empty(), "{losses:?}");
     let (a, b) = (layer(&p, "S"), layer(&q, "S"));
     assert_eq!(values(a.props.sub(GROUP).expect("styles")), values(b.props.sub(GROUP).expect("styles")));
-    // EffectCraft's Use Global Light default (on) differs from After Effects' (off): written.
+    // VL Effects' Use Global Light default (on) differs from After Effects' (off): written.
     assert_eq!(b.props.sub(GROUP).and_then(|g| g.sub("dropShadow")).and_then(|g| g.get("useGlobalLight")).map(|p| p.value.clone()), Some(Value::Bool(true)));
     assert_eq!(q.comps().next().expect("comp").1.global_light.angle.value, Value::Scalar(60.0));
 }

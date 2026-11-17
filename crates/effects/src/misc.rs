@@ -608,7 +608,7 @@ fn linear_wipe_blurred(ctx: &EffectCtx, mut b: Buf) -> Buf {
     b
 }
 
-/// Linear Wipe as EffectCraft drew it before #3125 (projects saved then keep it): a linear ramp
+/// Linear Wipe as VL Effects drew it before #3125 (projects saved then keep it): a linear ramp
 /// Feather pixels wide, the travel extended by the feather at both ends.
 fn linear_wipe_legacy(ctx: &EffectCtx, mut b: Buf) -> Buf {
     let done = ctx.params.f("completion") / 100.0;
@@ -1121,7 +1121,7 @@ mod tests {
     }
 
     /// After Effects 2026: Radial Blur keeps the layer's edges. Zoom 20 on a flat grey 960 × 540
-    /// solid (case 713) leaves it flat and opaque to the edge (EffectCraft faded the edges toward
+    /// solid (case 713) leaves it flat and opaque to the edge (VL Effects faded the edges toward
     /// transparency, letting the red layer below show through); on a full-frame horizontal ramp
     /// (case 829, centre [960, 540]) row 540 reads 2/255 at x = 2 and 253/255 at x = 1917.
     #[test]

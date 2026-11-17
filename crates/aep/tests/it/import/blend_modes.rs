@@ -1,5 +1,5 @@
 //! Blend modes beyond the six of batch 1: 906 (13 solids over a test image, each with a mode set
-//! by name) and the codes of 907 (each rendered by After Effects and matched against EffectCraft's
+//! by name) and the codes of 907 (each rendered by After Effects and matched against VL Effects'
 //! modes), here written into 906's top layer.
 
 use crate::import::helpers::comp;

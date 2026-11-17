@@ -81,7 +81,7 @@ pub(crate) fn open_or_import(app: &mut EffectcraftApp, paths: Vec<String>) {
     }
 }
 
-/// The eframe app: the shared EffectCraft UI plus the browser host's per-frame duties.
+/// The eframe app: the shared VL Effects UI plus the browser host's per-frame duties.
 pub struct WebApp {
     pub app: EffectcraftApp,
     /// Keep the session snapshot (off with `?empty`; off with an explicit `"demo"` startup until
@@ -322,6 +322,10 @@ pub async fn start(canvas_id: String) -> Result<(), JsValue> {
                     app.offer_recovery(r);
                 }
                 install_hooks(&mut app);
+                // The Visualab Studios splash over the first seconds (`?nosplash`: none, for tests).
+                if !query_flag("nosplash") {
+                    effectcraft_ui_egui::splash::enable(&cc.egui_ctx);
+                }
                 // Viewer frames render in frame workers (`?frameworkers=N`, 0 or `?noworkers`:
                 // on the page's thread), each on its own WebGPU device where the browser has
                 // WebGPU in workers (`?nogpuworkers`: their CPU).

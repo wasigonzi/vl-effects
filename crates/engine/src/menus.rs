@@ -14,7 +14,7 @@
 //!   @effects                                  the effect categories (Effect menu)
 //!   @dynamic:history                          entries computed from the session when the menu
 //!                                             opens ([`dynamic`]: recent files, undo history…)
-//! [mac] Quit EffectCraft | app.quit           only on macOS ([!mac] = everywhere else)
+//! [mac] Quit VL Effects | app.quit           only on macOS ([!mac] = everywhere else)
 //! ```
 //!
 //! An entry's shortcut is the command's default shortcut unless the line gives one (needed for
@@ -22,13 +22,13 @@
 //! (`| F3, Cmd+Shift+T`); the menus show the first. Adobe-service entries (Team Projects,
 //! Libraries, Bridge, Media Encoder, Behance, Creative Cloud…) are intentionally absent; the
 //! Essential Graphics workspace uses the Properties panel and the Essential Graphics panel, whose
-//! templates use EffectCraft's own open `.ectemplate` format.
+//! templates use VL Effects' own open `.ectemplate` format.
 //!
-//! Where EffectCraft has entries After Effects lacks, After Effects' entries keep their order and
+//! Where VL Effects has entries After Effects lacks, After Effects' entries keep their order and
 //! the others get a fixed place. File ▸ Import: the project imports sit together where After
 //! Effects has Adobe Premiere Pro Project…, in alphabetical order and named in full (Adobe After
-//! Effects Project…, Adobe Premiere Pro Project…, EffectCraft Project…); the formats only
-//! EffectCraft imports follow a separator at the end, in alphabetical order (#3103).
+//! Effects Project…, Adobe Premiere Pro Project…, VL Effects Project…); the formats only
+//! VL Effects imports follow a separator at the end, in alphabetical order (#3103).
 
 use std::sync::OnceLock;
 
@@ -532,8 +532,8 @@ fn effect_categories() -> Vec<MenuNode> {
 
 /// The After Effects menu layout. Labels use "..." like AE's macOS menus.
 pub const TREE: &str = r#"
-[mac] EffectCraft
-  About EffectCraft... | app.about
+[mac] VL Effects
+  About VL Effects... | app.about
   ---
   Settings...
     General... | app.settings {"page":"general"} | Cmd+Alt+;
@@ -554,11 +554,11 @@ pub const TREE: &str = r#"
     3D... | app.settings {"page":"3d"}
     Scripting & Expressions... | app.settings {"page":"scripting"}
   ---
-  Hide EffectCraft | app.hide
+  Hide VL Effects | app.hide
   Hide Others | app.hideOthers
   Show All | app.showAll
   ---
-  Quit EffectCraft | app.quit
+  Quit VL Effects | app.quit
 File
   New
     New Project | file.newProject
@@ -586,7 +586,7 @@ File
     Multiple Files... | file.importMultiple
     Adobe After Effects Project... | file.importAep
     Adobe Premiere Pro Project... | file.importTimeline
-    EffectCraft Project... | file.importProject
+    VL Effects Project... | file.importProject
     Vanishing Point (.vpe)... | file.importVanishingPoint
     Placeholder... | file.importPlaceholder
     Solid... | file.importSolid
@@ -1301,7 +1301,7 @@ Window
   VR Comp Editor | window.panel {"panel":"vrCompEditor"}
   @dynamic:scriptPanels
 Help
-  EffectCraft Help... | help.docs {"page":"help"} | F1
+  VL Effects Help... | help.docs {"page":"help"} | F1
   Scripting Help... | help.docs {"page":"scripting"}
   Expression Reference... | help.docs {"page":"expressions"}
   Effect Reference... | help.docs {"page":"effects"}
@@ -1315,15 +1315,14 @@ Help
   Enable Logging | help.enableLogging
   Reveal Logging File | help.revealLogFile
   ---
-  Join the ArtCraft Discord... | help.discord
+  Visit Visualab Studios... | help.discord
   Provide Feedback... | help.reportIssue
   ---
-  ArtCraft Website | help.website
-  EffectCraft Home Page | help.appPage
-  EffectCraft on GitHub | help.github
+  Visualab Studios Website | help.website
+  VL Effects Home Page | help.appPage
   Open Demo Project | file.openDemoProject
   [!mac] ---
-  [!mac] About EffectCraft... | app.about
+  [!mac] About VL Effects... | app.about
 "#;
 
 #[cfg(test)]

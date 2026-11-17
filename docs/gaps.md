@@ -1,8 +1,8 @@
-# Where EffectCraft falls short
+# Where VL Effects falls short
 
 > **Last reviewed:** 2026-10-12 · **Last updated:** 2026-10-30 · **Change:** minor (gap 25, second slice: Info, Flowchart, Script Console and the 3D Camera Tracker block named, described and keyboard-operable, #1335; earlier change: gap 4 closed: every pull request and push to `main` runs `cargo xtask ci` in CI, #2204; earlier change: gap 25: an AccessKit audit test and a theme contrast test, Effects & Presets, Settings and Render Queue named and keyboard-operable, #1335; earlier change: path-editing layer bounds, #1220; issue, PR and catalog references gap 21: percentage guides and effect colour labels in; earlier change: re-audited against `upstream/main` 470ea7a3; ranked gap list from the 10 October re-measure otherwise unchanged) · **Target:** Adobe After Effects 2026 (26.5.0.89)
 
-An honest assessment of how far EffectCraft is from being a real replacement for After Effects,
+An honest assessment of how far VL Effects is from being a real replacement for After Effects,
 and the work that closes the gap. This document is meant for contributors and agents choosing
 what to work on. [target-app-parity.md](target-app-parity.md) holds the numbers and how they were
 measured; the [ROADMAP](../ROADMAP.md) summarises both. Estimates marked "≈" are judgements from
@@ -21,7 +21,7 @@ Substance materials, ACES 2.0, Proportional Scrubbing, paste SVG/AI as shapes…
 animation presets, project and template formats, and hardware encoding.
 
 **Ready for real work ≈ 45%** answers *can someone who uses After Effects for a living do real
-work in EffectCraft?* It is still estimated, not measured. Four things hold it back: projects we
+work in VL Effects?* It is still estimated, not measured. Four things hold it back: projects we
 can't open (`.aep`), behaviour nobody has checked against After Effects (one live comparison so
 far: scalar ease, 168 samples), reliability outside macOS, and the third-party plug-ins and
 presets professional projects depend on. It sits higher than the 5 October estimate (30–50%)
@@ -96,7 +96,7 @@ The most important missing piece: it turns every other estimate here into a meas
   blend modes, track mattes, each effect at default and at non-default settings, text animators,
   expressions, 3D, motion blur, time remapping.
 - Drive After Effects through ExtendScript (see CLAUDE.md) to record property values at sampled
-  times and render reference frames; render the same projects in EffectCraft headless.
+  times and render reference frames; render the same projects in VL Effects headless.
 - Compare values exactly and frames with a perceptual metric; publish a per-feature fidelity
   score and a fidelity column in target-app-parity.md.
 - Clean room: After Effects output stays local in `plan/aftereffects/ref/` (gitignored). Commit
@@ -309,7 +309,7 @@ Issues #41–#47 (all from the Linux AppImage 0.1.1, 5 October): panning the vie
 
 ### G8. Plug-in ecosystem
 
-- After Effects SDK plug-ins cannot run in EffectCraft. Our own WebAssembly plug-in API exists
+- After Effects SDK plug-ins cannot run in VL Effects. Our own WebAssembly plug-in API exists
   ([plugins.md](plugins.md)). Grow it: documentation, examples, and original effects that cover
   what the most common third-party plug-ins are used for (particles, glows, 3D objects, sabers).
   Settings ▸ Plug-in Library installs, updates and removes community WebAssembly effects listed
@@ -320,7 +320,7 @@ Issues #41–#47 (all from the Linux AppImage 0.1.1, 5 October): panning the vie
   [ADR 0001](adr/0001-external-effect-helpers.md)): the core gains no native code and no
   `unsafe`, and a crashing plug-in is an error on the effect. The helpers themselves ship
   separately.
-- Features that come from third parties in After Effects are extensions in EffectCraft too, built
+- Features that come from third parties in After Effects are extensions in VL Effects too, built
   on the same extension points as After Effects: scripts, ScriptUI panels and effect plug-ins
   ([plugins.md](plugins.md#extension-points-compared-with-after-effects) compares them). ScriptUI
   panels in the user's ScriptUI Panels folder are listed in the Window menu, dock like any panel

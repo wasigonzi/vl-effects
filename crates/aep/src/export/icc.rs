@@ -73,7 +73,7 @@ pub(crate) fn rec709_gamma24() -> Vec<u8> {
     let mut trc = b"para\0\0\0\0".to_vec();
     trc.extend([0, 0, 0, 0]);
     trc.extend(s15(2.4));
-    profile("Rec.709 Gamma 2.4 (EffectCraft)", trc)
+    profile("Rec.709 Gamma 2.4 (VL Effects)", trc)
 }
 
 /// The sRGB display profile (ICC v4.3): IEC 61966-2-1's curve as `para` function type 3, `Y =
@@ -110,7 +110,7 @@ fn profile(desc: &str, trc: Vec<u8>) -> Vec<u8> {
     }
     let tags: [(&[u8; 4], Vec<u8>); 10] = [
         (b"desc", mluc(desc)),
-        (b"cprt", mluc("No copyright, use freely (EffectCraft)")),
+        (b"cprt", mluc("No copyright, use freely (VL Effects)")),
         (b"wtpt", xyz_tag(w50)),
         (b"chad", sf32),
         (b"rXYZ", xyz_tag([m50[0][0], m50[1][0], m50[2][0]])),

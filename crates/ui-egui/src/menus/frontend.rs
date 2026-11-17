@@ -6,15 +6,15 @@ const COPY_COMMANDS: &[&str] =
     &["edit.copy", "edit.cut", "edit.copyWithPropertyLinks", "edit.copyWithRelativePropertyLinks", "edit.copyExpressionOnly", "keys.copy", "effect.copy"];
 
 /// Text for the system clipboard: copied keyframes and values as After Effects keyframe text,
-/// for other applications (#1908), else a line naming what EffectCraft copied. The system
+/// for other applications (#1908), else a line naming what VL Effects copied. The system
 /// clipboard must hold something: with nothing on it, the windowing layer sends no paste event
-/// for Ctrl+V. Paste in EffectCraft uses its own clipboard either way.
+/// for Ctrl+V. Paste in VL Effects uses its own clipboard either way.
 fn clipboard_text(s: &effectcraft_engine::Session) -> String {
     let st = &s.state;
     if let Some(text) = &st.keyframe_text {
         return text.clone();
     }
-    let n = |n: usize, one: &str, many: &str| format!("EffectCraft: {n} {}", if n == 1 { one } else { many });
+    let n = |n: usize, one: &str, many: &str| format!("VL Effects: {n} {}", if n == 1 { one } else { many });
     if st.clip_is_keys && !st.key_clipboard.is_empty() {
         n(st.key_clipboard.iter().map(|c| c.keys.len()).sum(), "keyframe", "keyframes")
     } else if !st.effect_clipboard.is_empty() {
@@ -24,7 +24,7 @@ fn clipboard_text(s: &effectcraft_engine::Session) -> String {
     } else if !st.mask_clipboard.is_empty() {
         n(st.mask_clipboard.len(), "mask", "masks")
     } else if st.link_clipboard.is_some() {
-        "EffectCraft: property links".into()
+        "VL Effects: property links".into()
     } else {
         n(st.clipboard.len(), "layer", "layers")
     }
@@ -631,7 +631,7 @@ pub(super) fn file_dialog(app: &mut EffectcraftApp, id: &str, params: &Value) ->
     };
     let (key, ask) = match id {
         // Projects too, as After Effects' File… takes an .aep: they import as projects
-        // (`run_with_picked`, and `file.import` for EffectCraft projects).
+        // (`run_with_picked`, and `file.import` for VL Effects projects).
         "file.import" | "file.importMultiple" => ("paths", Ask::Import(&["aep", "aepx", "ecproj", "ecprojx"])),
         "file.open" => ("path", Ask::OpenProject),
         "file.save" if app.session.path.is_none() => ("path", Ask::Save(project_as("", "ecproj"))),

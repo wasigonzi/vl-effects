@@ -1,7 +1,7 @@
-//! EffectCraft's side of a helper: the child process, its pipes and frame exchange file, and
+//! VL Effects' side of a helper: the child process, its pipes and frame exchange file, and
 //! the [`EffectPlugin`] each remote effect is registered as.
 //!
-//! Nothing a helper does can take EffectCraft down: a helper that exits, hangs past its
+//! Nothing a helper does can take VL Effects down: a helper that exits, hangs past its
 //! timeout or answers nonsense is stopped, the render that hit it fails with a message (shown on
 //! the effect, the frame is left as it was), and the next render starts the helper again. An
 //! effect that took its helper down [`crate::blocklist::CRASH_LIMIT`] times is blocked.
@@ -481,7 +481,7 @@ impl Helper {
             }
             Ok(Reply::Hello { version, .. }) => {
                 c.stop();
-                return Err(format!("the helper speaks protocol {version}; this EffectCraft speaks {PROTOCOL_VERSION}"));
+                return Err(format!("the helper speaks protocol {version}; this VL Effects speaks {PROTOCOL_VERSION}"));
             }
             Ok(Reply::Error { message }) => {
                 c.stop();

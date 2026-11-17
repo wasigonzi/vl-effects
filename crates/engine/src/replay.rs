@@ -194,7 +194,7 @@ pub fn export(s: &Session, crash: Option<Value>) -> String {
     let mut head = Map::new();
     head.insert("start".into(), json!("new"));
     head.insert("version".into(), json!(VERSION));
-    head.insert("app".into(), json!(format!("EffectCraft {}", env!("CARGO_PKG_VERSION"))));
+    head.insert("app".into(), json!(format!("VL Effects {}", env!("CARGO_PKG_VERSION"))));
     head.insert("os".into(), json!(std::env::consts::OS));
     head.insert("exported".into(), json!(unix_secs()));
     if let Some(c) = crash {

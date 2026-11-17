@@ -102,7 +102,7 @@ fn markers_are_written_like_after_effects_stores_them() {
         cm.iter().map(|m| (m.time_units, m.comment.as_str(), m.duration_seconds, m.label)).collect::<Vec<_>>(),
         vec![
             (25_600, "M1", Some(0.0), Some(effectcraft_color::Label::ALL.iter().position(|l| *l == effectcraft_color::Label::Yellow).expect("label") as u8)),
-            // EffectCraft's default marker label is Red, index 1 (After Effects' own default is 0, None).
+            // VL Effects' default marker label is Red, index 1 (After Effects' own default is 0, None).
             (64_000, "M2", Some(0.5), Some(1)),
         ]
     );
@@ -531,7 +531,7 @@ fn every_shape_value_record_is_written_as_after_effects_wrote_it() {
                 [("ADBE Vector Stroke Miter Limit#0", 4.0), ("ADBE Vector Grad HiLite Angle#0", 0.0), ("ADBE Vector Grad HiLite Length#0", 0.0)]
                     .iter()
                     .any(|(n, v)| k.1.ends_with(n) && first == Some(*v));
-            // A polygon has no inner radius or roundness in EffectCraft (After Effects keeps their
+            // A polygon has no inner radius or roundness in VL Effects (After Effects keeps their
             // records, 331; a polygon ignores them).
             let polygon_inner = name.contains("polygon") && k.1.contains("ADBE Vector Star Inner");
             let Some(got) = b.get(k) else {

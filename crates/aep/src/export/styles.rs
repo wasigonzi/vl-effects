@@ -61,7 +61,7 @@ fn sane(v: f64) -> Option<f64> {
     (v.is_finite() && v.abs() <= crate::export::plan::LIMIT).then_some(v)
 }
 
-/// An EffectCraft value in the file's units.
+/// An VL Effects value in the file's units.
 pub(crate) fn stored(conv: StyleConv, v: &Value) -> Option<Vec<f64>> {
     let out = match (conv, v) {
         (StyleConv::Number, Value::Scalar(x)) => vec![sane(*x)?],
@@ -80,8 +80,8 @@ pub(crate) fn stored(conv: StyleConv, v: &Value) -> Option<Vec<f64>> {
 
 /// Whether an expression on a style popup would mean something else in After Effects. Both
 /// programs count popup items from 1 in expressions, so only a popup whose stored item numbers are
-/// not EffectCraft's items in the same order (Inner Glow Source is stored reversed) or a blend
-/// mode whose After Effects item number differs from its place in EffectCraft's list is reported.
+/// not VL Effects' items in the same order (Inner Glow Source is stored reversed) or a blend
+/// mode whose After Effects item number differs from its place in VL Effects' list is reported.
 fn popup_expression_differs(conv: StyleConv) -> bool {
     match conv {
         StyleConv::Popup(map) => map.iter().enumerate().any(|(i, m)| usize::try_from(*m).ok() != Some(i)),
@@ -185,7 +185,7 @@ fn plan_number_keys(prop: &Property, cp: &CompPlan, what: &str, col: &mut Collec
     out
 }
 
-/// EffectCraft's default of a style parameter (to tell an edited gradient).
+/// VL Effects' default of a style parameter (to tell an edited gradient).
 fn model_default(style: &str, id: &str) -> Option<Value> {
     let mut next = 1;
     let g = st::style(&mut Ids(&mut next), style)?;

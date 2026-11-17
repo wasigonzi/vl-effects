@@ -1,14 +1,14 @@
 //! Shape layer contents: groups (nested, with their transform), rectangle, ellipse, polystar and
 //! bezier paths, fill, stroke, gradient fill and stroke, trim paths, round corners, merge paths,
 //! offset paths and repeater, with
-//! keyframes and expressions, into EffectCraft's shape model.
+//! keyframes and expressions, into VL Effects' shape model.
 //!
 //! Every value of a shape item is stored as After Effects shows it (aep-format.md 3.9): sizes,
 //! positions, radii, widths and the group anchor in pixels, the group scale, every opacity, the
 //! trim start and end and the polystar roundness in percent, angles in degrees, colours as ARGB
 //! 0..255, popups 1-based (fill rule 455, trim mode 469, polystar type 331, line cap and join 239).
 //! A property without a record has After Effects' default, read back for every item in 519.
-//! Contents keep the file order, which is also EffectCraft's (the first item is on top, a fill
+//! Contents keep the file order, which is also VL Effects' (the first item is on top, a fill
 //! paints the paths above it in its group).
 //!
 //! Not imported, and reported in [`LossCategory::ShapeLayers`]: items other than the ones above
@@ -228,7 +228,7 @@ fn item(match_name: &str, g: &AepGroup<'_, '_>, depth: usize, cx: &mut Cx<'_, '_
             r
         }
         // Merge Paths (707, 708, 731): Mode 1-based over Merge, Add, Subtract, Intersect, Exclude
-        // Intersections, EffectCraft's order.
+        // Intersections, VL Effects' order.
         "ADBE Vector Filter - Merge" => {
             let mut m = build::shape_simple_op(cx.ids, "merge")?;
             set(&mut m, "mode", g, "ADBE Vector Merge Type", Kind::EffectPopup(5), cx);
@@ -237,7 +237,7 @@ fn item(match_name: &str, g: &AepGroup<'_, '_>, depth: usize, cx: &mut Cx<'_, '_
         }
         // Offset Paths (710, 731): Line Join 1-based (Miter, Round, Bevel); without a record Copy
         // Offset is 1. After Effects offsets copy i (0-based) by Amount x (i + Copy Offset)
-        // (826-828: Copies 3, Copy Offset 1.5 -> 30, 50, 70 px for Amount 20), EffectCraft by
+        // (826-828: Copies 3, Copy Offset 1.5 -> 30, 50, 70 px for Amount 20), VL Effects by
         // Amount x (i + 1 + copyOffset), so copyOffset = Copy Offset - 1 (the default 1 is 0).
         "ADBE Vector Filter - Offset" => {
             let mut o = build::shape_simple_op(cx.ids, "offset")?;
@@ -353,7 +353,7 @@ fn paint_switches(g: &AepGroup<'_, '_>, cx: &mut Cx<'_, '_>) {
 }
 
 fn star(g: &AepGroup<'_, '_>, cx: &mut Cx<'_, '_>) -> PropGroup {
-    // Type 1 star, 2 polygon (331); EffectCraft's polygon has no inner radius and roundness.
+    // Type 1 star, 2 polygon (331); VL Effects' polygon has no inner radius and roundness.
     let polygon = matches!(g.get("ADBE Vector Star Type"), Some(PropNode::Property(p)) if p.static_value().and_then(|v| v.first().copied()).is_some_and(|v| v.round() == 2.0));
     let mut s = build::shape_star(cx.ids, !polygon, 5.0, [0.0, 0.0], 100.0, 50.0);
     set(&mut s, "type", g, "ADBE Vector Star Type", Kind::EffectPopup(2), cx);
@@ -440,7 +440,7 @@ fn set(target: &mut PropGroup, id: &str, g: &AepGroup<'_, '_>, match_name: &str,
     import_expression(&node, prop, cx.col);
 }
 
-/// After Effects' Copy Offset (`i + Copy Offset`, default 1) as EffectCraft's (`i + 1 + copyOffset`,
+/// After Effects' Copy Offset (`i + Copy Offset`, default 1) as VL Effects' (`i + 1 + copyOffset`,
 /// default 0): the value and every key minus 1. An expression gives After Effects' number, so it is
 /// kept but reported.
 fn shift_copy_offset(p: &mut effectcraft_project::Property, cx: &mut Cx<'_, '_>) {
@@ -457,7 +457,7 @@ fn shift_copy_offset(p: &mut effectcraft_project::Property, cx: &mut Cx<'_, '_>)
     if p.expr.is_some() {
         cx.col.lose(
             LossCategory::ShapeLayers,
-            format!("{}: the expression on Offset Paths' Copy Offset gives After Effects' value (EffectCraft's is 1 less), kept unchanged", cx.what),
+            format!("{}: the expression on Offset Paths' Copy Offset gives After Effects' value (VL Effects' is 1 less), kept unchanged", cx.what),
         );
     }
 }

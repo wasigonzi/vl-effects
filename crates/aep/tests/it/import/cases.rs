@@ -638,7 +638,7 @@ fn project_settings_come_with_the_result_not_into_the_project() {
     assert_eq!(skip!(s("633-settings-feet-frames-35.aep")).time_display, TimeDisplayStyle::Feet35);
     assert_eq!(skip!(s("634-settings-feet-frames-16.aep")).time_display, TimeDisplayStyle::Feet16);
     assert_eq!(skip!(s("630-settings-frame-start-1.aep")).frame_start, 1);
-    // Settings EffectCraft does not keep (scene-referred compensation) change nothing: 628 shares
+    // Settings VL Effects does not keep (scene-referred compensation) change nothing: 628 shares
     // its file with 621, 623, 625, 629 and 630 (one value per project), and reads as their changes.
     let base = skip!(s("000-base.aep"));
     let others =

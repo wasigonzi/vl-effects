@@ -1,4 +1,4 @@
-//! After Effects project (`.aep`) export: an EffectCraft [`Project`] written as an `.aep` that
+//! After Effects project (`.aep`) export: an VL Effects [`Project`] written as an `.aep` that
 //! After Effects 2026 opens.
 //!
 //! Every chunk is built in code: the project skeleton, the item, layer and property records are

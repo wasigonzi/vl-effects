@@ -297,7 +297,7 @@ pub fn contributors_ui(ui: &mut egui::Ui, auto: &mut Registry) {
                     if i > 0 {
                         ui.label(RichText::new("·").weak());
                     }
-                    let r = ui.hyperlink_to(c.name(v.names), format!("https://github.com/{}", c.login)).on_hover_text(c.summary());
+                    let r = ui.label(c.name(v.names)).on_hover_text(c.summary());
                     auto.add(&format!("about.credits.contributor.{}", c.login), r.rect, &c.name(v.names));
                 }
             });
@@ -437,7 +437,7 @@ fn table(ui: &mut egui::Ui, list: &[&Contributor], v: &mut View, auto: &mut Regi
             for (c, cells) in list.iter().zip(rows) {
                 body.row(h, |mut row| {
                     row.col(|ui| {
-                        let r = aligned(ui, false, |ui| ui.hyperlink_to(c.name(v.names), format!("https://github.com/{}", c.login))).on_hover_text(c.summary());
+                        let r = aligned(ui, false, |ui| ui.label(c.name(v.names))).on_hover_text(c.summary());
                         auto.add(&format!("about.credits.contributor.{}", c.login), r.rect, &c.name(v.names));
                     });
                     for text in cells {

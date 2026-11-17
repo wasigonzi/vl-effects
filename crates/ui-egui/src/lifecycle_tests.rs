@@ -267,7 +267,7 @@ fn restart_to_update_with_the_startup_prompt_open_leaves_the_window_open() {
     app.updates_rt.updater.offer(craft_update::Release {
         tag: "v99.0.0".into(),
         version: craft_update::parse_version("99.0.0"),
-        name: "EffectCraft 99.0.0".into(),
+        name: "VL Effects 99.0.0".into(),
         html_url: "https://github.com/storytold/effectcraft/releases/tag/v99.0.0".into(),
         ..Default::default()
     });

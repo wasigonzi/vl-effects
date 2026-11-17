@@ -1,4 +1,4 @@
-//! The EffectCraft document model.
+//! The VL Effects document model.
 //!
 //! `Project` → items (folders, compositions, footage, solids) → `Comp` → `Layer` → property tree
 //! ([`props`]). Compositions, and each layer within them ([`Layers`]), sit behind `Arc` so undo

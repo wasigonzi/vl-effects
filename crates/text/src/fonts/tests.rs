@@ -233,7 +233,7 @@ fn postscript_and_full_names_resolve() {
 /// font menus list every instance.
 #[test]
 fn variable_named_instances_resolve_and_list() {
-    const FAMILY: &str = "EffectCraft Instance Test";
+    const FAMILY: &str = "VL Effects Instance Test";
     let instances = [
         ("Light", 300.0, Some("EffectCraftInstanceTest-Light")),
         ("Regular", 400.0, Some("EffectCraftInstanceTest-Regular")),

@@ -1,5 +1,5 @@
 //! Effects: the inverse of the importer, through the same table (`crate::effect_map`).
-//! An EffectCraft effect the table maps is written as the After Effects effect it came from:
+//! An VL Effects effect the table maps is written as the After Effects effect it came from:
 //!
 //! * the instance is the effect's default instance, built in code from the effect table
 //!   (`fx_defs`, `fxsynth`: `tdmn` + `sspc` with its full `parT` and the records After Effects
@@ -236,7 +236,7 @@ fn defs() -> &'static HashMap<String, HashMap<u16, ParDef>> {
 // ---------------------------------------------------------------------------------------------
 // Planning.
 
-/// The stored components of an EffectCraft value, `None` when it does not fit.
+/// The stored components of an VL Effects value, `None` when it does not fit.
 fn stored(conv: Conv, kind: PKind, v: &Value, size: (f64, f64), ui: &ParamUi) -> Option<Vec<f64>> {
     let c = v.components();
     let g = |i: usize| c.get(i).copied().and_then(sane);
@@ -294,7 +294,7 @@ fn stored_reported(conv: Conv, kind: PKind, v: &Value, (size, ui): ((f64, f64), 
             col.lose(LossCategory::InvalidValues, format!("{what}: a colour channel outside 0 to 1 is written as the nearest limit"));
         }
         // After Effects' colour parameters have no opacity (written as 255); Drop Shadow, for
-        // one, uses EffectCraft's.
+        // one, uses VL Effects'.
         if c.get(3).is_some_and(|a| a.to_bits() != 1f64.to_bits()) {
             col.lose(LossCategory::Effects, format!("{what}: the colour's opacity is not written"));
         }
@@ -386,7 +386,7 @@ pub(crate) fn plan_effects(layer: &Layer, size: (u32, u32), cp: &CompPlan, comp_
 }
 
 /// A layer parameter (the importer's inverse, `Conv::LayerRef`): an unset layer is None where the
-/// owning layer is EffectCraft's own default (`own`, Layer Control) and the owning layer
+/// owning layer is VL Effects' own default (`own`, Layer Control) and the owning layer
 /// elsewhere (Compound Blur, Displacement Map, Set Matte: unset means "this layer" in both
 /// programs); `None` = the default, the owning layer.
 fn plan_layer_param(layer: &Layer, g: &PropGroup, target: &str, own: bool, prop: &Property, here: &str, col: &mut Collector) -> Option<LayerPick> {
@@ -462,7 +462,7 @@ fn plan_extra(spec: &EffectMap, g: &PropGroup, pdefs: &HashMap<u16, ParDef>, her
     (data != before).then_some((index, data))
 }
 
-/// `x,y` pairs (EffectCraft's curve points; whitespace or `;` between pairs), and how many
+/// `x,y` pairs (VL Effects' curve points; whitespace or `;` between pairs), and how many
 /// entries are not a pair of finite numbers (left out).
 fn pairs_of(s: &str) -> (Vec<(f64, f64)>, usize) {
     let mut unreadable = 0usize;
@@ -503,7 +503,7 @@ fn static_str<'p>(g: &'p PropGroup, id: &str, here: &str, col: &mut Collector) -
     }
 }
 
-/// Curves (FORMAT S.1): EffectCraft's points (0..1) as After Effects' whole 0..255 points, with
+/// Curves (FORMAT S.1): VL Effects' points (0..1) as After Effects' whole 0..255 points, with
 /// the lookup tables After Effects stores for them (the natural spline); `None` at the default.
 fn plan_curves(g: &PropGroup, pdefs: &HashMap<u16, ParDef>, here: &str, col: &mut Collector) -> Option<(u16, Vec<u8>)> {
     let mut curves: [Vec<(u8, u8)>; 5] = Default::default();
@@ -521,7 +521,7 @@ fn plan_curves(g: &PropGroup, pdefs: &HashMap<u16, ParDef>, here: &str, col: &mu
             rounded |= (xs - xs.round()).abs() > 1e-3 || (ys - ys.round()).abs() > 1e-3;
             ints.push((xs.round() as u8, ys.round() as u8));
         }
-        // Points with the same input are merged as EffectCraft's own curve merges them (the
+        // Points with the same input are merged as VL Effects' own curve merges them (the
         // first is kept), and fewer than two points are the identity there too.
         ints.sort_by_key(|p| p.0);
         ints.dedup_by_key(|p| p.0);
@@ -551,7 +551,7 @@ fn plan_curves(g: &PropGroup, pdefs: &HashMap<u16, ParDef>, here: &str, col: &mu
     }
 }
 
-/// Mesh Warp (FORMAT S.2): EffectCraft's per-vertex pixel offsets as After Effects' vertices
+/// Mesh Warp (FORMAT S.2): VL Effects' per-vertex pixel offsets as After Effects' vertices
 /// (fractions of the layer) with their default handles moved along; `None` at the default.
 fn plan_mesh(g: &PropGroup, pdefs: &HashMap<u16, ParDef>, size: (f64, f64), here: &str, col: &mut Collector) -> Option<(u16, Vec<u8>)> {
     let int = |id: &str| g.prop(id).map(|p| p.value.as_f64().round().clamp(1.0, 31.0) as u32).unwrap_or(7);
@@ -613,7 +613,7 @@ fn plan_mesh(g: &PropGroup, pdefs: &HashMap<u16, ParDef>, size: (f64, f64), here
     MeshData { columns, rows, tail, vertices }.to_bytes().map(|b| (index, b))
 }
 
-/// EffectCraft parameters the table does not map are lost when they carry anything.
+/// VL Effects parameters the table does not map are lost when they carry anything.
 /// Reports the parameters of `g` the table has no record for: with keys or an expression, or at
 /// a value other than the one a new instance of the effect has.
 fn report_unmapped(g: &PropGroup, (effect, spec): (&str, &EffectMap), size: (f64, f64), here: &str, col: &mut Collector) {

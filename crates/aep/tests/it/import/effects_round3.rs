@@ -45,7 +45,7 @@ fn col(g: &PropGroup, id: &str, want: [f64; 3]) {
 #[test]
 fn the_24_effects_import_with_their_values() {
     let (p, r) = load!(F905);
-    // The one loss: CC Bend It's default Render Prestart "Bend" has no EffectCraft item.
+    // The one loss: CC Bend It's default Render Prestart "Bend" has no VL Effects item.
     assert_eq!(r.report.total_losses(), 1, "{:?}", r.report.losses);
     assert!(format!("{:?}", r.report.losses).contains("'Bend' has no counterpart"));
     let (_, c) = comp(&p, &r, "C");
@@ -168,7 +168,7 @@ fn the_24_effects_import_with_their_values() {
     near(&g, "hueTransform", 90.0);
     col(&g, "colorToChange", [0.0, 0.0, 1.0]);
     near(&g, "matchingTolerance", 30.0);
-    // After Effects' Match Colors default is Using RGB (EffectCraft's own: Using Hue).
+    // After Effects' Match Colors default is Using RGB (VL Effects' own: Using Hue).
     assert_eq!(v(&g, "matchColors"), Value::Enum(0));
 
     let g = e("E18");

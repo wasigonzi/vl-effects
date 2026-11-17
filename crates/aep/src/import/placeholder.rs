@@ -1,4 +1,4 @@
-//! Placeholders: an effect with no EffectCraft counterpart (a third-party plug-in, a pseudo effect
+//! Placeholders: an effect with no VL Effects counterpart (a third-party plug-in, a pseudo effect
 //! of expression controls) arrives as an effect group that renders nothing, as a missing plug-in
 //! does. Its effect id is the After Effects match name, so Find Missing Effects lists it. It holds
 //! the effect's parameters, flat and named as in After Effects, each with its value, keys and
@@ -6,7 +6,7 @@
 //! still reported, once per match name.
 //!
 //! The values keep After Effects' units, the ones its expressions read: sliders and angles as
-//! stored, points in layer pixels, colours RGBA 0..1, checkboxes on / off, popups as EffectCraft's
+//! stored, points in layer pixels, colours RGBA 0..1, checkboxes on / off, popups as VL Effects'
 //! 0-based items over the file's items in order (expressions read them 1-based, as After Effects
 //! does). Layer parameters name their layer (their keys and expression are reported). Paths and
 //! arbitrary data are not kept (reported when they hold something).

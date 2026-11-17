@@ -1,5 +1,5 @@
 # Checks index.json on every pull request and push: schema, unique ids, every release's download
-# (size + SHA-256), then installs every package with the real EffectCraft loader.
+# (size + SHA-256), then installs every package with the real VL Effects loader.
 # Lives at .github/workflows/validate.yml in storytold/effectcraft-plugins.
 name: Validate
 
@@ -18,13 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check out EffectCraft
+      - name: Check out VL Effects
         uses: actions/checkout@v4
         with:
           repository: storytold/effectcraft
           path: effectcraft
 
-      # The CLI links the UI crate, which needs these to build (same list as EffectCraft's CI).
+      # The CLI links the UI crate, which needs these to build (same list as VL Effects' CI).
       - name: System packages
         run: |
           sudo apt-get update

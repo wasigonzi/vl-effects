@@ -1427,7 +1427,7 @@ fn checkbox_and_dropdown_results() {
     assert_close!(f.ev(f.b, ROT, "effect('Dropdown Menu Control')('Menu') * 10", 0.0).unwrap().as_f64(), 10.0);
 }
 
-/// An effect EffectCraft does not have (an imported After Effects placeholder, #3087) is read by
+/// An effect VL Effects does not have (an imported After Effects placeholder, #3087) is read by
 /// name like any other: its parameters by their names, a popup 1-based. It is also found by its
 /// After Effects match name, its effect id (the group's match id is one path segment).
 #[test]

@@ -5,10 +5,10 @@ After Effects projects (`.aep`, `.aepx`) in one crate, the way `effectcraft-lott
 - `container`: reads and writes the container as a lossless chunk tree, with a typed, read-only
   view (below). This is `craft-aep` from [storytold/craft-libs](https://github.com/storytold/craft-libs),
   re-exported at the crate root; its container tests and the `aepdump`/`stubicc` tools are there.
-  Only `effect_map` and `style_map` (After Effects effects and layer styles to EffectCraft's) are here;
-- `import`: maps the typed view into an EffectCraft project and reports everything it does not
+  Only `effect_map` and `style_map` (After Effects effects and layer styles to VL Effects') are here;
+- `import`: maps the typed view into an VL Effects project and reports everything it does not
   import ([`docs/aep-import.md`](../../docs/aep-import.md));
-- `export`: writes an EffectCraft project as an `.aep` with every chunk built in code, and reports everything it does not export
+- `export`: writes an VL Effects project as an `.aep` with every chunk built in code, and reports everything it does not export
   ([`docs/aep-export.md`](../../docs/aep-export.md)).
 
 No file access: callers pass bytes, so the crate builds for wasm32.

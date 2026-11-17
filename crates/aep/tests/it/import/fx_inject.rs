@@ -263,13 +263,13 @@ pub fn bytes_with(fx: &Fx) -> Vec<u8> {
     bytes_with_effect(fx.match_name, |t| sspc(fx, t))
 }
 
-/// Imports `synthetic.aep` with `fx` in place of its Glow: the EffectCraft effect `effect` (if
+/// Imports `synthetic.aep` with `fx` in place of its Glow: the VL Effects effect `effect` (if
 /// imported) and the result.
 pub fn run(fx: &Fx, effect: &str) -> (Option<PropGroup>, ImportResult) {
     import_bytes(&bytes_with(fx), effect)
 }
 
-/// Imports `bytes`: the first EffectCraft effect `effect` (if imported) and the result.
+/// Imports `bytes`: the first VL Effects effect `effect` (if imported) and the result.
 pub fn import_bytes(bytes: &[u8], effect: &str) -> (Option<PropGroup>, ImportResult) {
     let mut project = Project::default();
     let none = |_: &str| false;

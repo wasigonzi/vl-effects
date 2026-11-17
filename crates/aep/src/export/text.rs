@@ -55,7 +55,7 @@ pub(crate) struct StyleOut {
     pub apply_stroke: bool,
     /// Slot `/63`: stroke width in pixels; `None` keeps the prototype's value.
     pub stroke_width: Option<f64>,
-    /// Slot `/58`: stroke over fill (one switch for the whole text in EffectCraft; 550).
+    /// Slot `/58`: stroke over fill (one switch for the whole text in VL Effects; 550).
     pub stroke_over_fill: bool,
 }
 
@@ -200,7 +200,7 @@ fn differs(g: &PropGroup, def: Option<&PropGroup>, depth: usize) -> bool {
 fn plan_doc(doc: &TextDoc, what: &str, col: &mut Collector) -> TextPlan {
     let base = doc.base_style();
     let runs = doc.runs();
-    // Characters in EffectCraft's text, each with its run, CRLF and LF made After Effects' CR.
+    // Characters in VL Effects' text, each with its run, CRLF and LF made After Effects' CR.
     let chars: Vec<char> = doc.text.chars().collect();
     let mut style_of: Vec<usize> = Vec::with_capacity(chars.len());
     for (ri, r) in runs.iter().enumerate() {

@@ -1,4 +1,4 @@
-//! #3087: an effect with no EffectCraft counterpart (a third-party plug-in, a pseudo effect of
+//! #3087: an effect with no VL Effects counterpart (a third-party plug-in, a pseudo effect of
 //! expression controls) arrives as a placeholder holding its parameters, so expressions that read
 //! them keep working; it renders nothing and is still reported. Each effect is built into
 //! `synthetic.aep` (`fx_inject`) in place of its Glow, on the 8 x 8 sequence layer.

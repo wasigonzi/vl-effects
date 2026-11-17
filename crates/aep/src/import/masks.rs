@@ -1,12 +1,12 @@
 //! Layer masks: path, mode, invert, feather, opacity and expansion, with keyframes and
-//! expressions, in EffectCraft's units.
+//! expressions, in VL Effects' units.
 //!
 //! Units (`docs/aep-format.md` 3.4 and 3.8): the path is stored as `f32` points normalised inside a
 //! box that is itself normalised to the **layer source** size (090 on a 1920x1080 solid, 309 on a
 //! 100x100 solid), so vertices become layer pixels with the origin at the layer's top left, as the
 //! project's masks are; a tangent is the handle minus the vertex (232). Feather and expansion are
 //! pixels, opacity a fraction (percent here). The path keyframes (64-byte records, 093) carry time,
-//! interpolation, label, roving and the ease at byte 24 (599, 700: EffectCraft's path at 0.5 / 1 /
+//! interpolation, label, roving and the ease at byte 24 (599, 700: VL Effects' path at 0.5 / 1 /
 //! 1.5 s within 0.5 px of After Effects'); only speed 0 is sampled, another speed is imported as
 //! progress per second and reported.
 

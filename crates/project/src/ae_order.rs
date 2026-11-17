@@ -2,21 +2,21 @@
 //!
 //! In After Effects `thisLayer(4)` and `layer.property(4)` reach the same group on every layer of a
 //! kind, whatever the layer holds: Marker is always 1, and the groups a layer has not used yet
-//! (Time Remap, Motion Trackers, Layer Styles…) still take their slot. EffectCraft's tree holds only
+//! (Time Remap, Motion Trackers, Layer Styles…) still take their slot. VL Effects' tree holds only
 //! the groups a layer has, without Marker, so its own positions differ and move as groups are
 //! added. Rigs that address groups by number (`comp("Palette").layer(1)(4)(n)(1)`) read the wrong
 //! group, or none, unless numbers go through this table.
 //!
 //! The order was observed in After Effects 26.3 by reading `layer.property(i).matchName` from a
 //! script and `thisComp.layer(..)(i).name` from an expression on new layers of each kind; both
-//! agree. 3D model and primitive layers have no table: their numbers stay EffectCraft's own.
+//! agree. 3D model and primitive layers have no table: their numbers stay VL Effects' own.
 
 use crate::{Layer, LayerSource, Node};
 
 /// One top-level slot in After Effects' order.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct AeSlot {
-    /// The group's match id in EffectCraft's tree, or `""` when EffectCraft has no such group.
+    /// The group's match id in VL Effects' tree, or `""` when VL Effects has no such group.
     pub match_id: &'static str,
     /// The display name After Effects gives the slot.
     pub name: &'static str,
@@ -82,7 +82,7 @@ const CAMERA: &[AeSlot] =
 const LIGHT: &[AeSlot] = &[MARKER, slot("transform", "Transform", "ADBE Transform Group"), slot("lightOptions", "Light Options", "ADBE Light Options Group")];
 
 /// After Effects' top-level slots for a layer of this kind, or `None` for 3D model and primitive
-/// layers, which keep EffectCraft's own numbers.
+/// layers, which keep VL Effects' own numbers.
 pub fn ae_slots(source: &LayerSource) -> Option<&'static [AeSlot]> {
     match source {
         LayerSource::Footage { .. } | LayerSource::Comp { .. } | LayerSource::Solid { .. } | LayerSource::Null => Some(AV),

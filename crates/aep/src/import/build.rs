@@ -218,7 +218,7 @@ fn import_footage(project: &mut Project, cx: &mut Ctx<'_>, item: &AepItem<'_, '_
     let aep_id = item.id();
     // An item without a stored name shows its file's name, a sequence `shot_[0101-0103].exr`
     // (126, 603-607).
-    // One layer of a Photoshop file is `<layer>/<file>`, as EffectCraft's own Photoshop import
+    // One layer of a Photoshop file is `<layer>/<file>`, as VL Effects' own Photoshop import
     // names it (#3087).
     let name = if name.is_empty() {
         let file = default_footage_name(item, &f).unwrap_or_else(|| "Footage".to_string());
@@ -255,7 +255,7 @@ fn import_footage(project: &mut Project, cx: &mut Ctx<'_>, item: &AepItem<'_, '_
     let mut path = f.path.clone().unwrap_or_default();
     // An image sequence's alias is its folder; its files are named by the stored numbering
     // (353, 603), or listed one by one when imported with Force alphabetical order. The first
-    // file stands for the sequence, as in EffectCraft.
+    // file stands for the sequence, as in VL Effects.
     let mut sequence = Vec::new();
     if let Some(seq) = item.sequence_info().filter(|s| !path.is_empty() && s.frame_count() > 0) {
         let frames = seq.frame_count();
@@ -437,7 +437,7 @@ fn blend(mode: AepBlend) -> Option<BlendMode> {
 
 /// The blend mode codes beyond the reader's six (`ldta` byte 99): 906 (set by name: Soft Light 8,
 /// Hard Light 9, Darken 10, Lighten 11, Exclusion 25, Color Dodge 27, Color Burn 28) and 907
-/// (each code rendered by After Effects over a test image and matched against every EffectCraft
+/// (each code rendered by After Effects over a test image and matched against every VL Effects
 /// mode: the named mode was the only one within 1/255 on average inside the patch). Codes 23 / 24
 /// render like 27 / 28 on that image; they are taken as the classic variants, which After Effects
 /// keeps beside the newer ones (E). Not imported: 1, 21 and 22 (Alpha Add and Luminescent
@@ -1085,7 +1085,7 @@ struct PendingMatte {
 /// matte layer can be anywhere in the composition, also below its target (407). A matte with no
 /// layer id is the form of After Effects before 23.0, where the matte is always the layer directly
 /// above: that layer is used. The matte layer's video switch is imported as stored (After Effects
-/// switches it off when the matte is set, 403; EffectCraft, like After Effects, still uses a
+/// switches it off when the matte is set, 403; VL Effects, like After Effects, still uses a
 /// hidden layer as a matte).
 fn resolve_mattes(
     comp: &mut Comp,

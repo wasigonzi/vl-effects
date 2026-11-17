@@ -241,7 +241,7 @@ fn effect_values_the_format_cannot_hold_are_reported() {
     reported(&with_effect("ec.color.tint", |g| set(g, "white", Value::Color([1.5, 0.0, 0.0, 1.0]))), LossCategory::InvalidValues, "colour channel");
     reported(&with_effect("ec.blur.fastbox", |g| set(g, "iterations", Value::Scalar(2.5))), LossCategory::Effects, "whole number");
     reported(&with_effect("ec.color.tint", |g| g.label = Some(Label::Red)), LossCategory::Effects, "label colour");
-    // After Effects' colour parameters have no opacity; Drop Shadow uses EffectCraft's.
+    // After Effects' colour parameters have no opacity; Drop Shadow uses VL Effects'.
     reported(&with_effect("ec.perspective.dropshadow", |g| set(g, "color", Value::Color([0.0, 0.0, 0.0, 0.5]))), LossCategory::Effects, "opacity");
     // A parameter the table has no record for, at a value other than a new instance's.
     lossless(&with_effect("ec.time.timewarp", |_| {}));
@@ -324,7 +324,7 @@ fn camera_options_stretch_curves_and_expressions_that_change_are_reported() {
     // A curve that is not text.
     reported(&with_effect("ec.color.curves", |g| set(g, "rgb", Value::Scalar(1.0))), LossCategory::InvalidValues, "not text");
     // An expression on a popup whose items are After Effects' in another order (Invert's
-    // channels: After Effects counts its separators, EffectCraft has none).
+    // channels: After Effects counts its separators, VL Effects has none).
     let p = with_effect("ec.channel.invert", |g| {
         g.prop_mut("channel").expect("channel").expr = Some(effectcraft_project::Expression { text: "6".into(), enabled: true });
     });

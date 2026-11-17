@@ -23,7 +23,7 @@ macro_rules! page {
 }
 
 page!(General {
-    /// Interface language: `system` (the operating system's, where EffectCraft has it, else
+    /// Interface language: `system` (the operating system's, where VL Effects has it, else
     /// English), or a language code from `LANGUAGES`.
     language: String = "system".into(),
     /// Levels of Undo (1–99).
@@ -77,7 +77,7 @@ page!(AutoSave {
     enabled: bool = true,
     interval_minutes: u32 = 20,
     max_versions: u32 = 5,
-    /// `nextToProject` (an "EffectCraft Auto-Save" folder beside the project) or `custom`.
+    /// `nextToProject` (an "VL Effects Auto-Save" folder beside the project) or `custom`.
     location: String = "nextToProject".into(),
     folder: String = String::new(),
     save_on_render_start: bool = false,

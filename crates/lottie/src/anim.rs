@@ -1,4 +1,4 @@
-//! Animated properties: EffectCraft keyframes ↔ Lottie keyframes, through `craft-lottie`'s
+//! Animated properties: VL Effects keyframes ↔ Lottie keyframes, through `craft-lottie`'s
 //! property encoding ([`craft_lottie::read_prop`], [`craft_lottie::write_prop`]) and its
 //! conversion between a segment's normalised Bezier ease and After Effects' speed and influence
 //! ([`Tangents`]). Spatial properties ease along the motion path (Δv = arc length, one

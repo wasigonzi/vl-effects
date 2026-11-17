@@ -1,6 +1,6 @@
 # Publishing an effect plug-in
 
-This guide takes you from an empty folder to an effect listed in EffectCraft's **Plug-in
+This guide takes you from an empty folder to an effect listed in VL Effects' **Plug-in
 Library** (Settings ▸ Plug-in Library, also Effect ▸ Plug-in Library…). The reference for the
 plug-in API is [plugins.md](plugins.md#effect-plug-ins); this page is the walk-through.
 
@@ -34,7 +34,7 @@ rm -rf target
 git init
 ```
 
-The folder has its own `[workspace]`, so it builds on its own, outside the EffectCraft repository.
+The folder has its own `[workspace]`, so it builds on its own, outside the VL Effects repository.
 
 Then make it yours:
 
@@ -73,7 +73,7 @@ cargo build --release --target wasm32-unknown-unknown
 
 The module is `target/wasm32-unknown-unknown/release/<name>.wasm`.
 
-## 3. Test it in EffectCraft
+## 3. Test it in VL Effects
 
 Load the module straight from the build folder:
 
@@ -94,7 +94,7 @@ To have it at every start, put the `.wasm` in the `Plug-ins` folder of the
 
 ## 4. Check the live preview
 
-Every package in the Plug-in Library gets a **live preview**: you do nothing to get it. EffectCraft
+Every package in the Plug-in Library gets a **live preview**: you do nothing to get it. VL Effects
 downloads the module (without installing it) and renders your effect in the sandbox on a built-in
 sample frame (320 × 180: a colour gradient, two discs and a band of fine stripes), with the
 **default parameters**, for 2 seconds of animation (12 frames per second),
@@ -192,13 +192,13 @@ Release fields (one per entry in `versions`):
 |---|---|---|
 | `version` | yes | Dotted numbers only, at most 32 characters: `1.0.0`, `1.2`. No `v` and no suffixes such as `-beta`. |
 | `api` | yes | The plug-in API the module implements: `1`. |
-| `minApp` | no | The oldest EffectCraft version the release needs (`0.17.0`). Leave it out if any version with this API works. |
+| `minApp` | no | The oldest VL Effects version the release needs (`0.17.0`). Leave it out if any version with this API works. |
 | `url` | yes | The release asset's `https://` URL on GitHub: `https://github.com/<owner>/<repo>/releases/download/<tag>/<file>`. When the package has a `repo`, the asset must be in that repository. Install and Preview refuse any other `https://` URL. |
 | `sha256` | yes | The file's SHA-256, 64 hex digits. |
 | `size` | no, but reviewed | The file's size in bytes. When it is given, a download of another size is refused. |
-| `effects` | yes | The effect ids the module registers (its manifest's `id`). EffectCraft uses them to find the package that provides an effect a project needs. |
+| `effects` | yes | The effect ids the module registers (its manifest's `id`). VL Effects uses them to find the package that provides an effect a project needs. |
 
-The rules EffectCraft applies when it reads the catalog:
+The rules VL Effects applies when it reads the catalog:
 
 * Downloads are `https://` only, from GitHub's hosts only: `github.com`,
   `raw.githubusercontent.com`, and the hosts release assets redirect to
@@ -209,8 +209,8 @@ The rules EffectCraft applies when it reads the catalog:
 * A package with a bad id, no name, or an id another package already uses is left out; so is a
   release with a bad version, `minApp` or `sha256`, or no `url`. The rest of the catalog still
   works.
-* EffectCraft installs the newest release whose `api` it implements and whose `minApp` it meets.
-  When the newest release needs a newer EffectCraft, `library.list` says so (`needsNewerApp`).
+* VL Effects installs the newest release whose `api` it implements and whose `minApp` it meets.
+  When the newest release needs a newer VL Effects, `library.list` says so (`needsNewerApp`).
 * The download must match `sha256` (and `size`, if given) exactly, or it is refused.
 
 ## 8. Test the entry locally
@@ -277,7 +277,7 @@ Reviewers check, and you can check first:
 * **Public source.** `repo` is public and contains the plug-in's source at the release's tag.
 * **Reproducible.** The module builds from that source (the steps are in the repository's README)
   and the result has the SHA-256 in the entry.
-* **No imports.** The module imports nothing; EffectCraft refuses it otherwise. `library.install`
+* **No imports.** The module imports nothing; VL Effects refuses it otherwise. `library.install`
   from a local catalog shows it.
 * **Ids.** The package id and effect ids are your own, follow the rules, don't start with `ec.`,
   and `effects` matches the manifest's `id`.
@@ -292,7 +292,7 @@ Reviewers check, and you can check first:
 1. Change the code, raise the version in `Cargo.toml` and in the manifest, build, and publish a
    new GitHub release (a new tag; never re-use an old one).
 2. Add a new object to `versions` with the new `version`, `url`, `sha256`, `size` and `effects`.
-   Keep the old entries: they may stay, and users of an older EffectCraft still get a release they
+   Keep the old entries: they may stay, and users of an older VL Effects still get a release they
    can run (set `minApp` on the new one if it needs a newer app).
 3. Test it with a local catalog as in [step 8](#8-test-the-entry-locally) (`library.update`
    updates an installed package), and open a pull request.
@@ -320,7 +320,7 @@ Settings ▸ Plug-in Library (also Effect ▸ Plug-in Library…):
 * **Update** (or **Update All**) installs a newer release. **Remove** deletes a package.
 * **Restart after updating or removing** a package whose effects are loaded: loaded effects can't
   be unloaded, so the change takes effect at the next start, and the list says "Restart
-  EffectCraft to finish".
+  VL Effects to finish".
 * A project that uses an effect you don't have: `library.missing` lists the missing effects and
   the catalog packages that provide them.
 
@@ -334,8 +334,8 @@ Packages are installed in the `Plug-ins/Library` folder of the settings folder:
 
 | System | Settings folder |
 |---|---|
-| macOS | `~/Library/Application Support/EffectCraft` |
-| Windows | `%APPDATA%\EffectCraft` |
+| macOS | `~/Library/Application Support/VL Effects` |
+| Windows | `%APPDATA%\VL Effects` |
 | Linux | `$XDG_CONFIG_HOME/effectcraft` or `~/.config/effectcraft` |
 | Portable (a `portable.txt` beside the executable) | `EffectCraftData` beside the executable |
 

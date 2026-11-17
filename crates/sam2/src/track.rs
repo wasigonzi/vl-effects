@@ -1,4 +1,4 @@
-// Modified work: adapts the ported SAM 2 video tracker to EffectCraft's `ObjectTracker`
+// Modified work: adapts the ported SAM 2 video tracker to VL Effects' `ObjectTracker`
 // interface (Apache-2.0, see NOTICE).
 //! SAM 2 as the Roto Brush's object tracker: prompts on some frames, the whole clip tracked
 //! forwards and backwards, each frame reported as it is finished.

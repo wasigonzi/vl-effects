@@ -1,5 +1,5 @@
-//! The frame exchange file: pixels shared between EffectCraft and a helper without going
-//! through the control pipe. EffectCraft creates it (in `/dev/shm` when there is one, so it
+//! The frame exchange file: pixels shared between VL Effects and a helper without going
+//! through the control pipe. VL Effects creates it (in `/dev/shm` when there is one, so it
 //! stays in memory, else the temp folder) and both sides read and write it at the offsets the
 //! messages name. Plain file I/O, no `unsafe`: the OS page cache makes it shared memory in
 //! practice, and a helper is free to map it.
@@ -20,7 +20,7 @@ pub struct Exchange {
 }
 
 impl Exchange {
-    /// Create a new, empty exchange file (EffectCraft's side).
+    /// Create a new, empty exchange file (VL Effects' side).
     pub fn create() -> std::io::Result<Exchange> {
         static N: AtomicU64 = AtomicU64::new(0);
         let shm = Path::new("/dev/shm");
@@ -37,7 +37,7 @@ impl Exchange {
         Ok(Exchange { file, path, owned: true })
     }
 
-    /// Open an exchange file EffectCraft created (the helper's side).
+    /// Open an exchange file VL Effects created (the helper's side).
     pub fn open(path: &Path) -> std::io::Result<Exchange> {
         let file = OpenOptions::new().read(true).write(true).open(path)?;
         Ok(Exchange { file, path: path.to_path_buf(), owned: false })

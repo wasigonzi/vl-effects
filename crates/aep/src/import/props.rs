@@ -1,4 +1,4 @@
-//! The Transform properties of a layer: static values and keyframes in EffectCraft's units, and
+//! The Transform properties of a layer: static values and keyframes in VL Effects' units, and
 //! expressions as source text.
 //!
 //! Units: Anchor Point is stored as a fraction of the source size (pixels here; on text layers,
@@ -87,7 +87,7 @@ impl Kind {
             Kind::EffectNumber(f) => Value::Scalar(g(0)? * f),
             Kind::EffectPoint(w, h) => Value::Vec2([g(0)? * w, g(1)? * h]),
             // ARGB: alpha first. After Effects colour parameters carry no editable alpha (Tint's
-            // defaults even store alpha 0); EffectCraft's colour parameters are opaque.
+            // defaults even store alpha 0); VL Effects' colour parameters are opaque.
             Kind::EffectColor => Value::Color([g(1)? / 255.0, g(2)? / 255.0, g(3)? / 255.0, 1.0]),
             Kind::EffectPopup(items) => {
                 let i = g(0)?.round();
@@ -253,7 +253,7 @@ pub(crate) fn import_transform(
 }
 
 /// The keys of a keyed Orientation (703). Linear and hold sides arrive as they are; the ease of a
-/// bezier side is not sampled, so it becomes linear and is reported. EffectCraft interpolates the
+/// bezier side is not sampled, so it becomes linear and is reported. VL Effects interpolates the
 /// three angles one by one, After Effects by a slerp of the rotations (a renderer difference).
 fn import_orientation_keys(layer: &AepLayer<'_, '_>, layer_name: &str, tm: &TimeMap, prop: &mut EcProp, col: &mut Collector) {
     let what = format!("{layer_name}: ADBE Orientation");
@@ -399,7 +399,7 @@ pub(crate) fn import_keys(node: &AepProp<'_, '_>, kind: Kind, layer_name: &str, 
         key.in_interp = interp(rec.interpolation_in(), col, &what);
         key.out_interp = interp(rec.interpolation_out(), col, &what);
         if let Some(spatial) = rec.spatial() {
-            // The switch is 1 for automatic spatial tangents (EffectCraft computes them) and 0
+            // The switch is 1 for automatic spatial tangents (VL Effects computes them) and 0
             // once the tangents were set by hand.
             key.spatial_auto = spatial.auto_bezier_flag != 0;
             key.spatial_in = kind.tangent(&spatial.in_tangent);

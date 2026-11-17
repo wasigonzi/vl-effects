@@ -149,7 +149,7 @@ fn bad_input_is_an_error_not_a_crash() {
 
 /// File ▸ Import: After Effects' own entries in its order, the project imports together where
 /// After Effects has Adobe Premiere Pro Project… (alphabetical, named in full), then a separator
-/// and the formats only EffectCraft imports, alphabetical (#3103).
+/// and the formats only VL Effects imports, alphabetical (#3103).
 #[test]
 fn the_import_menu_groups_the_project_imports() {
     use crate::menus::MenuNode;
@@ -178,7 +178,7 @@ fn the_import_menu_groups_the_project_imports() {
             "Multiple Files...",
             "Adobe After Effects Project...",
             "Adobe Premiere Pro Project...",
-            "EffectCraft Project...",
+            "VL Effects Project...",
             "Vanishing Point (.vpe)...",
             "Placeholder...",
             "Solid...",

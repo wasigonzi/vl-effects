@@ -1,4 +1,4 @@
-//! EffectCraft composition → Lottie document.
+//! VL Effects composition → Lottie document.
 
 use std::collections::BTreeSet;
 
@@ -35,7 +35,7 @@ impl ExportResult {
 }
 
 /// One supported effect: Lottie effect type and its parameter list in Lottie order:
-/// (EffectCraft param id or "" for a Lottie-only param, Lottie value type, scale to Lottie,
+/// (VL Effects param id or "" for a Lottie-only param, Lottie value type, scale to Lottie,
 /// constant value for Lottie-only params).
 pub(crate) struct FxMap {
     pub id: &'static str,
@@ -512,7 +512,7 @@ pub fn to_dotlottie(res: &ExportResult, id: &str) -> Vec<u8> {
 pub fn try_to_dotlottie(res: &ExportResult, id: &str) -> Result<Vec<u8>, LottieError> {
     let id: String = id.chars().map(|c| if c.is_ascii_alphanumeric() || c == '_' || c == '-' { c } else { '_' }).collect();
     let id = if id.is_empty() { "animation".to_string() } else { id };
-    let manifest = json!({"version": "1", "generator": "EffectCraft", "author": "", "animations": [{"id": id, "speed": 1, "loop": true}]});
+    let manifest = json!({"version": "1", "generator": "VL Effects", "author": "", "animations": [{"id": id, "speed": 1, "loop": true}]});
     crate::zip::try_store(&[
         ("manifest.json".into(), serde_json::to_vec(&manifest).map_err(|e| LottieError::Invalid(e.to_string()))?),
         (format!("animations/{id}.json"), serde_json::to_vec(&res.json).map_err(|e| LottieError::Invalid(e.to_string()))?),

@@ -33,7 +33,7 @@ fn state() -> &'static Mutex<State> {
     S.get_or_init(Default::default)
 }
 
-/// Where the block list lives (EffectCraft's settings folder); helpers get it as
+/// Where the block list lives (VL Effects' settings folder); helpers get it as
 /// `EFFECTCRAFT_HELPER_STATE_DIR` for their own records.
 pub fn set_state_dir(dir: PathBuf) {
     let mut s = lock(state());

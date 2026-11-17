@@ -115,11 +115,11 @@ pub fn install_pickers(app: &mut EffectcraftApp, ctx: &egui::Context) -> Receive
     }));
     let errors = tx.clone();
     app.hooks.pick_save = Some(Box::new(move |name: &str| {
-        blocking(&errors, "Save", || rfd::FileDialog::new().add_filter("EffectCraft Project", &["ecproj"]).set_file_name(name).save_file()).map(path_string)
+        blocking(&errors, "Save", || rfd::FileDialog::new().add_filter("VL Effects Project", &["ecproj"]).set_file_name(name).save_file()).map(path_string)
     }));
     let errors = tx.clone();
     app.hooks.pick_open_project = Some(Box::new(move || {
-        blocking(&errors, "Open", || rfd::FileDialog::new().add_filter("EffectCraft Project", &["ecproj", "ecprojx"]).pick_file()).map(path_string)
+        blocking(&errors, "Open", || rfd::FileDialog::new().add_filter("VL Effects Project", &["ecproj", "ecprojx"]).pick_file()).map(path_string)
     }));
     let errors = tx.clone();
     app.hooks.pick_folder = Some(Box::new(move || blocking(&errors, "Choose Folder", || rfd::FileDialog::new().pick_folder()).map(path_string)));
@@ -252,7 +252,7 @@ fn open(dialog: FileDialog, frame: &eframe::Frame) -> Answer {
             }
         }
         FileDialog::OpenProject => {
-            let f = parented(frame).add_filter("EffectCraft Project", &["ecproj", "ecprojx"]).pick_file();
+            let f = parented(frame).add_filter("VL Effects Project", &["ecproj", "ecprojx"]).pick_file();
             Box::pin(async move { path(f.await) })
         }
         FileDialog::Folder => {
@@ -263,7 +263,7 @@ fn open(dialog: FileDialog, frame: &eframe::Frame) -> Answer {
             let at = std::path::Path::new(&default);
             let name = at.file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or_default();
             let mut d = if project {
-                parented(frame).add_filter("EffectCraft Project", &["ecproj"])
+                parented(frame).add_filter("VL Effects Project", &["ecproj"])
             } else if ext.is_empty() {
                 parented(frame)
             } else {

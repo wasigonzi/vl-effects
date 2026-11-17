@@ -1,4 +1,4 @@
-//! EffectCraft desktop app.
+//! VL Effects desktop app.
 //!
 //! Usage: `effectcraft [--control <port>] [--demo|--empty|--home] [--] [project.ecproj | media files…]`
 //!
@@ -128,11 +128,10 @@ fn parse_args(args: impl IntoIterator<Item = String>, env_port: Result<String, s
     Ok(Some(out))
 }
 
-/// Whether the app looks for a newer release when it starts. Not when started for an agent
-/// (`--control`): the "update available" prompt is modal and would block the run until a person
-/// dismisses it. Help ▸ Check for Updates still works.
-fn startup_update_check(control_port: Option<u16>) -> bool {
-    control_port.is_none()
+/// Whether the app looks for a newer release when it starts: never. VL Effects is updated from
+/// visualabstudios.com, and an agent run (`--control`) must not get the modal prompt either.
+fn startup_update_check(_control_port: Option<u16>) -> bool {
+    false
 }
 
 /// A control-channel port from 1 to 65535 (0 would listen on a port nobody is told); `name` is
@@ -196,7 +195,7 @@ fn start_helpers_if_opted_in(session: &mut effectcraft_engine::Session) {
 fn main() -> eframe::Result {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
     if crash_report::maybe_run(&args, |description| {
-        file_dialogs::message("EffectCraft diagnostic report", description.to_owned());
+        file_dialogs::message("VL Effects diagnostic report", description.to_owned());
     }) {
         return Ok(());
     }
@@ -272,7 +271,7 @@ fn run_desktop(reporter: &crash_report::Shutdown) -> eframe::Result {
     let notice = launch.notice.take();
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_title("EffectCraft")
+            .with_title("VL Effects")
             .with_inner_size(window::DEFAULT_SIZE)
             .with_min_inner_size(window::MIN_SIZE)
             .with_drag_and_drop(true)
@@ -296,7 +295,7 @@ fn run_desktop(reporter: &crash_report::Shutdown) -> eframe::Result {
     let apple_events = &apple_events;
     let desktop_reporter = reporter.clone();
     let result = eframe::run_native(
-        "EffectCraft",
+        "VL Effects",
         options,
         Box::new(move |cc| {
             EffectcraftApp::install_ime_reset_hooks(&cc.egui_ctx);
@@ -317,7 +316,7 @@ fn run_desktop(reporter: &crash_report::Shutdown) -> eframe::Result {
                 None => diagnostic_state::record(&desktop_reporter, "actual GPU backend: no wgpu device"),
             }
             // This executable owns the shared device's handlers. Install them before
-            // EffectCraft's compositor pipelines are built, without changing handlers from
+            // VL Effects' compositor pipelines are built, without changing handlers from
             // inside Gpu::new. eframe has already constructed its presentation renderer here.
             let gpu_failures = effectcraft_ui_egui::gpu_failure::GpuFailureBridge::new(&cc.egui_ctx);
             let observations = diagnostic_state::GpuObservations::new(&desktop_reporter);
@@ -388,6 +387,9 @@ fn run_desktop(reporter: &crash_report::Shutdown) -> eframe::Result {
             let _ = session.execute("window.restoreScriptPanels", json!({}));
             let mut app = EffectcraftApp::new(session);
             app.set_startup_update_check(startup_update_check(control_port));
+            if control_port.is_none() {
+                effectcraft_ui_egui::splash::enable(&cc.egui_ctx);
+            }
             app.set_gpu_failure_bridge(gpu_failures);
             app.ui.start_screen = show_home;
             if let Some(n) = notice {
@@ -410,13 +412,13 @@ fn run_desktop(reporter: &crash_report::Shutdown) -> eframe::Result {
             if control_port.is_none() {
                 app.hooks.device_lost = Some(Box::new(|saved: Option<Result<String, String>>| {
                     let saved = match saved {
-                        Some(Ok(path)) => format!("\n\nYour unsaved changes were saved to:\n{path}\n\nReopen EffectCraft to recover them."),
+                        Some(Ok(path)) => format!("\n\nYour unsaved changes were saved to:\n{path}\n\nReopen VL Effects to recover them."),
                         Some(Err(e)) => format!("\n\nYour unsaved changes could not be saved ({e})."),
                         None => String::new(),
                     };
                     file_dialogs::message(
-                        "EffectCraft: graphics device lost",
-                        format!("The graphics driver stopped responding, so EffectCraft has to close.{saved}"),
+                        "VL Effects: graphics device lost",
+                        format!("The graphics driver stopped responding, so VL Effects has to close.{saved}"),
                     );
                 }));
             }
@@ -492,7 +494,7 @@ fn wgpu_options(backends: Option<eframe::wgpu::Backends>) -> eframe::WgpuConfigu
 /// so memory the compositor frees on the shared device goes back to the driver.
 fn device_descriptor(adapter: eframe::wgpu::Limits) -> eframe::wgpu::DeviceDescriptor<'static> {
     eframe::wgpu::DeviceDescriptor {
-        label: Some("EffectCraft device"),
+        label: Some("VL Effects device"),
         required_limits: device_limits(adapter),
         memory_hints: eframe::wgpu::MemoryHints::MemoryUsage,
         ..Default::default()
@@ -511,7 +513,7 @@ fn device_limits(adapter: eframe::wgpu::Limits) -> eframe::wgpu::Limits {
 fn startup_failed(e: &eframe::Error, gl_next: bool) {
     let next = if gl_next { "The next launch will try OpenGL instead. " } else { "" };
     let message = format!(
-        "EffectCraft couldn't start its window: {e}\n\n{next}Updating the graphics driver often helps. If it keeps happening, please report it at https://github.com/storytold/effectcraft/issues with this message."
+        "VL Effects couldn't start its window: {e}\n\n{next}Updating the graphics driver often helps. If it keeps happening, please contact us at https://www.visualabstudios.com/contacto with this message."
     );
     // Standard error and the session log; standard error alone when RUST_LOG turned errors off.
     if log::log_enabled!(log::Level::Error) {
@@ -519,7 +521,7 @@ fn startup_failed(e: &eframe::Error, gl_next: bool) {
     } else {
         eprintln!("effectcraft: {message}");
     }
-    file_dialogs::message("EffectCraft", message);
+    file_dialogs::message("VL Effects", message);
 }
 
 /// The desktop app: the egui app plus, on macOS, the system menu bar.
@@ -621,7 +623,7 @@ fn disable_app_nap() {
     {
         use objc2_foundation::{NSActivityOptions, NSProcessInfo, NSString};
         let info = NSProcessInfo::processInfo();
-        let reason = NSString::from_str("EffectCraft control channel");
+        let reason = NSString::from_str("VL Effects control channel");
         let opts = NSActivityOptions::UserInitiatedAllowingIdleSystemSleep | NSActivityOptions::LatencyCritical;
         // Leaked on purpose: the activity lasts for the life of the process.
         std::mem::forget(info.beginActivityWithOptions_reason(opts, &reason));
@@ -703,7 +705,7 @@ mod tests {
         let d = super::device_descriptor(big);
         assert!(matches!(d.memory_hints, eframe::wgpu::MemoryHints::MemoryUsage));
         assert_eq!(d.required_limits.max_texture_dimension_2d, 16384);
-        assert_eq!(d.label, Some("EffectCraft device"));
+        assert_eq!(d.label, Some("VL Effects device"));
     }
 
     /// A positional .ecprojx is a project file, not an unsupported media import (#528).
@@ -737,8 +739,8 @@ mod tests {
     #[test]
     fn agent_runs_skip_the_startup_update_check() {
         let port = |args: &[&str], env| parse_env(args, env).unwrap().unwrap_or_default().control_port;
-        assert!(super::startup_update_check(port(&[], Err(VarError::NotPresent))));
-        assert!(super::startup_update_check(port(&[], Ok(String::new()))));
+        assert!(!super::startup_update_check(port(&[], Err(VarError::NotPresent))));
+        assert!(!super::startup_update_check(port(&[], Ok(String::new()))));
         assert!(!super::startup_update_check(port(&["--control", "9877"], Err(VarError::NotPresent))));
         assert!(!super::startup_update_check(port(&["--control=9877"], Err(VarError::NotPresent))));
         assert!(!super::startup_update_check(port(&[], Ok("9877".into()))));

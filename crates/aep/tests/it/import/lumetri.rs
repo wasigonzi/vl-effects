@@ -1,4 +1,4 @@
-//! Lumetri Color (`ADBE Lumetri`) arrives as EffectCraft's Lumetri Color (`ec.color.lumetri`),
+//! Lumetri Color (`ADBE Lumetri`) arrives as VL Effects' Lumetri Color (`ec.color.lumetri`),
 //! its parameters found by match name. The effect is built into the committed `synthetic.aep` in
 //! place of its Glow, in the layout of the 1200 samples (After Effects 2026, docs/aep-format.md
 //! 3.7): the definitions are a subset in an order of our own, so a mapping by `parT` index fails.
@@ -284,7 +284,7 @@ fn run_with(defs: &[(u16, Def)], recs: &[(u16, Rec)]) -> (PropGroup, ImportResul
         .comps()
         .flat_map(|(_, c)| c.layers.iter())
         .find_map(|l| l.props.sub("effects").and_then(|fx| fx.children.iter().filter_map(|n| n.as_group()).find(|g| g.match_id == "ec.color.lumetri").cloned()))
-        .expect("an EffectCraft Lumetri Color");
+        .expect("an VL Effects Lumetri Color");
     (g, r)
 }
 
@@ -342,7 +342,7 @@ fn lumetri_values_arrive_by_match_name_also_from_default_state_records() {
         ("basicCorrection/tone/exposure", 2.589_999_914_169_311_5),
         ("basicCorrection/tone/contrast", 37.0),
         ("basicCorrection/tone/blacks", -150.0),
-        // Past EffectCraft's old slider range: kept (the range is After Effects' now).
+        // Past VL Effects' old slider range: kept (the range is After Effects' now).
         ("basicCorrection/whiteBalance/temperature", 300.0),
         ("creative/lookIntensity", 134.0),
         ("vignette/vignetteAmount", 1.85),
@@ -384,7 +384,7 @@ fn hue_vs_sat_arrives_with_its_y_scaled_other_moved_curves_are_reported() {
     assert_eq!(losses(&r), Vec::<String>::new());
     assert_eq!(val(&g, "curves/hueSaturationCurves/hueVsSat"), Value::Str(String::new()));
     // 1200 `-61-preset-curves-huesat`: red raised to 0.97 (After Effects nearly doubles its
-    // saturation), the neighbours pinned near 0. EffectCraft's y: 0.5 + y / 2.
+    // saturation), the neighbours pinned near 0. VL Effects' y: 0.5 + y / 2.
     let preset = curve(3, &[(0.015_463_917_525_773_196, 0.97), (0.262_886_597_938_144_34, -0.03), (0.764_604_810_996_563_5, -0.02)]);
     let (g, r) = run(&[(42, Rec::Data(preset))]);
     assert_eq!(losses(&r), Vec::<String>::new());

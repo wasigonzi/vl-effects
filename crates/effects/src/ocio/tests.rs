@@ -386,7 +386,7 @@ impl EffectHost for KeyedCard {
 /// #3125: with keyframed sample points After Effects samples the reference frame where the
 /// points were at the reference time, so a static card is corrected. Its render at 0.5 s (Black
 /// Point at (107.5, 94.5)) is a Levels map of the ramp: `out = a + b·v` with b 1.2935..1.2965
-/// and a −0.2365..−0.2350 (fitted on our 26-level export). EffectCraft sampled both frames at
+/// and a −0.2365..−0.2350 (fitted on our 26-level export). VL Effects sampled both frames at
 /// the current points and left the card unchanged.
 #[test]
 fn color_stabilizer_samples_the_reference_at_the_points_reference_positions() {
@@ -450,7 +450,7 @@ fn stabilizer_reacts(w: u32, h: u32, square: [f64; 2], bp: [f64; 2], size: f64) 
 /// #3125: Sample Size is the full width of the sampled square in layer pixels, at any layer
 /// size. After Effects 2026 (320 × 180 and 640 × 360, Black Point at 25 % width, mid-height)
 /// reacts to a square whose near edge is 7 px to the right of the point from Sample Size 13.5
-/// (not at 13), to one 17 px away by 35, and never to one 37 px away up to 50. EffectCraft used
+/// (not at 13), to one 17 px away by 35, and never to one 37 px away up to 50. VL Effects used
 /// Sample Size as the half-width and reacted at 12 and 30.
 #[test]
 fn color_stabilizer_sample_size_is_the_full_width_in_pixels() {
@@ -470,7 +470,7 @@ fn color_stabilizer_sample_size_is_the_full_width_in_pixels() {
 }
 
 /// #3125: the sampled area is a square centred on the middle of the pixel the point names, half a
-/// pixel right of and below EffectCraft's layer point. After Effects 2026 with the Black Point at
+/// pixel right of and below VL Effects' layer point. After Effects 2026 with the Black Point at
 /// (80, 90) on a 320 × 180 card: a square 7 px to the right or below reacts from 13.5 (not at
 /// 13), one 7 px to the left or above only from 15.5 (not at 15). Diagonally, with the square's
 /// near corner 7, 10 and 14 px away on both axes, it reacts at 16, 26 and 38 and not at 13, 19

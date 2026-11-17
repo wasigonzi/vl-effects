@@ -65,7 +65,7 @@ fn shape_operators_arrive() {
 }
 
 /// After Effects offsets copy i by Amount x (i + Copy Offset) (826-828): 828 (Amount 20, Copies 3,
-/// Copy Offset 1.5) draws rings at 30, 50, 70 px; EffectCraft's copy i is Amount x (i + 1 +
+/// Copy Offset 1.5) draws rings at 30, 50, 70 px; VL Effects' copy i is Amount x (i + 1 +
 /// copyOffset), so copyOffset is 0.5.
 #[test]
 fn offset_paths_copy_offset_is_after_effects_minus_one() {

@@ -152,7 +152,7 @@ fn operators_below_repeater_act_on_copies() {
 
 /// After Effects 2026 (case 709): a 400 × 200 rectangle with Fill, then a Repeater of 3 copies
 /// (Position 150, 60, Rotation 10, Scale 90 / 80, End Opacity 40) gives the copies 100 %, 80 %
-/// and 60 % opacity (EffectCraft gave 70 % and 40 %). The points are comp pixels where AE shows
+/// and 60 % opacity (VL Effects gave 70 % and 40 %). The points are comp pixels where AE shows
 /// only the last copy, only the middle one, and both.
 #[test]
 fn repeater_copy_opacity_matches_after_effects() {

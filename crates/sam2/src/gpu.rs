@@ -1,4 +1,4 @@
-// Original work for EffectCraft (wgpu compute kernels); the maths follows the Hugging Face
+// Original work for VL Effects (wgpu compute kernels); the maths follows the Hugging Face
 // `transformers` SAM 2 implementation (Apache-2.0, see NOTICE).
 //! An optional GPU path for the heavy parts of SAM 2 (the Hiera backbone, the neck and the memory
 //! attention), as wgpu compute kernels: it runs on AMD, NVIDIA and Intel alike, where candle has

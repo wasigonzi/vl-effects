@@ -254,7 +254,7 @@ fn eps_fallback_font(name: &[u8]) -> Option<&'static [u8]> {
 
 fn parse_eps(bytes: &[u8]) -> Result<Doc, Error> {
     let limits = craft_ps::read::Limits {
-        // Preserve EffectCraft's established 8,000,000-unit PostScript execution budget.
+        // Preserve VL Effects' established 8,000,000-unit PostScript execution budget.
         steps: 8_000_000,
         stack_overflow_noop: true,
         skip_images: true,

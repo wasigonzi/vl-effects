@@ -1,5 +1,5 @@
 //! Eases that were read as linear before: Anchor Point (597, 730), an effect point and an effect
-//! colour (598), mask paths (599, 700). EffectCraft's values between the keys are compared with
+//! colour (598), mask paths (599, 700). VL Effects' values between the keys are compared with
 //! After Effects' read-backs (MANIFEST S17 / S19).
 
 use crate::import::helpers::comp;

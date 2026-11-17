@@ -1,12 +1,12 @@
 //! Text animators: the animator properties and range selectors of a text layer, into
-//! EffectCraft's animators (`text/animators`).
+//! VL Effects' animators (`text/animators`).
 //!
 //! Every value is stored as After Effects shows it (579-593): positions, anchor points, stroke
 //! widths and line spacing in pixels, scales, opacity, Start / End / Offset, Amount, Smoothness and
 //! the eases in percent, angles in degrees, tracking in 1/1000 em, colours as ARGB 0..255, popups
-//! 1-based (Units 583, Based On 584, Mode 585, Shape 587, in EffectCraft's item order). A property
+//! 1-based (Units 583, Based On 584, Mode 585, Shape 587, in VL Effects' item order). A property
 //! without a record has After Effects' default. With Units = Index (583) the selector's
-//! `Index Start / End / Offset` hold the range in characters; EffectCraft's Start / End / Offset are
+//! `Index Start / End / Offset` hold the range in characters; VL Effects' Start / End / Offset are
 //! characters then too.
 //!
 //! Not imported, and reported in [`LossCategory::TextLayers`]: wiggly and expression selectors,
@@ -25,7 +25,7 @@ use crate::import::time::TimeMap;
 /// More animators or selectors than this on one layer are not imported (and reported).
 const MAX_ITEMS: usize = 1024;
 
-/// The animator properties: stored match name, EffectCraft property kind (the `Animate` entry
+/// The animator properties: stored match name, VL Effects property kind (the `Animate` entry
 /// that creates it), property id, value conversion.
 const PROPS: &[(&str, &str, &str, Kind)] = &[
     ("ADBE Text Anchor Point 3D", "anchor", "anchor", Kind::Position),
@@ -126,7 +126,7 @@ fn animator(g: &AepGroup<'_, '_>, index: usize, cx: &mut Cx<'_, '_>) -> Option<P
             cx.col.lose(LossCategory::TextLayers, format!("{here}: Tracking Type is not imported, Before & After used"));
         }
         // Character Alignment: only the value After Effects adds with Character Offset (1, 728) is
-        // sampled; it stays EffectCraft's default.
+        // sampled; it stays VL Effects' default.
         if let Some(PropNode::Property(t)) = p.get("ADBE Text Character Change Type")
             && (t.is_animated() || t.static_value().and_then(|v| v.first().copied()).is_some_and(|v| v != 1.0))
         {

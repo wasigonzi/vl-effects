@@ -1,11 +1,11 @@
-//! After Effects projects: the `.aep` / `.aepx` container, import into an EffectCraft project and
+//! After Effects projects: the `.aep` / `.aepx` container, import into an VL Effects project and
 //! export back to `.aep`, in one crate (like `effectcraft-lottie`).
 //!
 //! - [`container`]: the RIFX `Egg!` chunk tree (lossless, byte-identical round trip) and its typed,
 //!   read-only view, from `craft-aep`, re-exported at the crate root, plus the effect and
-//!   layer-style tables that map them onto EffectCraft's.
-//! - [`import`]: maps the typed view into an EffectCraft project and reports what it drops.
-//! - [`export`]: writes an EffectCraft project as an `.aep`, every chunk built in code.
+//!   layer-style tables that map them onto VL Effects'.
+//! - [`import`]: maps the typed view into an VL Effects project and reports what it drops.
+//! - [`export`]: writes an VL Effects project as an `.aep`, every chunk built in code.
 //!
 //! See `docs/aep-format.md`, `docs/aep-import.md` and `docs/aep-export.md`.
 

@@ -1,6 +1,6 @@
 //! The layer-style table shared by the importer (`crate::import`) and the exporter
 //! (`crate::export`): the After Effects layer styles (`ADBE Layer Styles`, docs
-//! `aep-format.md` 3.14) and their parameters, the EffectCraft style and parameter each maps to,
+//! `aep-format.md` 3.14) and their parameters, the VL Effects style and parameter each maps to,
 //! the unit conversion and After Effects' default as it would be stored.
 //!
 //! Layout (950-980): every layer's root group holds `ADBE Layer Styles`; under it `ADBE Blend
@@ -30,11 +30,11 @@ pub const FLAGS_OFF: u32 = 0;
 pub const FLAGS_UNUSED: u32 = 2;
 /// The `tdsb` of Layer Styles and Blending Options while no style is applied (950).
 pub const FLAGS_GROUP_UNUSED: u32 = 3;
-/// The switch group of Pattern Overlay, which has no EffectCraft counterpart (and no menu
+/// The switch group of Pattern Overlay, which has no VL Effects counterpart (and no menu
 /// command in After Effects 2026).
 pub const PATTERN_OVERLAY: &str = "patternFill";
 
-/// How a stored style value becomes an EffectCraft value.
+/// How a stored style value becomes an VL Effects value.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum StyleConv {
     /// A number used as stored (percent, pixels, degrees; 966-974, 977).
@@ -43,7 +43,7 @@ pub enum StyleConv {
     Color,
     /// A style blend mode: After Effects' 1-based item of [`STYLE_MODES`] (978).
     Mode,
-    /// Another popup: `map[stored - 1]` is the EffectCraft item (0-based).
+    /// Another popup: `map[stored - 1]` is the VL Effects item (0-based).
     Popup(&'static [u32]),
     /// A checkbox, stored 1.0 when on (977).
     Checkbox,
@@ -53,7 +53,7 @@ pub enum StyleConv {
     Gradient,
 }
 
-/// One parameter: its match name without the style prefix, the EffectCraft parameter id, the
+/// One parameter: its match name without the style prefix, the VL Effects parameter id, the
 /// conversion and After Effects' default as stored (MANIFEST 951 read-back).
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct StyleParam {
@@ -63,7 +63,7 @@ pub struct StyleParam {
     pub default: &'static [f64],
 }
 
-/// One style: its switch-group prefix, the EffectCraft style id and the parameters in After
+/// One style: its switch-group prefix, the VL Effects style id and the parameters in After
 /// Effects' property order (the order records are written in, 970).
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct StyleMap {
@@ -79,7 +79,7 @@ impl StyleMap {
     }
 }
 
-/// The style blend modes by their stored value (1-based): EffectCraft's mode name, `None` for a
+/// The style blend modes by their stored value (1-based): VL Effects' mode name, `None` for a
 /// separator of the menu (renders Normal). Sweep 978 (16 bpc, each value rendered over a known
 /// colour): Normal and Dissolve (at 100 % opacity) render alike, as do Lighter Color and Normal
 /// for that colour pair (E); the others matched one formula within 1/255.
@@ -119,12 +119,12 @@ pub const STYLE_MODES: &[Option<&str>] = &[
     Some("Divide"),
 ];
 
-/// The stored value (1-based) of a style blend mode by EffectCraft's name.
+/// The stored value (1-based) of a style blend mode by VL Effects' name.
 pub fn mode_code(name: &str) -> Option<u32> {
     STYLE_MODES.iter().position(|m| *m == Some(name)).and_then(|i| u32::try_from(i + 1).ok())
 }
 
-/// EffectCraft's name of a stored style blend mode; `None` for a separator or out of range.
+/// VL Effects' name of a stored style blend mode; `None` for a separator or out of range.
 pub fn mode_name(code: f64) -> Option<&'static str> {
     if !code.is_finite() || code < 1.0 {
         return None;
@@ -133,12 +133,12 @@ pub fn mode_name(code: f64) -> Option<&'static str> {
     *STYLE_MODES.get(i.checked_sub(1)?)?
 }
 
-/// A popup's stored value for an EffectCraft item (the inverse of `map`).
+/// A popup's stored value for an VL Effects item (the inverse of `map`).
 pub fn popup_code(map: &[u32], item: u32) -> Option<u32> {
     map.iter().position(|m| *m == item).and_then(|i| u32::try_from(i + 1).ok())
 }
 
-/// The EffectCraft item of a stored popup value.
+/// The VL Effects item of a stored popup value.
 pub fn popup_item(map: &[u32], code: f64) -> Option<u32> {
     if !code.is_finite() || code < 1.0 {
         return None;
@@ -156,7 +156,7 @@ const fn p(ae: &'static str, ec: &'static str, conv: StyleConv, default: &'stati
 const SAME2: &[u32] = &[0, 1];
 const SAME3: &[u32] = &[0, 1, 2];
 const SAME5: &[u32] = &[0, 1, 2, 3, 4];
-/// Inner Glow Source: After Effects stores Edge as 1 and Center as 2 (955, 979); EffectCraft
+/// Inner Glow Source: After Effects stores Edge as 1 and Center as 2 (955, 979); VL Effects
 /// lists Center, Edge.
 const GLOW_SOURCE: &[u32] = &[1, 0];
 
@@ -305,7 +305,7 @@ pub const STYLES: &[StyleMap] = &[
     },
 ];
 
-/// Advanced Blending (in Blending Options): full match name, EffectCraft id in
+/// Advanced Blending (in Blending Options): full match name, VL Effects id in
 /// `blendingOptions/advancedBlending`, conversion and default (977; Fill Opacity 975). After
 /// Effects has no Knockout.
 pub const ADVANCED_BLENDING: &[StyleParam] = &[
@@ -322,7 +322,7 @@ pub fn by_ae(prefix: &str) -> Option<&'static StyleMap> {
     STYLES.iter().find(|s| s.ae == prefix)
 }
 
-/// The style with this EffectCraft id.
+/// The style with this VL Effects id.
 pub fn by_ec(id: &str) -> Option<&'static StyleMap> {
     STYLES.iter().find(|s| s.ec == id)
 }

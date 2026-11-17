@@ -214,7 +214,7 @@ fn ellipse_tangents_232() {
     let p = path(&m[0]);
     assert!(p.closed);
     // After Effects read the path back as vertices [960,340],[1360,540],[960,740],[560,540] and
-    // tangents of 0.5523 times the radius: the same as an EffectCraft ellipse.
+    // tangents of 0.5523 times the radius: the same as an VL Effects ellipse.
     let e = ShapePath::ellipse([960.0, 540.0], 800.0, 400.0);
     assert_eq!(p.len(), 4);
     for i in 0..4 {

@@ -100,7 +100,7 @@ impl EffectPlugin for Fake {
                 let mut junk = vec![0xffu8; 1 << 20];
                 junk.push(b'\n');
                 err.write_all(&junk).map_err(|e| format!("stderr: {e}"))?;
-                // EffectCraft must still be reading.
+                // VL Effects must still be reading.
                 std::thread::sleep(Duration::from_millis(300));
                 err.write_all(b"still talking\n").map_err(|e| format!("stderr: {e}"))?;
                 frame.pixels.iter_mut().for_each(|p| *p = [1.0, 0.0, 0.0, 1.0]);
@@ -273,7 +273,7 @@ fn run_checks() -> bool {
     let r = effectcraft_helper_host::scan_paths(&[], true);
     all &= check("retry clears the block list", !effectcraft_helper_host::blocklist::is_blocked("org.test.helper.crash"), &r);
 
-    // A hang is cut off by the timeout, also while EffectCraft is writing to a helper that
+    // A hang is cut off by the timeout, also while VL Effects is writing to a helper that
     // stopped reading.
     let t0 = std::time::Instant::now();
     let r = render("org.test.helper.hang", &mut vec![[0.0; 4]; 4], 2, 2, 1.0, false);

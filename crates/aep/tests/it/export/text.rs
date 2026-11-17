@@ -374,7 +374,7 @@ fn superscript_stays_superscript_and_normal_stays_normal() {
 
 #[test]
 fn a_text_made_in_effectcraft_is_written_with_the_every_line_composer() {
-    // A plain box text without paragraph entries uses the document's settings: EffectCraft's
+    // A plain box text without paragraph entries uses the document's settings: VL Effects'
     // default composer is every-line, which After Effects reads back as such (t6).
     let mut d = TextDoc::plain("One two three four five six seven eight\rTwo");
     d.set_runs(vec![StyleRun { len: d.text.chars().count(), style: style("ArialMT", 30.0) }]);

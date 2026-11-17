@@ -1,4 +1,4 @@
-//! CC Color Neutralizer, EXtractoR and IDentifier (#3112) arrive as EffectCraft's effects of the
+//! CC Color Neutralizer, EXtractoR and IDentifier (#3112) arrive as VL Effects' effects of the
 //! same name. Each is built into `synthetic.aep` (`fx_inject`) with the definitions After Effects
 //! 2026 wrote for it in the importer block of 2026-11-05 (`1300-thirdparty.aep`) and the values
 //! of that block's compositions; the Channel Info data is laid out as those instances store it.
@@ -56,7 +56,7 @@ fn cc_color_neutralizer_pinning_and_blend() {
     let g = g.expect("imported");
     near(&g, "pinning", 16.0);
     near(&g, "blendWOriginal", 19.0);
-    // EffectCraft's own (identity) balance stays.
+    // VL Effects' own (identity) balance stays.
     assert_eq!(v(&g, "midtonesUnbalance"), v(&g, "midtonesBalance"));
 }
 
@@ -130,7 +130,7 @@ fn extractor_points_unmult_and_default_channels() {
     near(&g, "blackPoint", 10.0);
     near(&g, "whitePoint", 14.0);
     assert_eq!((v(&g, "unMult"), v(&g, "clip")), (Value::Bool(true), Value::Bool(false)));
-    // After Effects' `(copy)` Alpha is the input's alpha: EffectCraft's `(copy)`, not `A` (an
+    // After Effects' `(copy)` Alpha is the input's alpha: VL Effects' `(copy)`, not `A` (an
     // OpenEXR's own alpha plane).
     for (id, want) in [("red", "R"), ("green", "G"), ("blue", "B"), ("alpha", "(copy)")] {
         assert_eq!(v(&g, id), Value::Str(want.into()), "{id}");
@@ -138,7 +138,7 @@ fn extractor_points_unmult_and_default_channels() {
 }
 
 /// `extractor-07-preset-channel-z` (a preset of our own): `Z` into Red, Green and Blue, Alpha
-/// `(copy)`. EffectCraft's EXtractoR reads the footage's channel by the same name.
+/// `(copy)`. VL Effects' EXtractoR reads the footage's channel by the same name.
 #[test]
 fn extractor_channels_are_imported_by_name() {
     let (g, r) = run(&extractor(vec![], channels([(1, "Z"), (1, "Z"), (1, "Z"), (2, "(copy)")])), "ec.3d.extractor");
@@ -147,7 +147,7 @@ fn extractor_channels_are_imported_by_name() {
     for (id, want) in [("red", "Z"), ("green", "Z"), ("blue", "Z"), ("alpha", "(copy)")] {
         assert_eq!(v(&g, id), Value::Str(want.into()), "{id}");
     }
-    // `(copy)` on another channel is that channel of the input (EffectCraft's `(copy)` there).
+    // `(copy)` on another channel is that channel of the input (VL Effects' `(copy)` there).
     let (g, _) = run(&extractor(vec![], channels([(2, "(copy)"), (1, "CryptoObject00.R"), (2, "(copy)"), (1, "Z")])), "ec.3d.extractor");
     let g = g.expect("imported");
     for (id, want) in [("red", "(copy)"), ("green", "CryptoObject00.R"), ("blue", "(copy)"), ("alpha", "Z")] {
@@ -204,7 +204,7 @@ fn identifier_display_id_and_channel_type() {
 }
 
 /// `identifier-09-preset-channel-objectid-id2` (1310, a preset of our own): the UINT channel
-/// `objectId` chosen and ID 2. EffectCraft's IDentifier reads that channel itself (`ObjectID`
+/// `objectId` chosen and ID 2. VL Effects' IDentifier reads that channel itself (`ObjectID`
 /// without regard to case), so nothing is lost; another name is reported.
 #[test]
 fn identifier_chosen_channels_by_name() {

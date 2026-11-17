@@ -1,5 +1,5 @@
 //! Effects: a table maps an After Effects effect (its match name) and its parameters (by their
-//! index in `parT`) to an EffectCraft effect, a parameter id and a unit conversion. Parameters
+//! index in `parT`) to an VL Effects effect, a parameter id and a unit conversion. Parameters
 //! outside the table are reported in [`LossCategory::Effects`] by match name, never dropped
 //! silently. An effect outside it arrives as a placeholder holding its parameters (`placeholder.rs`)
 //! and is reported too.
@@ -7,10 +7,10 @@
 //! Every conversion is backed by the corpus (`docs/aep-format.md` 3.7, cases 356-450, 511-516):
 //!
 //! * colour: ARGB 0..255 in the file (alpha first), straight RGBA 0..1 here. Both are values in the
-//!   project's working-space encoding (After Effects stores what its colour picker shows; EffectCraft
+//!   project's working-space encoding (After Effects stores what its colour picker shows; VL Effects
 //!   hands parameter colours to the effect as stored, `effectcraft-render`'s colour pipeline), so
 //!   the conversion is `/ 255` with no transfer curve. After Effects colour parameters
-//!   have no editable alpha and Tint's defaults store alpha 0 (356); EffectCraft's colour
+//!   have no editable alpha and Tint's defaults store alpha 0 (356); VL Effects' colour
 //!   parameters are opaque, so alpha is 1.
 //! * point: a fraction of the layer (source) size in the file, layer pixels here (369, 374, 383).
 //! * slider: each slider has its own stored scale, told by its valid maximum in `pard` (Amount to
@@ -19,8 +19,8 @@
 //!   Midpoint a 0..0.99 fraction: 361, 378-381, 422, 429, 438). The table names the maximum it
 //!   expects; a file with another maximum is reported instead of guessed.
 //! * popup: 1-based in the file over all items, separators `(-` included (410); mapped to
-//!   EffectCraft's item **by name**, since the orders differ (Levels' clip popups are On, Off, ... in
-//!   After Effects and Off, On, ... here). An item EffectCraft does not have is reported.
+//!   VL Effects' item **by name**, since the orders differ (Levels' clip popups are On, Off, ... in
+//!   After Effects and Off, On, ... here). An item VL Effects does not have is reported.
 //! * float and integer sliders, angles: the stored number as it is (Exposure, Gaussian Blur 216,
 //!   Fast Box Blur's Iterations 414, Drop Shadow's Direction 423).
 //! * checkbox: stored 1.0 when on, 0.0 when off; without a record it has the `pard` default, which
@@ -183,7 +183,7 @@ pub(crate) fn param_label(p: &EffectParam<'_, '_>) -> String {
     if p.name.trim().is_empty() { p.match_name.clone() } else { format!("{} ({})", p.name.trim(), p.match_name) }
 }
 
-/// Imports one parameter of `fx` into its EffectCraft property: its keyframes, the value in its
+/// Imports one parameter of `fx` into its VL Effects property: its keyframes, the value in its
 /// record or the `pard` default, with a loss for what cannot be read or mapped.
 fn import_param(fx: &AepEffect<'_, '_>, map: &EffectMap, p: &EffectParam<'_, '_>, cx: &LayerCtx<'_>, shown: &str, out: ParamOut<'_>) {
     let ParamOut { group, refs, col } = out;
@@ -272,12 +272,12 @@ pub(crate) fn import_mapped(p: &EffectParam<'_, '_>, m: &ParamMap, cx: &LayerCtx
         col.lose_with(LossCategory::Effects, || format!("{here}: parameter {label} has no counterpart '{}'", m.target));
         return;
     };
-    // For a popup: file item (0-based over all items) -> EffectCraft item, by name.
+    // For a popup: file item (0-based over all items) -> VL Effects item, by name.
     let popup_map = match m.conv {
         Conv::Popup { .. } => match popup_mapping(&items, &prop.ui) {
             Some(map) => Some(map),
             None => {
-                col.lose_with(LossCategory::Effects, || format!("{here}: parameter {label}: the popup items do not match EffectCraft's, not imported"));
+                col.lose_with(LossCategory::Effects, || format!("{here}: parameter {label}: the popup items do not match VL Effects', not imported"));
                 return;
             }
         },
@@ -357,14 +357,14 @@ pub(crate) fn import_mapped(p: &EffectParam<'_, '_>, m: &ParamMap, cx: &LayerCtx
     }
 }
 
-/// Reports a value After Effects accepts but EffectCraft's effect limits (`ParamMap::limit`): it is
+/// Reports a value After Effects accepts but VL Effects' effect limits (`ParamMap::limit`): it is
 /// imported as it is, and the effect renders it as the nearest end of its range.
 fn report_beyond_limit<'v>(limit: Option<(f64, f64)>, values: impl Iterator<Item = &'v Value>, here: &str, label: &str, col: &mut Collector) {
     let Some((lo, hi)) = limit else { return };
     let beyond: Vec<f64> = values.filter_map(|v| if let Value::Scalar(x) = v { Some(*x) } else { None }).filter(|x| *x < lo || *x > hi).collect();
     if let Some(x) = beyond.first() {
         col.lose_with(LossCategory::Effects, || {
-            format!("{here}: parameter {label} is {x}, EffectCraft's effect uses {lo} to {hi} (rendered as the nearest of them)")
+            format!("{here}: parameter {label} is {x}, VL Effects' effect uses {lo} to {hi} (rendered as the nearest of them)")
         });
     }
 }
@@ -377,7 +377,7 @@ pub(crate) fn import_layer_ref(p: &EffectParam<'_, '_>, target: &str, own: bool,
     let ParamOut { group, refs, col } = out;
     // After Effects hands the named layer's source to the effect, without its masks and effects
     // (904 E24: Set Matte's luminance from a grey solid that carries a Gradient Ramp is the grey's,
-    // 0.5 everywhere); EffectCraft's companion choice defaults to Effects & Masks. Where After
+    // 0.5 everywhere); VL Effects' companion choice defaults to Effects & Masks. Where After
     // Effects stores another choice is not sampled.
     if let Some(src) = group.prop_mut(&effectcraft_effects::layer_source_id(target)) {
         src.value = Value::Enum(0);
@@ -423,11 +423,11 @@ pub(crate) fn resolve_layer_refs(
     }
 }
 
-/// The EffectCraft item of each file item (by name, ignoring case and separators, and a known
+/// The VL Effects item of each file item (by name, ignoring case and separators, and a known
 /// non-English name for it, [`popup_alias`]); `None` when the parameter here is not a popup.
 fn popup_mapping(file_items: &[String], ui: &ParamUi) -> Option<Vec<Option<u32>>> {
     let ParamUi::Popup { options } = ui else { return None };
-    // The file's item count is not bounded (its `pdnm`), EffectCraft's options are: the options'
+    // The file's item count is not bounded (its `pdnm`), VL Effects' options are: the options'
     // keys are built once, and each file item's once, so the cost is linear in the file's items.
     let options: Vec<String> = options.iter().map(|o| popup_key(o)).collect();
     Some(
@@ -448,7 +448,7 @@ fn popup_mapping(file_items: &[String], ui: &ParamUi) -> Option<Vec<Option<u32>>
     )
 }
 
-/// Keys of a popup were imported as file indices (0-based); maps them to EffectCraft's items.
+/// Keys of a popup were imported as file indices (0-based); maps them to VL Effects' items.
 fn remap_popup_keys(prop: &mut effectcraft_project::Property, map: &[Option<u32>], here: &str, label: &str, col: &mut Collector) {
     let before = prop.keys.len();
     prop.keys.retain_mut(|k| match k.value {
@@ -517,8 +517,8 @@ fn import_extra(fx: &AepEffect<'_, '_>, extra: Extra, p: &EffectParam<'_, '_>, h
         },
         Extra::Curves => match CurvesData::parse(data) {
             Some(d) => {
-                // EffectCraft's curves are `x,y` points in 0..1 (the stored inputs and outputs /
-                // 255); EffectCraft interpolates them its own way (a renderer difference, the
+                // VL Effects' curves are `x,y` points in 0..1 (the stored inputs and outputs /
+                // 255); VL Effects interpolates them its own way (a renderer difference, the
                 // stored tables are After Effects' natural spline).
                 for (id, pts) in CURVE_IDS.iter().zip(&d.curves) {
                     if let Some(prop) = group.prop_mut(id) {
@@ -535,8 +535,8 @@ fn import_extra(fx: &AepEffect<'_, '_>, extra: Extra, p: &EffectParam<'_, '_>, h
         },
         Extra::Extractor => match ExtractorChannels::parse(data).map(|c| (c.sources(effectcraft_effects::EXTRACTOR_COPY), c)) {
             // Each output channel reads the footage's channel of the stored name, which
-            // EffectCraft's EXtractoR finds by the same name (`Z`); After Effects' `(copy)` is the
-            // input's own channel, EffectCraft's `(copy)` (not `A`, which EffectCraft reads from an
+            // VL Effects' EXtractoR finds by the same name (`Z`); After Effects' `(copy)` is the
+            // input's own channel, VL Effects' `(copy)` (not `A`, which VL Effects reads from an
             // OpenEXR footage's alpha plane, losing what earlier effects did to it).
             Some((Ok(names), _)) => {
                 for (id, name) in ["red", "green", "blue", "alpha"].into_iter().zip(names) {
@@ -560,7 +560,7 @@ fn import_extra(fx: &AepEffect<'_, '_>, extra: Extra, p: &EffectParam<'_, '_>, h
         },
         Extra::Identifier => match crate::identifier_channel_type(data) {
             // No channel chosen (the type's label): After Effects lists only the footage's integer
-            // (UINT) channels and, with none chosen, leaves the layer unchanged, where EffectCraft
+            // (UINT) channels and, with none chosen, leaves the layer unchanged, where VL Effects
             // draws the footage's object ID channel.
             Some("Object ID") => {
                 if let Some(prop) = group.prop_mut("channelType") {
@@ -568,10 +568,10 @@ fn import_extra(fx: &AepEffect<'_, '_>, extra: Extra, p: &EffectParam<'_, '_>, h
                 }
                 col.lose_with(
                     LossCategory::Effects,
-                    || format!("{here}: no ID channel is chosen (Channel Info), so After Effects leaves the layer unchanged; EffectCraft draws the footage's object ID channel"),
+                    || format!("{here}: no ID channel is chosen (Channel Info), so After Effects leaves the layer unchanged; VL Effects draws the footage's object ID channel"),
                 );
             }
-            // A chosen channel, by name. EffectCraft's IDentifier has no channel of its own: it
+            // A chosen channel, by name. VL Effects' IDentifier has no channel of its own: it
             // reads the footage's first `ObjectID` (`MaterialID`) channel, names compared without
             // regard to case, so a channel of that name is the one After Effects reads.
             Some(name) => match IDENTIFIER_OWN.iter().position(|own| own.eq_ignore_ascii_case(name.trim())) {
@@ -582,7 +582,7 @@ fn import_extra(fx: &AepEffect<'_, '_>, extra: Extra, p: &EffectParam<'_, '_>, h
                 }
                 None => col.lose_with(
                     LossCategory::Effects,
-                    || format!("{here}: the ID channel '{name}' (Channel Info) is not imported; EffectCraft reads the footage's object ID channel (ObjectID, object_id, objectId, id)"),
+                    || format!("{here}: the ID channel '{name}' (Channel Info) is not imported; VL Effects reads the footage's object ID channel (ObjectID, object_id, objectId, id)"),
                 ),
             },
             None => col.lose_with(LossCategory::Effects, || format!("{here}: the Channel Info data is not in the sampled layout, the object ID channel used")),
@@ -592,7 +592,7 @@ fn import_extra(fx: &AepEffect<'_, '_>, extra: Extra, p: &EffectParam<'_, '_>, h
 }
 
 /// The Cryptomatte plug-in (`Extra::Cryptomatte`, docs/aep-format.md 3.7): 1 Settings data
-/// (the layer by name and the selection, both carried as text), 2 Output (EffectCraft's Display
+/// (the layer by name and the selection, both carried as text), 2 Output (VL Effects' Display
 /// and Matte Only), 3 Selection Mode (reported when on). Anything else stored is reported.
 fn import_cryptomatte(fx: &AepEffect<'_, '_>, params: &[EffectParam<'_, '_>], cx: &LayerCtx<'_>, shown: &str, group: &mut PropGroup, col: &mut Collector) {
     let here = format!("{}: '{}' effect '{shown}' ({})", cx.comp, cx.layer, fx.match_name());
@@ -601,7 +601,7 @@ fn import_cryptomatte(fx: &AepEffect<'_, '_>, params: &[EffectParam<'_, '_>], cx
             prop.value = v;
         }
     };
-    // The plug-in's Output starts at Colors (EffectCraft's Display starts at Preview); an Output
+    // The plug-in's Output starts at Colors (VL Effects' Display starts at Preview); an Output
     // that cannot be imported keeps it.
     let (display, matte_only) = CRYPTO_COLORS;
     set(group, "display", Value::Enum(display));
@@ -649,7 +649,7 @@ fn import_cryptomatte(fx: &AepEffect<'_, '_>, params: &[EffectParam<'_, '_>], cx
                     col.lose_with(LossCategory::Effects, || format!("{here}: keyframes or an expression on {label} are not imported"));
                 } else {
                     match selection_mode_on(p) {
-                        // A picking switch of the plug-in; EffectCraft picks with its own tool.
+                        // A picking switch of the plug-in; VL Effects picks with its own tool.
                         Some(true) => col.lose_with(LossCategory::Effects, || format!("{here}: parameter {label} is on and has no counterpart")),
                         Some(false) => {}
                         None => col.lose_with(LossCategory::DamagedData, || format!("{here}: parameter {label} holds an unreadable value, off used")),
@@ -665,7 +665,7 @@ fn import_cryptomatte(fx: &AepEffect<'_, '_>, params: &[EffectParam<'_, '_>], cx
     }
 }
 
-/// EffectCraft's (Display, Matte Only) for the plug-in's Output Colors, its default.
+/// VL Effects' (Display, Matte Only) for the plug-in's Output Colors, its default.
 const CRYPTO_COLORS: (u32, bool) = (0, false);
 
 /// Is Selection Mode on? The plug-in writes it, when on, as a record in the default state
@@ -680,7 +680,7 @@ fn selection_mode_on(p: &EffectParam<'_, '_>) -> Option<bool> {
     }
 }
 
-/// Cryptomatte's Output as EffectCraft's (Display, Matte Only): Colors is Colors, Matted RGBA
+/// Cryptomatte's Output as VL Effects' (Display, Matte Only): Colors is Colors, Matted RGBA
 /// is Matte (the layer keyed by the selection), Matte Only is Matte Only. Matted Colors (the
 /// ID colours keyed by the selection) becomes Matte, the same matte over the layer's own
 /// colours, and is reported; a value that cannot be read is reported and Colors used.
@@ -729,22 +729,22 @@ fn crypto_output(p: &EffectParam<'_, '_>, here: &str, label: &str, col: &mut Col
     }
 }
 
-/// The channels EffectCraft's IDentifier reads first for its Channel Type Object ID and Material
+/// The channels VL Effects' IDentifier reads first for its Channel Type Object ID and Material
 /// ID (`AuxChannels::object_id`, `material_id`).
 const IDENTIFIER_OWN: [&str; 2] = ["ObjectID", "MaterialID"];
 
-/// Curves' EffectCraft parameters, in the stored order (RGB, Red, Green, Blue, Alpha).
+/// Curves' VL Effects parameters, in the stored order (RGB, Red, Green, Blue, Alpha).
 const CURVE_IDS: [&str; 5] = ["rgb", "red", "green", "blue", "alpha"];
 
-/// A stored 0..255 curve value as EffectCraft's fraction, as short as it is exact.
+/// A stored 0..255 curve value as VL Effects' fraction, as short as it is exact.
 fn fraction(v: u8) -> String {
     let s = format!("{:.6}", f64::from(v) / 255.0);
     s.trim_end_matches('0').trim_end_matches('.').to_string()
 }
 
-/// The Distortion Mesh as EffectCraft's per-vertex offsets in layer pixels (row-major `dx,dy`).
+/// The Distortion Mesh as VL Effects' per-vertex offsets in layer pixels (row-major `dx,dy`).
 /// The grid size comes from the data (rows first, `export-tests\mesh`); After Effects'
-/// Bezier handles are reported when they are not the default ones (EffectCraft's mesh is
+/// Bezier handles are reported when they are not the default ones (VL Effects' mesh is
 /// bilinear).
 fn import_mesh(m: &MeshData, here: &str, size: (u32, u32), group: &mut PropGroup, col: &mut Collector) {
     let (w, h) = (f64::from(size.0.max(1)), f64::from(size.1.max(1)));
@@ -782,7 +782,7 @@ fn import_mesh(m: &MeshData, here: &str, size: (u32, u32), group: &mut PropGroup
             col.lose_with(LossCategory::DamagedData, || format!("{here}: the Distortion Mesh holds a number that is not valid, not imported"));
             return;
         }
-        // EffectCraft's mesh reads the first two numbers of a vertex; moved handles follow as
+        // VL Effects' mesh reads the first two numbers of a vertex; moved handles follow as
         // eight more (kept for the export, not drawn).
         let mut token = format!("{},{}", px(dx * w), px(dy * h));
         if own.iter().any(|x| x.abs() > 0.01) {
@@ -795,7 +795,7 @@ fn import_mesh(m: &MeshData, here: &str, size: (u32, u32), group: &mut PropGroup
     }
     if handles_moved {
         col.lose_with(LossCategory::Effects, || {
-            format!("{here}: Distortion Mesh Bezier handles moved on their own are not drawn (EffectCraft's mesh is bilinear; they are kept for the export)")
+            format!("{here}: Distortion Mesh Bezier handles moved on their own are not drawn (VL Effects' mesh is bilinear; they are kept for the export)")
         });
     }
     if let Some(p) = group.prop_mut("rows") {
@@ -815,7 +815,7 @@ fn px(v: f64) -> String {
     if v.abs() < 0.01 { "0".to_string() } else { format!("{v:.3}") }
 }
 
-/// A decoded value in EffectCraft's units, `None` when it does not fit the kind or is not a valid
+/// A decoded value in VL Effects' units, `None` when it does not fit the kind or is not a valid
 /// number.
 pub(crate) fn convert(value: ParamValue, kind: Kind) -> Option<Value> {
     let raw = match (value, kind) {

@@ -20,7 +20,7 @@ pub use gpu::{GPU_PREPARING, GpuBuild};
 pub(crate) use screenshot::{MAX_PENDING_SHOTS, SCREENSHOT_SETTLE_PASSES, SCREENSHOT_SETTLE_S, SCREENSHOT_TIMEOUT_S};
 
 impl EffectcraftApp {
-    /// The window title as of the last tick (`EffectCraft - <project>`, ` *` while modified). The
+    /// The window title as of the last tick (`VL Effects - <project>`, ` *` while modified). The
     /// app sends it as `ViewportCommand::Title`, which eframe on the web ignores: that host writes
     /// it to `document.title`.
     pub fn window_title(&self) -> &str {
@@ -189,5 +189,6 @@ impl eframe::App for EffectcraftApp {
     /// Draw one UI pass through `draw`.
     fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
         self.draw(ui, frame);
+        crate::splash::paint(ui.ctx());
     }
 }

@@ -37,7 +37,7 @@ fn close(a: &Value, b: f64) {
 fn invert() {
     let g = skip!(only_effect("410-fx-invert-channel-2.aep"));
     assert_eq!(g.match_id, "ec.channel.invert");
-    // The second file item, Red, is EffectCraft's item 1 (the separators are skipped by name).
+    // The second file item, Red, is VL Effects' item 1 (the separators are skipped by name).
     assert_eq!((v(&g, "channel"), v(&g, "blend")), (Value::Enum(1), s(0.0)));
     let g = skip!(only_effect("411-fx-invert-blend-50.aep"));
     assert_eq!((v(&g, "channel"), v(&g, "blend")), (Value::Enum(0), s(50.0)));

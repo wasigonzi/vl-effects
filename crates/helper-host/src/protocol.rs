@@ -1,6 +1,6 @@
 //! The helper protocol, version [`PROTOCOL_VERSION`] (`docs/external-helpers.md`).
 //!
-//! Control messages are JSON, one per line. EffectCraft writes requests ([`Request`]) to the
+//! Control messages are JSON, one per line. VL Effects writes requests ([`Request`]) to the
 //! helper's stdin; the helper writes replies ([`Reply`]) to its stdout, each line starting with
 //! [`MAGIC`] so that anything else a helper (or a library it loads) prints is ignored. Pixels
 //! never travel over the pipe: they live in the **frame exchange file** named in
@@ -17,7 +17,7 @@ pub const PROTOCOL_VERSION: u32 = 1;
 /// without it, are the helper's own output and only logged).
 pub const MAGIC: &str = "@ec-helper ";
 
-/// The argument EffectCraft starts helpers with.
+/// The argument VL Effects starts helpers with.
 pub const HELPER_ARG: &str = "--effectcraft-helper";
 
 /// The longest control line either side accepts (bytes). Hidden parameters can carry a few MB.
@@ -83,7 +83,7 @@ pub struct RenderRequest {
     pub frame_range: Option<(f64, f64)>,
 }
 
-/// EffectCraft → helper.
+/// VL Effects → helper.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "op", rename_all = "snake_case")]
 pub enum Request {
@@ -121,7 +121,7 @@ pub struct RemoteEffect {
     pub padding: bool,
 }
 
-/// Helper → EffectCraft.
+/// Helper → VL Effects.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "op", rename_all = "snake_case")]
 pub enum Reply {

@@ -1,7 +1,7 @@
 {
   "id": "org.effectcraft.example.posterize-bands",
   "name": "Posterize Bands",
-  "author": "EffectCraft contributors",
+  "author": "VL Effects contributors",
   "license": "MIT OR Apache-2.0",
   "repo": "https://github.com/storytold/effectcraft/tree/main/examples/plugins/posterize-bands",
   "description": "Posterizes luminance into a chosen number of bands and tints them.",

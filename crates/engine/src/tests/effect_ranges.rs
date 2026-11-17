@@ -10,7 +10,7 @@ use serde_json::{Value, json};
 use crate::Session;
 
 /// (issue, effect, parameter path, lowest, highest): the ends of the range the effect now accepts,
-/// in EffectCraft's units: After Effects' valid range, or wider where EffectCraft already was.
+/// in VL Effects' units: After Effects' valid range, or wider where VL Effects already was.
 /// At least one end of each is outside the range accepted before the issue.
 #[rustfmt::skip]
 const ROWS: &[(u32, &str, &str, f64, f64)] = &[

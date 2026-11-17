@@ -1,4 +1,4 @@
-//! EffectCraft's own animation preset library (Effects & Presets ▸ * Animation Presets): the
+//! VL Effects' own animation preset library (Effects & Presets ▸ * Animation Presets): the
 //! Transitions category (original presets built on our Transition effects and layer opacity) and
 //! the Backgrounds category (generators, noise and colour effects driven by expressions) and the
 //! Behaviors category (transform and opacity driven by expressions, no effects).

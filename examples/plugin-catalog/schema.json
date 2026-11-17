@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/storytold/effectcraft-plugins/main/schema.json",
-  "title": "EffectCraft Plug-in Library catalog (index.json), format 1",
+  "title": "VL Effects Plug-in Library catalog (index.json), format 1",
   "description": "Mirrors crates/engine/src/system/library.rs (parse_catalog). Unknown fields are rejected here to catch typos; the app itself ignores them.",
   "type": "object",
   "required": ["schema", "packages"],

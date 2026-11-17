@@ -3,13 +3,13 @@
 //!
 //! Mapped: the text (paragraphs separated by `\r`; U+0003, which After Effects lays out exactly
 //! like `\r`, becomes `\r`), per style run the font (its PostScript name,
-//! which EffectCraft resolves like a family name), size, fill and stroke colour, whether fill and
+//! which VL Effects resolves like a family name), size, fill and stroke colour, whether fill and
 //! stroke are drawn, the stroke width, tracking, leading (automatic or explicit), faux bold /
 //! italic, all caps / small caps, superscript / subscript, horizontal and vertical scale, baseline
 //! shift, automatic kerning (metrics, optical, none), ligatures, tsume; per paragraph the
 //! justification (also the justified variants), indents, space before / after, direction,
 //! composer and hanging punctuation; stroke over fill (one switch for the whole text in
-//! EffectCraft); box text as a box; vertical right-to-left text. A missing font keeps its name (the
+//! VL Effects); box text as a box; vertical right-to-left text. A missing font keeps its name (the
 //! renderer falls back as for any missing font) and is listed in the report.
 
 use crate::{AutoKern, Caps, FontBaseline, Justification, Layer as AepLayer, ParagraphRun, PropGroup, PropNode, StyleRun as AepRun, TextDocument};
@@ -28,7 +28,7 @@ pub(crate) const MAX_TEXT_CHARS: usize = 1 << 20;
 /// U+0003 (END OF TEXT): After Effects' other paragraph break besides `\r`.
 const ETX: char = '\u{3}';
 
-/// The name of a text layer without a name of its own: its first paragraph, cut as EffectCraft
+/// The name of a text layer without a name of its own: its first paragraph, cut as VL Effects
 /// cuts a following name ([`effectcraft_project::text_layer_name`]), so a following name that
 /// export writes as no name comes back unchanged (#3233). U+0003 ends a paragraph like `\r`.
 pub(crate) fn first_paragraph(raw: &str) -> String {
@@ -37,7 +37,7 @@ pub(crate) fn first_paragraph(raw: &str) -> String {
 
 /// The Source Text value of `doc`, with what cannot be mapped reported for the layer `what`.
 pub(crate) fn text_doc(doc: &TextDocument, what: &str, has_font: &dyn Fn(&str) -> bool, col: &mut Collector) -> TextDoc {
-    // The stored text ends with the `\r` of the last paragraph; EffectCraft's text does not.
+    // The stored text ends with the `\r` of the last paragraph; VL Effects' text does not.
     let stored = doc.raw_text.strip_suffix('\r').unwrap_or(&doc.raw_text);
     // U+0003 is a line break that starts a new paragraph in After Effects (386 against 387: the
     // same two lines and two paragraphs, and the same paragraph runs as a CR). One character for
@@ -84,7 +84,7 @@ pub(crate) fn text_doc(doc: &TextDocument, what: &str, has_font: &dyn Fn(&str) -
     if !paras.is_empty() {
         out.set_paras(paras);
     }
-    // Stroke over fill is one switch for the whole text in EffectCraft (per run in After Effects).
+    // Stroke over fill is one switch for the whole text in VL Effects (per run in After Effects).
     if let Some(first) = doc.style_runs.first() {
         out.stroke_over_fill = first.stroke_over_fill;
         if doc.style_runs.iter().any(|r| r.stroke_over_fill != first.stroke_over_fill && r.apply_stroke) {
@@ -218,7 +218,7 @@ fn char_style(doc: &TextDocument, run: &AepRun, what: &str, has_font: &dyn Fn(&s
     s.apply_stroke = run.apply_stroke;
     s.stroke_width = fit(run.stroke_width, (0.0, 10_000.0), 0.0, "the stroke width", what, col);
     s.tracking = fit(run.tracking, (-100_000.0, 100_000.0), 0.0, "the tracking", what, col);
-    // Scales are factors in the file (539, 540) and percent in EffectCraft; tsume is a fraction
+    // Scales are factors in the file (539, 540) and percent in VL Effects; tsume is a fraction
     // (553) and a percentage.
     s.h_scale = fit(run.horizontal_scale * 100.0, (1.0, 10_000.0), 100.0, "the horizontal scale", what, col);
     s.v_scale = fit(run.vertical_scale * 100.0, (1.0, 10_000.0), 100.0, "the vertical scale", what, col);
@@ -245,7 +245,7 @@ fn char_style(doc: &TextDocument, run: &AepRun, what: &str, has_font: &dyn Fn(&s
         Caps::Other(code) => col.lose(LossCategory::TextLayers, format!("{what}: capitalisation code {code} is not decoded, imported as normal")),
     }
     // Superscript / subscript (526-528): After Effects' 58.3 % size and 33.3 % shift are
-    // EffectCraft's too.
+    // VL Effects' too.
     s.baseline = match run.baseline {
         FontBaseline::Normal => BaselineOption::Normal,
         FontBaseline::Superscript => BaselineOption::Superscript,
@@ -264,7 +264,7 @@ fn para_style(p: &ParagraphRun, what: &str, col: &mut Collector) -> ParaStyle {
     if p.leading_type != 0 {
         col.lose(LossCategory::TextLayers, format!("{what}: the Japanese leading model is not imported, Roman leading used"));
     }
-    // Automatic hyphenation (`/9`) is not reported: EffectCraft never hyphenates, so a paragraph
+    // Automatic hyphenation (`/9`) is not reported: VL Effects never hyphenates, so a paragraph
     // with hyphenation off (556) is laid out as After Effects does.
     let rtl = p.direction == 1;
     ParaStyle {
@@ -288,7 +288,7 @@ fn para_style(p: &ParagraphRun, what: &str, col: &mut Collector) -> ParaStyle {
     }
 }
 
-/// Character settings EffectCraft has no field for, reported once per text.
+/// Character settings VL Effects has no field for, reported once per text.
 fn report_character_extras(doc: &TextDocument, what: &str, col: &mut Collector) {
     let runs = &doc.style_runs;
     if runs.iter().any(|r| r.no_break) {
@@ -313,7 +313,7 @@ fn report_character_extras(doc: &TextDocument, what: &str, col: &mut Collector) 
 /// The stored justification is relative to the paragraph direction: in a right-to-left paragraph
 /// After Effects lays "left" (0) and "justify, last line left" (3) out flush right and "right"
 /// (1, 4) flush left (read-back test t7: point and box text with all seven codes; 2, 5 and 6 are
-/// the same in both directions). EffectCraft's justification is visual, so the two pairs swap.
+/// the same in both directions). VL Effects' justification is visual, so the two pairs swap.
 fn justify(j: Justification, rtl: bool, what: &str, col: &mut Collector) -> Justify {
     match j {
         Justification::Left if rtl => Justify::Right,

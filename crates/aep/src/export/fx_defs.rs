@@ -749,7 +749,7 @@ mod tests {
     }
 
     /// Every effect parameter the .aep table maps to a recorded After Effects definition accepts
-    /// at least After Effects' valid range, converted to EffectCraft's units the way the importer
+    /// at least After Effects' valid range, converted to VL Effects' units the way the importer
     /// converts values (`Conv::number_scale`). Only `ParamUi::Slider` limits values (`prop.set`,
     /// the Effect Controls and Timeline editors); other controls take any number. A mapping with
     /// a declared narrower range (`ParamMap::limit`) must match the effect's range instead.

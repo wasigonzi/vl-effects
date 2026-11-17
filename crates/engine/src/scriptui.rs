@@ -488,7 +488,7 @@ pub struct ScriptUi {
     #[serde(skip)]
     pub task_hosts: Vec<u32>,
     /// The script contexts of Startup scripts: their tasks go on when the project is closed or
-    /// replaced, until EffectCraft quits.
+    /// replaced, until VL Effects quits.
     #[serde(skip)]
     pub startup_hosts: Vec<u32>,
 }

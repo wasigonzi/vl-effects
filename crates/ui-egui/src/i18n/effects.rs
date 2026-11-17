@@ -32,7 +32,7 @@
 //! (26.5.0.89) Simplified Chinese interface, its 21 category folder names included (the `CC` names
 //! came from Adobe's Chinese *documentation*, which names 68 of the 69); `Cryptomatte`,
 //! `EXtractoR`, `IDentifier`, `Key Light` and `Unmult` stay in English as brand names, and
-//! `Face Measurements` / `Face Track Points` are EffectCraft's own effects, so their wording is
+//! `Face Measurements` / `Face Track Points` are VL Effects' own effects, so their wording is
 //! ours.
 //!
 //! The Traditional Chinese names for Taiwan are written from the meaning of the English ones, with
@@ -807,7 +807,7 @@ const TRADITIONAL_CHINESE: &[Row] = &[
 /// (`Cryptomatte`, `EXtractoR`, `IDentifier` and `Key Light`) repeat that English name here rather
 /// than being left out; the `VR` and `OCIO` sets take a Japanese tail instead, and `Unmult` keeps
 /// its English name in both catalogs. An effect with no row draws its English name anyway, which
-/// is what `Twirl (Legacy)` and the two EffectCraft-only effects would do without their rows.
+/// is what `Twirl (Legacy)` and the two VL Effects-only effects would do without their rows.
 ///
 /// The rows of the effects this cleanup did not rename come from AE 2026's Japanese interface
 /// where it was read directly (its Effect menu and its Effects & Presets panel) and from Adobe's

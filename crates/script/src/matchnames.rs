@@ -62,7 +62,7 @@ const TEXT: &[(&str, &str)] = &[
 ];
 
 // Match names of the six properties below Text ▸ Path Options, as named by
-// After Effects' scripting API (rather than EffectCraft's internal ids).
+// After Effects' scripting API (rather than VL Effects' internal ids).
 const TEXT_PATH_OPTIONS: &[(&str, &str)] = &[
     ("path", "ADBE Text Path"),
     ("reversePath", "ADBE Text Reverse Path"),
@@ -421,7 +421,7 @@ fn find<'a>(t: &'a [(&str, &'a str)], k: &str) -> Option<&'a str> {
 
 /// Effect match names that resolve to one of our effects but are not the name we emit (#3113):
 /// After Effects' hidden obsolete versions (`ADBE Noise`, `ADBE Photo Filter`), which its
-/// `addProperty` still accepts, and the names earlier EffectCraft versions emitted by mistake,
+/// `addProperty` still accepts, and the names earlier VL Effects versions emitted by mistake,
 /// which scripts written against them may use. Lookup only: `effect()` gives the `EFFECTS` name.
 const LEGACY_EFFECTS: &[(&str, &str)] = &[
     ("ADBE Noise", "ec.noise.noise"),

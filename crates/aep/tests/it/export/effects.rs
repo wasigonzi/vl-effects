@@ -138,7 +138,7 @@ fn every_effect_fixture_is_written_as_after_effects_wrote_it() {
             for (x, y) in fa.iter().zip(fb) {
                 assert_eq!((&x.match_name, &x.name), (&y.match_name, &y.name), "{name}");
                 // Written as the importer took it over (712: CC Radial Blur's Type Scratch has no
-                // EffectCraft item, reported on import).
+                // VL Effects item, reported on import).
                 if lossy.iter().any(|d| d.contains(&format!("({})", x.match_name))) {
                     continue;
                 }
@@ -469,7 +469,7 @@ fn every_static_value_record_is_rebuilt_in_its_decoded_bytes() {
         let none = |_: &str| false;
         let imported = import(&mut p, &bytes, &ImportOptions { allow_losses: true, ..ImportOptions::new(&none) }).expect("import");
         // An effect the importer could not take over completely (712: CC Radial Blur's Type
-        // Scratch has no EffectCraft item) is written as EffectCraft has it.
+        // Scratch has no VL Effects item) is written as VL Effects has it.
         let lossy: Vec<String> = imported.report.losses.iter().flat_map(|l| l.details.clone()).collect();
         let r = export_all(&p);
         let exported = parse(&r.bytes).expect("parse export");
@@ -611,7 +611,7 @@ fn find_id<'a>(g: &'a PropGroup, id: &str) -> Option<&'a effectcraft_project::Pr
 #[test]
 fn an_explicit_none_is_written_as_none() {
     // After Effects' None on Compound Blur / Displacement Map / Set Matte (`tdpi` 0) differs from
-    // the owning layer (fx27 `layer-none`); it is EffectCraft's `NO_LAYER` both ways.
+    // the owning layer (fx27 `layer-none`); it is VL Effects' `NO_LAYER` both ways.
     let mut p = import_bytes(&fixture!("905-fx-24-effects-set-one-comp.aep"));
     let none = Value::Layer(Some(effectcraft_project::NO_LAYER));
     let n: usize = ["blurLayer", "displacementMapLayer", "takeMatteFromLayer"].iter().map(|id| set_all(&mut p, id, none.clone())).sum();
@@ -695,7 +695,7 @@ fn curves_and_mesh_warp_are_written_as_after_effects_stores_them() {
 #[test]
 fn mesh_handles_moved_on_their_own_survive_the_round_trip() {
     // 985 imported, then the right handle of vertex (2, 2) moved by 30 px on its own: the importer
-    // keeps such moves as extra numbers of the vertex (EffectCraft draws a bilinear mesh).
+    // keeps such moves as extra numbers of the vertex (VL Effects draws a bilinear mesh).
     let mut p = import_bytes(&fixture!("985-meshwarp-3x3-vertex-moved-on-S.aep"));
     let id: Vec<_> = p.comps().map(|(i, _)| *i).collect();
     let mut tokens = Vec::new();

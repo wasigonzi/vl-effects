@@ -1,25 +1,41 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#1b1c1f">
-  <meta name="description" content="EffectCraft: motion graphics and visual effects in the browser">
-  <title>EffectCraft</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="description" content="VL Effects: motion graphics y efectos visuales de Visualab Studios, en tu navegador.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="VL Effects">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0b0b0c">
+  <title>VL Effects</title>
+  <!-- Visualab Studios brand: the same favicon, home-screen icons and loading screen as VL Studios. -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon-180.png">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icon-256.png">
   <style>
-    html, body { margin: 0; height: 100%; overflow: hidden; background: #1b1c1f; }
-    canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; outline: none; }
+    /* Mobile: no page scroll, bounce or callout; the app takes the gestures. */
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0b0c; overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+    canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; outline: none; touch-action: none; }
+    /* Visualab Studios loading screen while the app downloads (the app's own splash follows). */
     #loading {
-      position: absolute; inset: 0; display: flex; flex-direction: column; gap: 14px;
-      align-items: center; justify-content: center; color: #c9c9cc;
-      font: 14px/1.4 system-ui, sans-serif; pointer-events: none;
+      position: absolute; inset: 0; display: flex; flex-direction: column; gap: 18px; padding: 0 24px;
+      align-items: center; justify-content: center; text-align: center; color: #b8b8c0;
+      font: 14px/1.4 Inter, system-ui, sans-serif; pointer-events: none;
+      background: radial-gradient(ellipse at 30% 40%, rgba(0,212,255,.14), transparent 55%), radial-gradient(ellipse at 75% 65%, rgba(123,60,255,.14), transparent 55%), #0b0b0c;
     }
-    #loading img { width: 56px; height: 56px; }
-    #loading .err { color: #ff8a7a; white-space: pre-wrap; max-width: 70ch; pointer-events: auto; }
+    #loading img { width: min(260px, 64vw); height: auto; animation: vl-pulse 2.4s ease-in-out infinite; filter: drop-shadow(0 0 18px rgba(0,212,255,.35)); }
+    #loading .vl-name { color: #00d4ff; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; }
+    #loading .vl-bar { width: min(260px, 64vw); height: 3px; border-radius: 2px; background: #26262a; overflow: hidden; }
+    #loading .vl-bar i { display: block; height: 100%; width: 40%; border-radius: 2px; background: #00d4ff; animation: vl-slide 1.4s ease-in-out infinite; }
+    #loading .err { color: #ff8a7a; white-space: pre-wrap; max-width: min(70ch, 92vw); pointer-events: auto; text-align: left; font-size: 12px; }
+    @keyframes vl-pulse { 50% { transform: scale(1.03); filter: drop-shadow(0 0 28px rgba(0,212,255,.55)); } }
+    @keyframes vl-slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+    @media (prefers-reduced-motion: reduce) { #loading img, #loading .vl-bar i { animation: none; } }
     #device-lost {
       position: absolute; inset: 0; display: flex; flex-direction: column; gap: 10px;
       align-items: center; justify-content: center; padding: 16px; text-align: center;
@@ -34,18 +50,72 @@
       background: #232323; color: #e3e3e3; font: inherit; cursor: pointer;
     }
     #device-lost button:hover { background: #303030; }
-    #device-lost button:last-child { background: #2d8ceb; border-color: #2d8ceb; }
-    #device-lost button:last-child:hover { background: #4aa0f5; }
+    #device-lost button:last-child { background: #00a3c4; border-color: #00a3c4; }
+    #device-lost button:last-child:hover { background: #00c2e8; }
     #device-lost button:disabled { opacity: 0.6; cursor: default; }
   </style>
 </head>
 <body>
   <canvas id="effectcraft_canvas"></canvas>
-  <div id="loading"><img src="favicon.svg" alt=""><div id="status">Loading EffectCraft…</div></div>
+  <div id="loading">
+    <img src="vl-logo.png" alt="Visualab Studios" width="450" height="144">
+    <div class="vl-name">VL Effects</div>
+    <div class="vl-bar"><i></i></div>
+    <div id="status">Cargando VL Effects…</div>
+  </div>
+  <script>
+    // Visualab Studios account gate: only signed-in users open VL Effects. The website hands the
+    // Supabase session over in the URL fragment (#access_token=…&refresh_token=…) when it opens the
+    // app; the session is kept in this origin's storage and refreshed when it expires. Without a
+    // valid session the page goes back to VL Effects' page on the website to sign in.
+    // `__VL_SUPABASE_URL__` / `__VL_SUPABASE_ANON__` are filled in at deploy time; unfilled (local
+    // builds) the gate is off.
+    window.vlGate = (async () => {
+      const SB = "__VL_SUPABASE_URL__", KEY = "__VL_SUPABASE_ANON__";
+      const SITE = "https://www.visualabstudios.com/vl-tools/vl-effects";
+      const STORE = "vl-effects-session";
+      if (SB.startsWith("__") || KEY.startsWith("__")) return true;
+      const say = (t) => { const s = document.getElementById("status"); if (s) s.textContent = t; };
+      const leave = () => { say("Inicia sesión en Visualab Studios para usar VL Effects…"); location.replace(SITE + "?acceso=1"); return new Promise(() => {}); };
+      const h = new URLSearchParams(location.hash.slice(1));
+      if (h.get("access_token")) {
+        localStorage.setItem(STORE, JSON.stringify({ access_token: h.get("access_token"), refresh_token: h.get("refresh_token") || "" }));
+        history.replaceState(null, "", location.pathname + location.search);
+      }
+      let sess = null;
+      try { sess = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { sess = null; }
+      if (!sess || !sess.access_token) return leave();
+      say("Verificando tu cuenta…");
+      const user = (t) => fetch(SB + "/auth/v1/user", { headers: { apikey: KEY, Authorization: "Bearer " + t } });
+      try {
+        let r = await user(sess.access_token);
+        if (r.status === 401 || r.status === 403) {
+          if (!sess.refresh_token) { localStorage.removeItem(STORE); return leave(); }
+          const t = await fetch(SB + "/auth/v1/token?grant_type=refresh_token", {
+            method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ refresh_token: sess.refresh_token }),
+          });
+          if (!t.ok) { localStorage.removeItem(STORE); return leave(); }
+          const j = await t.json();
+          sess = { access_token: j.access_token, refresh_token: j.refresh_token };
+          localStorage.setItem(STORE, JSON.stringify(sess));
+          r = await user(sess.access_token);
+        }
+        if (!r.ok) { localStorage.removeItem(STORE); return leave(); }
+      } catch (e) {
+        // offline: an earlier verified session may still open the app from the cache
+        if (!navigator.onLine) return true;
+        return leave();
+      }
+      say("Cargando VL Effects…");
+      return true;
+    })();
+  </script>
   <script type="module">
     import init, * as ec from "./effectcraft_web.js";
-    const t0 = performance.now();
     window.effectcraftLoad = {};
+    // Only signed-in Visualab Studios users get past this line (see the gate above).
+    await window.vlGate;
+    const t0 = performance.now();
     // The agent / test API: the desktop control channel as promises (docs/web.md).
     window.effectcraft = {
       request: (method, params) => ec.request(method, params ?? {}),
@@ -114,7 +184,7 @@
       window.effectcraftLoad.readyMs = performance.now() - t0;
     } catch (e) {
       const s = document.getElementById("status");
-      if (s) { s.className = "err"; s.textContent = "EffectCraft failed to start:\n" + (e && e.stack || e); }
+      if (s) { s.className = "err"; s.textContent = "VL Effects no pudo iniciar (se necesita un navegador con WebGPU o WebGL2):\n" + (e && e.stack || e); }
       window.effectcraftLoad.error = String(e);
       throw e;
     }

@@ -141,7 +141,7 @@ fn a_wrong_checksum_or_a_bad_module_installs_nothing() {
     let e = s.execute("library.install", json!({"id": "org.test.web", "wait": true})).unwrap_err().to_string();
     assert!(e.contains("isn't on GitHub"), "{e}");
     let e = s.execute("library.install", json!({"id": "org.test.future", "wait": true})).unwrap_err().to_string();
-    assert!(e.contains("no release for this EffectCraft"), "{e}");
+    assert!(e.contains("no release for this VL Effects"), "{e}");
     assert_eq!(package(&s.execute("library.list", json!({})).unwrap(), "org.test.future")["needsNewerApp"], true);
     let lib = dir.join("Plug-ins").join("Library");
     for id in ["org.test.badsum", "org.test.garbage", "org.test.web"] {

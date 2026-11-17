@@ -1,4 +1,4 @@
-//! The EffectCraft egui frontend (swappable): docking panels, the Composition viewer, the
+//! The VL Effects egui frontend (swappable): docking panels, the Composition viewer, the
 //! Timeline with property twirl-downs and keyframes, Effect Controls, Effects & Presets, Preview,
 //! Info, Character/Paragraph/Align, menus, dialogs and the control channel.
 //!
@@ -9,13 +9,13 @@
 
 pub(crate) mod a11y;
 
-/// EffectCraft as craft-update knows it, with its 128 px icon and accent colour: the update
+/// VL Effects as craft-update knows it, with its 128 px icon and accent colour: the update
 /// prompt shows both, and an AppImage's menu entry gets the icon.
 #[cfg(not(target_arch = "wasm32"))]
 pub const UPDATE_APP: craft_update::app::App = craft_update::app::App {
     icon_png: Some(include_bytes!("../../../assets/app-icon/hicolor/128x128/apps/ai.storyteller.effectcraft.png")),
-    accent: Some([0xe0, 0x36, 0x8f]),
-    ..craft_update::suite::EFFECTCRAFT
+    accent: Some([0x00, 0xd4, 0xff]),
+    ..craft_update::app::App::new("vl-effects", "VL Effects", "Motion graphics and visual effects", "wasigonzi/vl-effects")
 };
 
 pub mod audio;
@@ -40,6 +40,7 @@ pub mod num_math;
 pub mod panels;
 mod pointer_wrap;
 pub mod prefs_live;
+pub mod splash;
 pub mod state;
 pub mod theme;
 pub mod updates_ui;

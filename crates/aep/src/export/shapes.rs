@@ -212,7 +212,7 @@ pub(crate) fn c_scalar(v: &Value) -> Option<Vec<f64>> {
     }
 }
 
-/// Offset Paths' Copy Offset: EffectCraft's value + 1 (826-828).
+/// Offset Paths' Copy Offset: VL Effects' value + 1 (826-828).
 fn c_copy_offset(v: &Value) -> Option<Vec<f64>> {
     match v {
         Value::Scalar(s) => Some(vec![*s + 1.0]),
@@ -253,7 +253,7 @@ fn colour_alpha(p: &Property, keyed: bool) -> bool {
     if keyed { p.keys.iter().any(|k| alpha(&k.value)) } else { alpha(&p.value) }
 }
 
-/// A popup stored 1-based (EffectCraft's items in After Effects' order).
+/// A popup stored 1-based (VL Effects' items in After Effects' order).
 pub(crate) fn c_popup(v: &Value) -> Option<Vec<f64>> {
     match v {
         Value::Enum(e) => Some(vec![f64::from(*e) + 1.0]),
@@ -568,14 +568,14 @@ pub(crate) fn plan_contents(contents: &PropGroup, what: &str, depth: usize, cx: 
                 rec(&mut r, g, ("ADBE Vector Offset Line Join", "join"), c_popup, &[1.0], &w, cx);
                 rec(&mut r, g, ("ADBE Vector Offset Miter Limit", "miter"), c_scalar, &[4.0], &w, cx);
                 rec(&mut r, g, ("ADBE Vector Offset Copies", "copies"), c_scalar, &[1.0], &w, cx);
-                // EffectCraft offsets copy i by Amount x (i + 1 + copyOffset), After Effects by
+                // VL Effects offsets copy i by Amount x (i + 1 + copyOffset), After Effects by
                 // Amount x (i + Copy Offset) (826-828): Copy Offset = copyOffset + 1, the
                 // importer's inverse.
                 rec(&mut r, g, ("ADBE Vector Offset Copy Offset", "copyOffset"), c_copy_offset, &[1.0], &w, cx);
                 if g.get("copyOffset").is_some_and(|p| p.has_expression()) {
                     cx.col.lose(
                         LossCategory::ShapeLayers,
-                        format!("{w}: the expression on Offset Paths' Copy Offset is written as it is (After Effects' value is 1 more than EffectCraft's)"),
+                        format!("{w}: the expression on Offset Paths' Copy Offset is written as it is (After Effects' value is 1 more than VL Effects')"),
                     );
                 }
                 "ADBE Vector Filter - Offset"

@@ -1,4 +1,4 @@
-//! Effects: Tint, Gradient Ramp and Exposure arrive with every parameter and key in EffectCraft's
+//! Effects: Tint, Gradient Ramp and Exposure arrive with every parameter and key in VL Effects'
 //! units (cases 356-397, the values each case was made with), in stack order; other effects and
 //! parameters are reported.
 
@@ -90,7 +90,7 @@ fn default_tint_equals_effectcrafts_default() {
     assert_eq!(value(&g, "black"), Value::Color([0.0, 0.0, 0.0, 1.0]));
     assert_eq!(value(&g, "white"), Value::Color([1.0, 1.0, 1.0, 1.0]));
     assert_eq!(value(&g, "amount"), Value::Scalar(100.0));
-    // The file's pard defaults, converted, are EffectCraft's defaults.
+    // The file's pard defaults, converted, are VL Effects' defaults.
     let spec = effectcraft_effects::find("ec.color.tint").unwrap();
     for ps in &spec.params {
         assert_eq!(value(&g, ps.id), effectcraft_effects::default_value(ps, [1920.0, 1080.0]), "{}", ps.id);

@@ -35,7 +35,7 @@ jobs:
     with:
       dry-run: ${{ github.event_name == 'schedule' }}
       app-name: effectcraft
-      app-title: EffectCraft
+      app-title: VL Effects
       version: ${{ inputs.version }}
       contributors-artifact: ${{ needs.credits.outputs.artifact-name }}
     secrets:

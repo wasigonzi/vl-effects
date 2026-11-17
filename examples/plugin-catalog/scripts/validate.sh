@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Validate the plug-in catalog: schema, unique ids, every release's download (size + SHA-256),
-# then install every package with the real EffectCraft loader.
+# then install every package with the real VL Effects loader.
 #
 #   scripts/validate.sh [index.json]
 #
@@ -47,9 +47,9 @@ echo "== 3. release URLs"
 # a `repo`, an asset of that repository, as Install and Preview require (the loader step installs
 # from file:// copies, which skip this check).
 bad=$(jq -r '
-  # A path segment EffectCraft refuses: empty, `.` or `..` (also percent-encoded).
+  # A path segment VL Effects refuses: empty, `.` or `..` (also percent-encoded).
   def bad_segment: . == "" or (ascii_downcase | gsub("%2e"; ".") | . == "." or . == "..");
-  # A `?`, `#`, `\` or white space character (Unicode, and U+FEFF), which EffectCraft refuses in a URL.
+  # A `?`, `#`, `\` or white space character (Unicode, and U+FEFF), which VL Effects refuses in a URL.
   def bad_char: test("[?#\\\\\t\n\u000b\f\r \u0085   -     　﻿]");
   # "owner/name" in lower case of a release asset,
   # https://github.com/<owner>/<name>/releases/download/<tag>/<file> (a tag may contain `/`), with
@@ -97,7 +97,7 @@ done < <(jq -r '.packages | to_entries[] | .key as $p | .value as $pkg | $pkg.ve
   | [$p, .key, $pkg.id, .value.version, .value.url, .value.sha256, (.value.size // "")] | @tsv' "$catalog")
 echo "ok"
 
-echo "== 5. load with EffectCraft"
+echo "== 5. load with VL Effects"
 if [[ -z "${EFFECTCRAFT_CLI:-}" ]]; then
   echo "skipped (set EFFECTCRAFT_CLI to an effectcraft-cli build)"
   exit 0

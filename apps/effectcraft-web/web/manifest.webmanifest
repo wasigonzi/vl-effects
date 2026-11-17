@@ -1,16 +1,17 @@
 {
-  "name": "EffectCraft",
-  "short_name": "EffectCraft",
-  "description": "Motion graphics and visual effects compositor, in the browser",
+  "name": "VL Effects",
+  "short_name": "VL Effects",
+  "description": "Motion graphics y efectos visuales de Visualab Studios, en tu navegador",
   "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#1b1c1f",
-  "theme_color": "#1b1c1f",
+  "background_color": "#0b0b0c",
+  "theme_color": "#0b0b0c",
   "categories": ["graphics", "photo", "productivity"],
   "icons": [
     { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-256.png", "sizes": "256x256", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]

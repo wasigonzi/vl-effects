@@ -3,14 +3,14 @@
 //! `text_anim.rs`.
 //!
 //! The layer's `ADBE Text Animators` group is the one of 579 emptied; every animator is its first
-//! animator (one range selector) with the properties and selectors of the EffectCraft animator.
+//! animator (one range selector) with the properties and selectors of the VL Effects animator.
 //! An animator property is written whenever the animator has it (its presence is what After
 //! Effects shows: Animate > Position adds the entry), a range selector property only when it
 //! differs from After Effects' default or carries keys or an expression. Every record has the layout
 //! After Effects writes for that property in a one-change case (579-592, 728; `tree_defs`):
 //! positions, anchor points, stroke widths and line spacing in pixels, scales, opacity, Start /
 //! End / Offset, Amount, Smoothness and the eases in percent, angles in degrees, tracking in 1/1000
-//! em, colours ARGB 0..255, popups 1-based (Units, Based On, Mode, Shape in EffectCraft's item
+//! em, colours ARGB 0..255, popups 1-based (Units, Based On, Mode, Shape in VL Effects' item
 //! order). With Units = Index the selector's range is `Index Start / End / Offset` (583). Keys
 //! and expressions are written as on shape properties (R46; 593, 594).
 
@@ -77,7 +77,7 @@ fn c_bool(v: &Value) -> Option<Vec<f64>> {
     }
 }
 
-/// EffectCraft animator property -> stored match name, conversion, key layout (the importer's
+/// VL Effects animator property -> stored match name, conversion, key layout (the importer's
 /// `PROPS`, 579-592, 728).
 const PROPS: &[(&str, &str, Conv, Layout)] = &[
     ("anchor", "ADBE Text Anchor Point 3D", c_vec3, Layout::Point),
@@ -97,12 +97,12 @@ const PROPS: &[(&str, &str, Conv, Layout)] = &[
     ("characterOffset", "ADBE Text Character Offset", c_scalar, Layout::One),
 ];
 
-/// Properties After Effects adds with another one and EffectCraft keeps at their default: written
+/// Properties After Effects adds with another one and VL Effects keeps at their default: written
 /// by After Effects itself (Tracking Type with Tracking, Character Range and Alignment with
 /// Character Offset, 728); a value other than the default is reported.
 const DEPENDENT: &[(&str, Value)] = &[("trackingType", Value::Enum(0)), ("characterRange", Value::Enum(0)), ("characterAlignment", Value::Enum(1))];
 
-/// Range selector properties: EffectCraft id, stored match names (percent units, index units),
+/// Range selector properties: VL Effects id, stored match names (percent units, index units),
 /// conversion, default (stored).
 const RANGE: &[(&str, &str, &str, f64)] = &[
     ("start", "ADBE Text Percent Start", "ADBE Text Index Start", 0.0),

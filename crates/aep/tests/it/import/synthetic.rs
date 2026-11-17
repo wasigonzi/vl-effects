@@ -587,7 +587,7 @@ fn default_state_effect_records_import_like_written_ones() {
     let (p, _) = run(&with_record("ADBE Glo2-0011", 3, 0.75), true);
     let mid: Vec<_> = effect_values(&p).into_iter().filter(|(id, _)| id == "abMidpoint").collect();
     assert_eq!(mid, vec![("abMidpoint".to_string(), effectcraft_keyframe::Value::Scalar(75.0))]);
-    // Levels' Clip To Output Black (`-0008`) recorded as After Effects' item 1, On: EffectCraft's
+    // Levels' Clip To Output Black (`-0008`) recorded as After Effects' item 1, On: VL Effects'
     // On is item 1 of Off, On, Off for 32 bpc Color (the default is item 2).
     let (p, _) = run(&with_record("ADBE Easy Levels2-0008", 3, 1.0), true);
     let clip: Vec<_> = effect_values(&p).into_iter().filter(|(id, _)| id == "clipToOutputBlack").collect();
@@ -993,11 +993,11 @@ fn with_french_levels_popups() -> Vec<u8> {
     bytes
 }
 
-/// A popup's item names in the file are matched to EffectCraft's own (English) ones by name
+/// A popup's item names in the file are matched to VL Effects' own (English) ones by name
 /// (`popup_key`): a project saved by a French After Effects stores "RVB", "Activé", "Désactivé
 /// pour la couleur 32 bpc" for Levels' Channel and Clip to Output Black / White (observed in a
 /// real "Niveaux" effect, After Effects 2026 26.0.0x67). Before `popup_alias`, none of these
-/// matched EffectCraft's English-only options, so each came back "has no counterpart, default
+/// matched VL Effects' English-only options, so each came back "has no counterpart, default
 /// used" and the real selection was silently lost.
 #[test]
 fn french_levels_popup_items_are_recognized() {

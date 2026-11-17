@@ -1,8 +1,8 @@
 //! # effectcraft-helper-host (L3)
 //!
-//! **External effect helpers**: separate programs that offer effects to EffectCraft over a small,
+//! **External effect helpers**: separate programs that offer effects to VL Effects over a small,
 //! versioned protocol ([`protocol`], `docs/external-helpers.md`, ADR
-//! `docs/adr/0001-external-effect-helpers.md`). EffectCraft finds installed helpers
+//! `docs/adr/0001-external-effect-helpers.md`). VL Effects finds installed helpers
 //! ([`find_helpers`]), starts each as a child process, lists its effects and registers every one
 //! as an ordinary plug-in effect (plug-in API 2), so the UI, the property tree, keyframes,
 //! scripting and the command surface need nothing new. Rendering sends the frame to the helper
@@ -10,7 +10,7 @@
 //! time, another layer, parameters at another time) while it works.
 //!
 //! The point is containment: whatever native code a helper runs (an OpenFX plug-in host, for
-//! example) runs in **its** process. If it crashes, hangs or talks nonsense, EffectCraft stops
+//! example) runs in **its** process. If it crashes, hangs or talks nonsense, VL Effects stops
 //! it, shows the error on the effect, leaves the frame as it was and starts the helper again
 //! for the next render; an effect that keeps taking its helper down is turned off
 //! ([`blocklist`]). This crate is safe Rust (`unsafe_code = "forbid"`, like the rest of the
@@ -226,7 +226,7 @@ pub fn list() -> Value {
 }
 
 /// Stop every helper process (they start again when needed). Called when the app quits;
-/// helpers also exit on their own when EffectCraft's end of the pipe closes.
+/// helpers also exit on their own when VL Effects' end of the pipe closes.
 pub fn stop_all() {
     for h in lock(helpers()).iter() {
         h.stop();

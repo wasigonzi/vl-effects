@@ -1,11 +1,11 @@
-EffectCraft
+VL Effects by Visualab Studios
+Based on open-source software:
 Copyright (c) 2026 ArtCraft Team and the EffectCraft contributors.
 Licensed under the MIT License or the Apache License, Version 2.0, at your option
 (LICENSE-MIT, LICENSE-APACHE).
 
-The ArtCraft name, wordmark and logos in docs/brand/ are trademarks of the ArtCraft Team. They are
-not open source and are not covered by the license above; their terms are in
-docs/brand/LICENSE-brand.txt.
+The Visualab Studios name and logos are trademarks of Visualab Studios and are not covered by
+the license above.
 
 Third-party material
 
@@ -14,18 +14,18 @@ list (author, source, license) is in ATTRIBUTION.md.
 
 Bundled fonts
 
-EffectCraft embeds Inter, Noto Serif, JetBrains Mono and Noto Sans Symbols 2 from
+VL Effects embeds Inter, Noto Serif, JetBrains Mono and Noto Sans Symbols 2 from
 assets/fonts/. The pinned egui dependency (epaint_default_fonts, revision
 6d518fc799681571963842f95b55a6b68431b15a) additionally embeds Ubuntu Light, Hack,
-Noto Emoji, egui-icons and emoji-icon-font through EffectCraft's enabled `default_fonts`
+Noto Emoji, egui-icons and emoji-icon-font through VL Effects' enabled `default_fonts`
 and `monochrome_emoji_fonts` features; no font file from that dependency is added to
 this repository. The complete copyright notices and licence texts required for all of
 these fonts follow.
 
 The optional PDF document reader uses craft-pdf and Hayro-syntax 0.7.2, MIT OR Apache-2.0.
-The shared patched syntax source is centralized in storytold/craft-libs, transferred from
+The shared patched syntax source is centralized in the craft-libs library, transferred from
 PdfCraft revision 9ed3abe4907a127d36b12fbfeee71d7e26248da1. This parser-only use embeds no
-Hayro fonts, CMaps or image codecs; EffectCraft keeps its existing fonts and drawing filters.
+Hayro fonts, CMaps or image codecs; VL Effects keeps its existing fonts and drawing filters.
 
 Linux Wayland window decorations
 -------------------------------

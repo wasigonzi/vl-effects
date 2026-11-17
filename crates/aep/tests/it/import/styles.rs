@@ -51,7 +51,7 @@ fn all_nine_at_after_effects_defaults() {
     assert!(ls.groups().all(|g| g.enabled));
     let ds = style(l, "dropShadow");
     assert_eq!((v(ds, "blendMode"), v(ds, "opacity"), v(ds, "angle")), (mode("Multiply"), s(75.0), s(120.0)));
-    // After Effects' Use Global Light is off by default (EffectCraft's own default is on).
+    // After Effects' Use Global Light is off by default (VL Effects' own default is on).
     assert_eq!(v(ds, "useGlobalLight"), Value::Bool(false));
     assert_eq!(v(style(l, "outerGlow"), "blendMode"), mode("Screen"));
     assert_eq!(v(style(l, "innerGlow"), "source"), Value::Enum(1), "Edge");

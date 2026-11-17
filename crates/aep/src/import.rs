@@ -1,5 +1,5 @@
 //! After Effects project (`.aep`) import: the typed view of [`effectcraft_aep`] mapped into an
-//! EffectCraft [`Project`]. The XML form (`.aepx`) is accepted as well: both are read into the same
+//! VL Effects [`Project`]. The XML form (`.aepx`) is accepted as well: both are read into the same
 //! flat chunk index (an `.aep` in place, an `.aepx` decoded into one buffer first).
 //!
 //! What arrives: the project item tree (folders), project settings (depth, working space, time
@@ -78,7 +78,7 @@ pub struct ImportOptions<'a> {
     /// The folder every imported item goes into (After Effects names it after the file).
     pub folder_name: &'a str,
     /// Whether the caller takes over the file's project settings ([`ImportResult::settings`]).
-    /// When not, a setting EffectCraft has no counterpart for is no loss (nothing is changed), so it
+    /// When not, a setting VL Effects has no counterpart for is no loss (nothing is changed), so it
     /// is not reported.
     pub settings: bool,
 }

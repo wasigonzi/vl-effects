@@ -2,7 +2,7 @@
 
 > **Last reviewed:** 2026-10-19 · **Last updated:** 2026-11-05 · **Change:** ProRes alpha final-run conformance; previously `.aep` / `.aepx` import and `.aep` export (`crates/aep`: `container`, `import`, `export`) · **Target:** Adobe After Effects 2026
 
-Every format After Effects reads or writes, with EffectCraft's support. After Effects' list comes
+Every format After Effects reads or writes, with VL Effects' support. After Effects' list comes
 from its installed bundle (26.5.0.89: `Info.plist` `CFBundleDocumentTypes`, `Plug-ins/Format`,
 `Resources/usd_plugins`) and its public documentation; ours from `crates/media/src/lib.rs`
 (`STILL_EXTENSIONS`, `VIDEO_EXTENSIONS`, `MODEL_EXTENSIONS`, FilmCraft's `AUDIO_EXTENSIONS`),
@@ -20,7 +20,7 @@ trips and renders, checked by tests, not against After Effects), **partial** (na
 
 ## After Effects' own formats
 
-| Format | After Effects | EffectCraft read | Write | Fidelity / notes | Tested by |
+| Format | After Effects | VL Effects read | Write | Fidelity / notes | Tested by |
 |---|---|---|---|---|---|
 | Project `.aep` | R/W (native) | partial | partial | Main file format; the clean-room method is in [aep-format.md](aep-format.md), the maintainers' decision on it is open (#190). `crates/aep` reads and writes the RIFX container losslessly (byte-identical round trip) with a typed view of the decoded fields, from our own generated files only ([aep-format.md](aep-format.md)). File ▸ Import ▸ Adobe After Effects Project… (`file.importAep`, `effectcraft_aep::import`): folders, project settings, compositions, every layer kind, Transform, keyframes, expressions, masks, text with animators, shapes, cameras, lights, track mattes, markers, time remapping, layer styles, the built-in effects of a table shared with the exporter (Lumetri Color, Curves, Levels, Glow, Fractal Noise, Gradient Ramp, … and the expression controls), footage and image sequences; everything else is reported ([aep-import.md](aep-import.md)). File ▸ Export ▸ Adobe After Effects Project… (`file.exportAep`, `effectcraft_aep::export`) writes the same scope with every chunk built in code; exports were opened and read back in After Effects 2026 ([aep-export.md](aep-export.md)); everything else is reported. Effects outside the table (plug-ins, …) are not converted | `crates/aep` tests (`tests/container`, `tests/import`, `tests/export`) |
 | XML project `.aepx` | R/W | partial | none | Read into the same chunk tree as `.aep` by `crates/aep` (`read_aepx`; mapping in [aep-format.md](aep-format.md) section 1), so `file.importAep` imports it with the same coverage as `.aep`; not written | `crates/aep` `aepx` tests (container and import) |

@@ -39,7 +39,7 @@ fn finite(values: impl IntoIterator<Item = f64>) -> Result<()> {
     Ok(())
 }
 
-/// Right-handed EffectCraft world (right, down, forward) → Blender (right, forward, up).
+/// Right-handed VL Effects world (right, down, forward) → Blender (right, forward, up).
 fn position(p: [f64; 3], scale: f64) -> [f64; 3] {
     [p[0] * scale, p[2] * scale, -p[1] * scale]
 }
@@ -211,7 +211,7 @@ fn scene_warnings(camera: Option<&Layer>, solve: &CameraSolve, footage: &Footage
         warnings
             .push("No linked tracker camera: focus uses the default scene depth, DOF is off; optical focus cannot be recovered from feature tracks.".into());
     } else {
-        warnings.push("Focus/iris settings are sampled from the linked camera; pose and lens come from the tracker solve. Blender's physical DOF is an approximation of EffectCraft's blur model.".into());
+        warnings.push("Focus/iris settings are sampled from the linked camera; pose and lens come from the tracker solve. Blender's physical DOF is an approximation of VL Effects' blur model.".into());
     }
     if solve.distortion.is_some_and(|d| !d.is_none()) {
         warnings.push("Radial distortion is preserved as metadata (Brown k1/k2, half-diagonal normalization), not applied to Blender's pinhole camera. Use an undistorted plate for exact alignment.".into());

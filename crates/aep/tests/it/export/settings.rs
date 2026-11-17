@@ -22,7 +22,7 @@ fn with(f: impl FnOnce(&mut ProjectSettings)) -> Project {
 
 #[test]
 fn every_setting_is_written_as_after_effects_stores_it() {
-    // EffectCraft's defaults: 8 bpc, no working space, gamma 2.2, timecode, frames from 0.
+    // VL Effects' defaults: 8 bpc, no working space, gamma 2.2, timecode, frames from 0.
     let d = read_back(&with(|_| {}));
     assert_eq!(d.bits_per_channel, Some(8));
     assert_eq!(d.working_space, Some(WorkingSpace::None));
@@ -108,7 +108,7 @@ fn our_rec709_profile_without_its_name_is_still_rec709() {
     let at = bytes.windows(key.len()).position(|w| w == key).expect("name");
     bytes[at..at + key.len()].fill(b' ');
     let s = effectcraft_aep::ProjectSettings::read(&parse(&bytes).expect("parse"));
-    assert_eq!(s.working_space, Some(WorkingSpace::Profile("Rec.709 Gamma 2.4 (EffectCraft)".into())));
+    assert_eq!(s.working_space, Some(WorkingSpace::Profile("Rec.709 Gamma 2.4 (VL Effects)".into())));
     let mut q = Project::default();
     let none = |_: &str| false;
     let back = effectcraft_aep::import::import(&mut q, &bytes, &effectcraft_aep::import::ImportOptions::new(&none)).expect("import");
