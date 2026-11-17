@@ -1,4 +1,4 @@
-//! Modal dialogs: About (community links, Contributors and Models credits), New Composition /
+//! Modal dialogs: About (community links), New Composition /
 //! Composition Settings, Solid Settings and the command palette (Camera/Light Settings live in `dialogs_3d`).
 
 use crate::i18n::{tr, tr_args};
@@ -331,47 +331,13 @@ pub fn show(app: &mut EffectcraftApp, ctx: &egui::Context) {
     }
 }
 
-/// About tabs: About · Contributors · Models.
-const ABOUT_TABS: [(&str, &str); 3] = [("About", "about"), ("Contributors", "contributors"), ("Models", "models")];
-/// Height of the Contributors / Models tab bodies (they scroll inside it).
-const CREDITS_HEIGHT: f32 = 380.0;
-
-/// The About dialog: tabs for the name/version/blurb, the contributors and the models (the last
-/// two scroll in a fixed-height body), the licence and bundled-font line, and Close. The tab is
-/// kept in egui temp data. A command the About body asked for is run once the modal has been
-/// built; Close clears `app.dialog`.
+/// The About dialog: the name/version/blurb, the licence and bundled-font line, and Close. A
+/// command the About body asked for is run once the modal has been built; Close clears `app.dialog`.
 fn about(app: &mut EffectcraftApp, ctx: &egui::Context, t: &Tokens) {
     let mut close = false;
     let mut cmd: Option<&str> = None;
-    let tab_id = egui::Id::unique("about_tab");
-    // Wide enough for every Contributors column at its natural width (modals shrink to the window).
-    modal(ctx, "About VL Effects", vec2(820.0, 520.0), t, |ui| {
-        let mut tab = ui.data_mut(|d| d.get_temp::<usize>(tab_id)).unwrap_or(0);
-        ui.horizontal(|ui| {
-            for (i, (label, id)) in ABOUT_TABS.iter().enumerate() {
-                let r = ui.selectable_label(tab == i, *label);
-                app.auto.add(&format!("about.tab.{id}"), r.rect, label);
-                if r.clicked() {
-                    tab = i;
-                }
-            }
-        });
-        ui.data_mut(|d| d.insert_temp(tab_id, tab));
-        ui.separator();
-        match tab {
-            1 | 2 => {
-                let h = CREDITS_HEIGHT.min(ui.available_height().max(120.0));
-                ui.allocate_ui(vec2(ui.available_width(), h), |ui| {
-                    ui.set_max_height(h);
-                    if tab == 1 {
-                        crate::credits::contributors_ui(ui, &mut app.auto);
-                    } else {
-                        crate::credits::models_ui(ui);
-                    }
-                });
-            }
-            _ => about_main(app, ui, t, &mut cmd),
-        }
+    modal(ctx, "About VL Effects", vec2(460.0, 420.0), t, |ui| {
+        about_main(app, ui, t, &mut cmd);
         ui.add_space(8.0);
         ui.horizontal(|ui| {
             ui.label(egui::RichText::new(tr("MIT OR Apache-2.0 • Fonts: Inter, JetBrains Mono (OFL)")).small().color(t.text_faint));
